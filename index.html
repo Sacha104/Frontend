@@ -28,31 +28,30 @@
       height: 120px;
       padding: 15px;
       background: #1a1a2e;
-      border: none;
-      border-radius: 12px;
+      border: 1px solid #00ffe7;
+      border-radius: 10px;
       color: #ffffff;
       font-size: 1rem;
       margin-bottom: 20px;
       resize: none;
-      box-shadow: 0 0 10px #00ffe7a0;
     }
     .buttons {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-top: 10px;
     }
     button {
       background-color: #00ffe7;
       color: #000;
       border: none;
-      padding: 12px 24px;
+      padding: 10px 20px;
       font-size: 1rem;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 0 12px #00ffe7;
-      transition: 0.3s;
+      box-shadow: 0 0 10px #00ffe7a0;
+      transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #00cabb;
@@ -63,13 +62,20 @@
       padding: 20px;
       border-radius: 12px;
       white-space: pre-wrap;
-      margin-top: 20px;
+      margin-top: 30px;
       box-shadow: 0 0 10px #00ffe775;
+      width: 100%;
     }
     .label {
       color: #00ffe7;
       font-weight: bold;
-      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .action-buttons {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
     }
   </style>
 </head>
@@ -80,17 +86,23 @@
 
   <div class="buttons">
     <button onclick="generatePrompt()">🎯 Générer le prompt</button>
-    <button onclick="sendToChatGPT()">💬 Envoyer à GPT</button>
   </div>
 
   <div id="generatedPrompt" class="output" style="display: none;">
     <div class="label">📌 Prompt optimisé :</div>
     <div id="resultContent"></div>
+    <div class="action-buttons">
+      <button onclick="copyText('resultContent')">📋 Copier</button>
+      <button onclick="sendToChatGPT()">💬 Envoyer à GPT</button>
+    </div>
   </div>
 
   <div id="chatResponse" class="output" style="display: none;">
     <div class="label">🤖 Réponse de l'IA :</div>
     <div id="chatContent"></div>
+    <div class="action-buttons">
+      <button onclick="copyText('chatContent')">📋 Copier</button>
+    </div>
   </div>
 
   <script>
@@ -101,7 +113,6 @@
       const resultContainer = document.getElementById("generatedPrompt");
       const resultContent = document.getElementById("resultContent");
       const chatContainer = document.getElementById("chatResponse");
-      const chatContent = document.getElementById("chatContent");
 
       chatContainer.style.display = "none";
       resultContainer.style.display = "block";
@@ -157,6 +168,13 @@
       } catch (error) {
         chatContent.innerText = "❌ Échec : " + error.message;
       }
+    }
+
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Texte copié dans le presse-papiers !");
+      });
     }
   </script>
 </body>
