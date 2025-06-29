@@ -46,6 +46,7 @@
       cursor: pointer;
       box-shadow: 0 0 12px #00ffe7;
       transition: 0.3s;
+      margin: 5px;
     }
     button:hover {
       background-color: #00cabb;
@@ -64,14 +65,25 @@
 <body>
   <h1>Générateur de Prompts IA</h1>
   <textarea id="prompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
-  <button onclick="generatePrompt()">Générer</button>
+  <div>
+    <button onclick="generatePrompt()">Générer</button>
+    <button id="sendBtn" onclick="sendToChatGPT()" style="display:none;">Envoyer à l'IA</button>
+  </div>
   <div id="result" class="output"></div>
+  <div id="aiResponse" class="output" style="display:none;"></div>
 
   <script>
+    let lastGeneratedPrompt = "";
+
     async function generatePrompt() {
       const userPrompt = document.getElementById("prompt").value;
       const resultDiv = document.getElementById("result");
+      const aiResponseDiv = document.getElementById("aiResponse");
+      const sendBtn = document.getElementById("sendBtn");
+
       resultDiv.innerText = "⏳ Génération en cours...";
+      aiResponseDiv.style.display = "none";
+      sendBtn.style.display = "none";
 
       try {
         const response = await fetch("https://prompt-ai-naa1.onrender.com/generate", {
@@ -85,12 +97,40 @@
         const data = await response.json();
 
         if (data.response) {
+          lastGeneratedPrompt = data.response;
           resultDiv.innerText = data.response;
+          sendBtn.style.display = "inline-block";
         } else {
           resultDiv.innerText = "❌ Erreur : " + (data.error || "Réponse inconnue.");
         }
       } catch (error) {
         resultDiv.innerText = "❌ Échec de la requête : " + error.message;
+      }
+    }
+
+    async function sendToChatGPT() {
+      const aiResponseDiv = document.getElementById("aiResponse");
+      aiResponseDiv.style.display = "block";
+      aiResponseDiv.innerText = "🤖 Réponse de l'IA en cours...";
+
+      try {
+        const response = await fetch("https://prompt-ai-naa1.onrender.com/respond", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: lastGeneratedPrompt })
+        });
+
+        const data = await response.json();
+
+        if (data.response) {
+          aiResponseDiv.innerText = data.response;
+        } else {
+          aiResponseDiv.innerText = "❌ Erreur : " + (data.error || "Réponse inconnue.");
+        }
+      } catch (error) {
+        aiResponseDiv.innerText = "❌ Échec de la requête : " + error.message;
       }
     }
   </script>
