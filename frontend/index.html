@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Générateur de Prompts IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(ellipse at center, #1e1e2f 0%, #0d0d14 100%);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      color: #00ffe7;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px #00ffe7;
+    }
+    textarea {
+      width: 100%;
+      max-width: 600px;
+      height: 120px;
+      padding: 15px;
+      background: #1a1a2e;
+      border: none;
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      resize: none;
+      box-shadow: 0 0 10px #00ffe7a0;
+    }
+    button {
+      background-color: #00ffe7;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #00ffe7;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #00cabb;
+    }
+    .output {
+      max-width: 700px;
+      margin-top: 30px;
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      box-shadow: 0 0 10px #00ffe775;
+    }
+  </style>
+</head>
+<body>
+  <h1>Générateur de Prompts IA</h1>
+  <textarea id="prompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
+  <button onclick="generatePrompt()">Générer</button>
+  <div id="result" class="output"></div>
+
+  <script>
+    async function generatePrompt() {
+      const userPrompt = document.getElementById("prompt").value;
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = "⏳ Génération en cours...";
+
+      try {
+        const response = await fetch("https://prompt-ai-naa1.onrender.com/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: userPrompt })
+        });
+
+        const data = await response.json();
+
+        if (data.response) {
+          resultDiv.innerText = data.response;
+        } else {
+          resultDiv.innerText = "❌ Erreur : " + (data.error || "Réponse inconnue.");
+        }
+      } catch (error) {
+        resultDiv.innerText = "❌ Échec de la requête : " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
