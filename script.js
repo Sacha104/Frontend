@@ -137,6 +137,8 @@ auth.onAuthStateChanged(user => {
     appSection.style.display = "none";
   }
 });
+
+// 👁️ Fonction pour afficher/masquer le mot de passe
 function togglePassword() {
   const passwordInput = document.getElementById("password");
   const eyeIcon = document.getElementById("eyeIcon");
