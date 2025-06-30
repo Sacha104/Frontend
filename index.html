@@ -97,6 +97,20 @@
     color: #94a3b8;
     font-size: 1rem;
   }
+
+  .response-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+
+  .response-column {
+    flex: 1 1 45%;
+    min-width: 300px;
+  }
+
 </style>
 </head>
 <body>
@@ -113,7 +127,8 @@
     ⏳ Génération du prompt en cours...
   </div>
 
-  <div id="generatedPromptBox" class="output" style="display: none;">
+<div class="response-section">
+  <div id="generatedPromptBox" class="output response-column" style="display: none;">
     <div class="label">📌 Prompt optimisé :</div>
     <div id="optimizedPrompt"></div>
     <div class="action-buttons">
@@ -126,13 +141,14 @@
     🤖 Envoi à l'IA en cours...
   </div>
 
-  <div id="aiResponseBox" class="output" style="display: none;">
+  <div id="aiResponseBox" class="output response-column" style="display: none;">
     <div class="label">🤖 Réponse de l'IA :</div>
     <div id="aiResponse"></div>
     <div class="action-buttons">
       <button onclick="copyText('aiResponse')">📋 Copier</button>
     </div>
   </div>
+</div>
 
   <script>
     const backendURL = "https://prompt-ai-naa1.onrender.com";
