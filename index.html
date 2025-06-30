@@ -82,9 +82,26 @@
 
     .loading-message {
       text-align: center;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
       font-style: italic;
-      color: #6b7280;
+      color: #4b5563;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .spinner {
+      border: 3px solid #d1d5db;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 1.25rem;
+      height: 1.25rem;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -95,11 +112,11 @@
   <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
 
   <div class="buttons">
-    <button onclick="generatePrompt()">🎯 Générer le prompt</button>
+    <button id="generateBtn" onclick="generatePrompt()">🎯 Générer le prompt</button>
   </div>
 
   <div id="loadingPrompt" class="loading-message" style="display: none;">
-    ⏳ Génération du prompt en cours...
+    <div class="spinner"></div> Génération du prompt en cours...
   </div>
 
   <div id="generatedPromptBox" class="output" style="display: none;">
@@ -107,12 +124,12 @@
     <div id="optimizedPrompt"></div>
     <div class="action-buttons">
       <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
-      <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
+      <button id="sendBtn" onclick="getAIResponse()">💬 Envoyer à GPT</button>
     </div>
   </div>
 
   <div id="loadingAI" class="loading-message" style="display: none;">
-    🤖 Envoi à l'IA en cours...
+    <div class="spinner"></div> Envoi à l'IA en cours...
   </div>
 
   <div id="aiResponseBox" class="output" style="display: none;">
@@ -140,9 +157,11 @@
         return;
       }
 
-      document.getElementById("loadingPrompt").style.display = "block";
+      // UI state
+      document.getElementById("loadingPrompt").style.display = "flex";
       document.getElementById("generatedPromptBox").style.display = "none";
       document.getElementById("aiResponseBox").style.display = "none";
+      document.getElementById("generateBtn").disabled = true;
 
       try {
         const response = await fetch(`${backendURL}/generate`, {
@@ -158,6 +177,7 @@
         alert("Erreur lors de la génération du prompt.");
       } finally {
         document.getElementById("loadingPrompt").style.display = "none";
+        document.getElementById("generateBtn").disabled = false;
       }
     }
 
@@ -168,8 +188,9 @@
         return;
       }
 
-      document.getElementById("loadingAI").style.display = "block";
+      document.getElementById("loadingAI").style.display = "flex";
       document.getElementById("aiResponseBox").style.display = "none";
+      document.getElementById("sendBtn").disabled = true;
 
       try {
         const response = await fetch(`${backendURL}/respond`, {
@@ -185,6 +206,7 @@
         alert("Erreur lors de la réponse de l'IA.");
       } finally {
         document.getElementById("loadingAI").style.display = "none";
+        document.getElementById("sendBtn").disabled = false;
       }
     }
   </script>
