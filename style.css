@@ -205,3 +205,32 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
+.auth-box {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.auth-box input {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+}
+
+.auth-box button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #007BFF, #00C6FF);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-box button:hover {
+  opacity: 0.85;
+}
+
