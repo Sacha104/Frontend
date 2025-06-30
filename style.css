@@ -231,6 +231,22 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
-.toggle-password i {
-  color: #d1d5db;
+/* === Password Toggle Eye === */
+.password-wrapper {
+  position: relative;
 }
+
+.password-wrapper input {
+  padding-right: 2.5rem;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #cbd5e1; /* gris clair */
+  font-size: 1.2rem;
+}
+
