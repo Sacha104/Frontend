@@ -109,6 +109,8 @@
   </div>
 
   <script>
+    const backendURL = "https://prompt-ai-naa1.onrender.com";
+
     function copyText(elementId) {
       const text = document.getElementById(elementId).textContent;
       navigator.clipboard.writeText(text).then(() => {
@@ -123,7 +125,7 @@
         return;
       }
 
-      const response = await fetch("/generate", {
+      const response = await fetch(`${backendURL}/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: userPrompt })
@@ -142,7 +144,7 @@
         return;
       }
 
-      const response = await fetch("/respond", {
+      const response = await fetch(`${backendURL}/respond`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: improvedPrompt })
