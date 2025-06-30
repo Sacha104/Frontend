@@ -1,0 +1,104 @@
+body {
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  margin: 0;
+  padding: 2rem;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  color: #38bdf8;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+textarea {
+  width: 100%;
+  height: 140px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  resize: vertical;
+  font-size: 1rem;
+  background: #1e293b;
+  color: #f8fafc;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.buttons {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+button {
+  background: linear-gradient(to right, #3b82f6, #06b6d4);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.7);
+}
+
+.output {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #38bdf8;
+  font-size: 1.1rem;
+}
+
+.action-buttons {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.action-buttons button {
+  background: linear-gradient(to right, #10b981, #22c55e);
+  border: none;
+  color: #f0fdf4;
+}
+
+.action-buttons button:hover {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.loading-message {
+  text-align: center;
+  margin-top: 1rem;
+  font-style: italic;
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+.response-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.response-column {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
