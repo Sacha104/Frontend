@@ -4,8 +4,87 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Générateur de Prompts IA</title>
-  <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    /* === Styles CSS intégrés === */
+    body {
+      background: #f0f2f5;
+      color: #1e1e1e;
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      padding: 2rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 140px;
+      margin-bottom: 1rem;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin: 0 0.5rem;
+    }
+
+    button:hover {
+      background: #1e4ec9;
+    }
+
+    .output {
+      background: #ffffff;
+      border: 1px solid #ccc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #111827;
+    }
+
+    .action-buttons {
+      margin-top: 1rem;
+      text-align: right;
+    }
+
+    .action-buttons button {
+      background: #10b981;
+    }
+
+    .action-buttons button:hover {
+      background: #0e9f6e;
+    }
+  </style>
 </head>
 <body>
   <h1>Générateur de Prompts IA</h1>
@@ -16,7 +95,7 @@
     <button onclick="generatePrompt()">🎯 Générer le prompt</button>
   </div>
 
-  <div id="generatedPrompt" class="output" style="display: none;">
+  <div id="generatedPrompt" class="output">
     <div class="label">📌 Prompt optimisé :</div>
     <div id="resultContent"></div>
     <div class="action-buttons">
@@ -25,7 +104,7 @@
     </div>
   </div>
 
-  <div id="chatResponse" class="output" style="display: none;">
+  <div id="chatResponse" class="output">
     <div class="label">🤖 Réponse de l'IA :</div>
     <div id="chatContent"></div>
     <div class="action-buttons">
@@ -33,6 +112,45 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // === JavaScript intégré ===
+    function generatePrompt() {
+      const input = document.getElementById("prompt").value.trim();
+      const resultContainer = document.getElementById("generatedPrompt");
+      const resultContent = document.getElementById("resultContent");
+
+      if (input === "") {
+        alert("Veuillez entrer un texte pour générer un prompt.");
+        return;
+      }
+
+      const optimizedPrompt = `Agis comme un expert en intelligence artificielle et génère une réponse à cette demande : "${input}"`;
+
+      resultContent.textContent = optimizedPrompt;
+      resultContainer.style.display = "block";
+
+      // Reset previous AI response
+      document.getElementById("chatResponse").style.display = "none";
+    }
+
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Texte copié dans le presse-papiers !");
+      }).catch(err => {
+        alert("Échec de la copie : " + err);
+      });
+    }
+
+    function sendToChatGPT() {
+      const optimizedPrompt = document.getElementById("resultContent").textContent;
+      const chatResponseBox = document.getElementById("chatResponse");
+      const chatContent = document.getElementById("chatContent");
+
+      // Simule une réponse d'IA
+      chatContent.textContent = "Voici une réponse simulée pour : " + optimizedPrompt;
+      chatResponseBox.style.display = "block";
+    }
+  </script>
 </body>
 </html>
