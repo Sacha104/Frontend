@@ -47,7 +47,7 @@
       });
     }
 
-    async function generatePrompt() {
+        async function generatePrompt() {
       const userPrompt = document.getElementById("userPrompt").value.trim();
       if (!userPrompt) {
         alert("Veuillez entrer une idée ou une demande.");
@@ -56,7 +56,6 @@
 
       document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
       document.getElementById("aiResponse").textContent = "Aucune réponse générée pour l’instant.";
-
 
       try {
         const response = await fetch(`${backendURL}/generate`, {
@@ -73,7 +72,8 @@
       } catch (error) {
         console.error("Erreur dans generatePrompt:", error);
         alert("Erreur lors de la génération du prompt.");
-      } finally
+      } finally {
+      }
     }
 
     async function getAIResponse() {
@@ -84,7 +84,6 @@
       }
 
       document.getElementById("aiResponse").textContent = "🤖 Réponse en cours…";
-
 
       try {
         const response = await fetch(`${backendURL}/respond`, {
@@ -101,8 +100,10 @@
       } catch (error) {
         console.error("Erreur dans getAIResponse:", error);
         alert("Erreur lors de la réponse de l'IA.");
-      } finally 
+      } finally {
+      }
     }
+
   </script>
 
 </body>
