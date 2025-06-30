@@ -13,15 +13,16 @@
 </head>
 
 <body>
-
+  
   <div id="authSection" class="auth-section">
-  <div class="auth-container">
+  <div class="auth-box">
     <h1 class="logo">PromptApp</h1>
 
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Mot de passe" />
-
-    <button onclick="signIn()" class="btn-primary">Se connecter</button>
+    <form class="auth-form">
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Mot de passe" />
+      <button type="button" onclick="signIn()" class="btn-primary">Se connecter</button>
+    </form>
 
     <a href="#" class="forgot-password">Mot de passe oublié ?</a>
 
