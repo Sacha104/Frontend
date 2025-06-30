@@ -31,6 +31,17 @@
   <h1>Générateur de Prompts IA</h1>
 
   <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
+  
+  <div class="auth-section">
+  <h2>Connexion / Inscription</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Mot de passe">
+  <button onclick="signUp()">S'inscrire</button>
+  <button onclick="signIn()">Se connecter</button>
+  <button onclick="signOut()">Se déconnecter</button>
+  <p id="authStatus"></p>
+</div>
+
 
   <div class="buttons">
     <button onclick="generatePrompt()">🎯 Générer le prompt</button>
@@ -122,6 +133,50 @@
     }
 
   </script>
+  <script>
+  const auth = firebase.auth();
+
+  function signUp() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
+      })
+      .catch(error => {
+        document.getElementById("authStatus").textContent = "❌ " + error.message;
+      });
+  }
+
+  function signIn() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById("authStatus").textContent = "✅ Connecté !";
+      })
+      .catch(error => {
+        document.getElementById("authStatus").textContent = "❌ " + error.message;
+      });
+  }
+
+  function signOut() {
+    auth.signOut()
+      .then(() => {
+        document.getElementById("authStatus").textContent = "👋 Déconnecté.");
+      });
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      console.log("Connecté :", user.email);
+    } else {
+      console.log("Utilisateur non connecté");
+    }
+  });
+</script>
 
 </body>
 </html>
