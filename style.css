@@ -31,10 +31,6 @@ h1 {
   text-align: center;
 }
 
-#authSection h2 {
-  margin-bottom: 1.5rem;
-}
-
 #authSection input {
   display: block;
   width: 100%;
@@ -45,6 +41,7 @@ h1 {
   background: #0f172a;
   color: #f8fafc;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 #authSection button {
@@ -231,13 +228,18 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
+
 /* === Password Toggle Eye === */
 .password-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .password-wrapper input {
   padding-right: 2.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .toggle-password {
@@ -246,7 +248,7 @@ button:hover {
   right: 0.75rem;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #cbd5e1; /* gris clair */
+  color: #cbd5e1;
   font-size: 1.2rem;
+  z-index: 10;
 }
-
