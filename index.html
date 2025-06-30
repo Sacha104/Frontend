@@ -15,13 +15,25 @@
 <body>
 
   <div id="authSection" class="auth-section">
-    <h2>Connexion / Inscription</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Mot de passe">
-    <button onclick="signUp()">S'inscrire</button>
-    <button onclick="signIn()">Se connecter</button>
-    <p id="authStatus"></p>
+  <div class="auth-box">
+    <h1 class="logo">PromptApp</h1>
+
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Mot de passe" />
+
+    <button onclick="signIn()" class="btn-primary">Se connecter</button>
+
+    <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+
+    <p id="authStatus" class="auth-status"></p>
+
+    <div class="signup-footer">
+      <span>Vous n’avez pas de compte ?</span>
+      <a href="#" onclick="signUp()">Inscrivez-vous</a>
+    </div>
   </div>
+</div>
+
 
   <div id="appSection" style="display: none;">
     <h1>Générateur de Prompts IA</h1>
