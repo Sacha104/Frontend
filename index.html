@@ -20,7 +20,6 @@
     <input type="password" id="password" placeholder="Mot de passe">
     <button onclick="signUp()">S'inscrire</button>
     <button onclick="signIn()">Se connecter</button>
-    <button onclick="signOut()">Se déconnecter</button>
     <p id="authStatus"></p>
   </div>
 
@@ -28,6 +27,7 @@
     <h1>Générateur de Prompts IA</h1>
 
     <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
+    <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
 
     <div class="buttons">
       <button onclick="generatePrompt()">🎯 Générer le prompt</button>
