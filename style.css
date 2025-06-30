@@ -231,3 +231,8 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
+
+.toggle-password {
+  color: #cbd5e1; /* gris clair */
+  cursor: pointer;
+}
