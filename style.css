@@ -231,8 +231,6 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
-
-.toggle-password svg {
-  fill: #cbd5e1;
-  cursor: pointer;
+.toggle-password i {
+  color: #d1d5db;
 }
