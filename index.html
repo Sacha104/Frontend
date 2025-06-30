@@ -54,7 +54,6 @@
         return;
       }
 
-      document.getElementById("loadingPrompt").style.display = "block";
       document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
       document.getElementById("aiResponse").textContent = "Aucune réponse générée pour l’instant.";
 
@@ -74,9 +73,7 @@
       } catch (error) {
         console.error("Erreur dans generatePrompt:", error);
         alert("Erreur lors de la génération du prompt.");
-      } finally {
-        document.getElementById("loadingPrompt").style.display = "none";
-      }
+      } finally
     }
 
     async function getAIResponse() {
@@ -86,7 +83,6 @@
         return;
       }
 
-      document.getElementById("loadingAI").style.display = "block";
       document.getElementById("aiResponse").textContent = "🤖 Réponse en cours…";
 
 
@@ -105,9 +101,7 @@
       } catch (error) {
         console.error("Erreur dans getAIResponse:", error);
         alert("Erreur lors de la réponse de l'IA.");
-      } finally {
-        document.getElementById("loadingAI").style.display = "none";
-      }
+      } finally 
     }
   </script>
 
