@@ -35,7 +35,7 @@
 
     .buttons {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
 
     button {
@@ -79,6 +79,13 @@
     .action-buttons button:hover {
       background: #059669;
     }
+
+    .loading-message {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-style: italic;
+      color: #6b7280;
+    }
   </style>
 </head>
 <body>
@@ -91,6 +98,10 @@
     <button onclick="generatePrompt()">🎯 Générer le prompt</button>
   </div>
 
+  <div id="loadingPrompt" class="loading-message" style="display: none;">
+    ⏳ Génération du prompt en cours...
+  </div>
+
   <div id="generatedPromptBox" class="output" style="display: none;">
     <div class="label">📌 Prompt optimisé :</div>
     <div id="optimizedPrompt"></div>
@@ -98,6 +109,10 @@
       <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
       <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
     </div>
+  </div>
+
+  <div id="loadingAI" class="loading-message" style="display: none;">
+    🤖 Envoi à l'IA en cours...
   </div>
 
   <div id="aiResponseBox" class="output" style="display: none;">
@@ -125,16 +140,25 @@
         return;
       }
 
-      const response = await fetch(`${backendURL}/generate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: userPrompt })
-      });
-
-      const data = await response.json();
-      document.getElementById("optimizedPrompt").textContent = data.response || "Erreur dans la génération.";
-      document.getElementById("generatedPromptBox").style.display = "block";
+      document.getElementById("loadingPrompt").style.display = "block";
+      document.getElementById("generatedPromptBox").style.display = "none";
       document.getElementById("aiResponseBox").style.display = "none";
+
+      try {
+        const response = await fetch(`${backendURL}/generate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: userPrompt })
+        });
+
+        const data = await response.json();
+        document.getElementById("optimizedPrompt").textContent = data.response || "Erreur dans la génération.";
+        document.getElementById("generatedPromptBox").style.display = "block";
+      } catch (error) {
+        alert("Erreur lors de la génération du prompt.");
+      } finally {
+        document.getElementById("loadingPrompt").style.display = "none";
+      }
     }
 
     async function getAIResponse() {
@@ -144,16 +168,26 @@
         return;
       }
 
-      const response = await fetch(`${backendURL}/respond`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: improvedPrompt })
-      });
+      document.getElementById("loadingAI").style.display = "block";
+      document.getElementById("aiResponseBox").style.display = "none";
 
-      const data = await response.json();
-      document.getElementById("aiResponse").textContent = data.response || "Erreur dans la réponse.";
-      document.getElementById("aiResponseBox").style.display = "block";
+      try {
+        const response = await fetch(`${backendURL}/respond`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: improvedPrompt })
+        });
+
+        const data = await response.json();
+        document.getElementById("aiResponse").textContent = data.response || "Erreur dans la réponse.";
+        document.getElementById("aiResponseBox").style.display = "block";
+      } catch (error) {
+        alert("Erreur lors de la réponse de l'IA.");
+      } finally {
+        document.getElementById("loadingAI").style.display = "none";
+      }
     }
   </script>
+
 </body>
 </html>
