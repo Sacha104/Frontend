@@ -232,7 +232,7 @@ button:hover {
   margin-top: 1rem;
 }
 
-.toggle-password {
-  color: #cbd5e1; /* gris clair */
+.toggle-password svg {
+  fill: #cbd5e1;
   cursor: pointer;
 }
