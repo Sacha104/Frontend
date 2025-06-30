@@ -102,3 +102,22 @@ button:hover {
   flex: 1 1 45%;
   min-width: 300px;
 }
+#aiResponse h1, #aiResponse h2, #aiResponse h3 {
+  color: #38bdf8;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+#aiResponse p {
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+#aiResponse ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+#aiResponse li::marker {
+  color: #22d3ee;
+}
