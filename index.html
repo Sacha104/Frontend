@@ -64,8 +64,9 @@
       }
 
       document.getElementById("loadingPrompt").style.display = "block";
-      document.getElementById("generatedPromptBox").style.display = "none";
-      document.getElementById("aiResponseBox").style.display = "none";
+      document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
+      document.getElementById("aiResponse").textContent = "Aucune réponse générée pour l’instant.";
+
 
       try {
         const response = await fetch(`${backendURL}/generate`, {
@@ -95,7 +96,8 @@
       }
 
       document.getElementById("loadingAI").style.display = "block";
-      document.getElementById("aiResponseBox").style.display = "none";
+      document.getElementById("aiResponse").textContent = "🤖 Réponse en cours…";
+
 
       try {
         const response = await fetch(`${backendURL}/respond`, {
