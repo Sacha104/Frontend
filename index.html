@@ -6,9 +6,9 @@
   <title>Générateur de Prompts IA</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-
-  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+  
 <body>
 
   <h1>Générateur de Prompts IA</h1>
@@ -100,7 +100,7 @@
         const data = await response.json();
         console.log("Réponse IA :", data);
 
-        document.getElementById("aiResponse").textContent = data.response || "Erreur dans la réponse.";
+        document.getElementById("aiResponse").innerHTML = marked.parse(data.response || "Erreur dans la réponse.");
         document.getElementById("aiResponseBox").style.display = "block";
       } catch (error) {
         console.error("Erreur dans getAIResponse:", error);
