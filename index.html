@@ -5,21 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Générateur de Prompts IA</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-
   <style>
-    /* === Styles CSS intégrés === */
     body {
-      background: #f0f2f5;
-      color: #1e1e1e;
-      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-      padding: 2rem;
+      background: #f3f4f6;
+      color: #1f2937;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
       margin: 0;
-      line-height: 1.6;
+      padding: 2rem;
     }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
       text-align: center;
+      color: #111827;
       margin-bottom: 2rem;
     }
 
@@ -27,12 +25,12 @@
       width: 100%;
       height: 140px;
       margin-bottom: 1rem;
-      background: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
       padding: 1rem;
-      font-size: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
       resize: vertical;
+      font-size: 1rem;
+      background: white;
     }
 
     .buttons {
@@ -41,40 +39,37 @@
     }
 
     button {
-      background: #2563eb;
-      color: #fff;
+      background: #3b82f6;
+      color: white;
       border: none;
       padding: 0.8rem 1.5rem;
       border-radius: 8px;
       font-size: 1rem;
-      font-weight: 500;
+      margin: 0.5rem;
       cursor: pointer;
-      transition: background 0.3s ease;
-      margin: 0 0.5rem;
+      transition: background 0.2s;
     }
 
     button:hover {
-      background: #1e4ec9;
+      background: #2563eb;
     }
 
     .output {
-      background: #ffffff;
-      border: 1px solid #ccc;
-      padding: 1.5rem;
+      background: white;
+      border: 1px solid #d1d5db;
       border-radius: 8px;
-      margin-top: 1rem;
-      display: none;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
     }
 
     .label {
       font-weight: bold;
       margin-bottom: 0.5rem;
-      color: #111827;
     }
 
     .action-buttons {
-      margin-top: 1rem;
       text-align: right;
+      margin-top: 1rem;
     }
 
     .action-buttons button {
@@ -82,74 +77,80 @@
     }
 
     .action-buttons button:hover {
-      background: #0e9f6e;
+      background: #059669;
     }
   </style>
 </head>
 <body>
+
   <h1>Générateur de Prompts IA</h1>
 
-  <textarea id="prompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
+  <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
 
   <div class="buttons">
     <button onclick="generatePrompt()">🎯 Générer le prompt</button>
   </div>
 
-  <div id="generatedPrompt" class="output">
+  <div id="generatedPromptBox" class="output" style="display: none;">
     <div class="label">📌 Prompt optimisé :</div>
-    <div id="resultContent"></div>
+    <div id="optimizedPrompt"></div>
     <div class="action-buttons">
-      <button onclick="copyText('resultContent')">📋 Copier</button>
-      <button onclick="sendToChatGPT()">💬 Envoyer à GPT</button>
+      <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
+      <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
     </div>
   </div>
 
-  <div id="chatResponse" class="output">
+  <div id="aiResponseBox" class="output" style="display: none;">
     <div class="label">🤖 Réponse de l'IA :</div>
-    <div id="chatContent"></div>
+    <div id="aiResponse"></div>
     <div class="action-buttons">
-      <button onclick="copyText('chatContent')">📋 Copier</button>
+      <button onclick="copyText('aiResponse')">📋 Copier</button>
     </div>
   </div>
 
   <script>
-    // === JavaScript intégré ===
-    function generatePrompt() {
-      const input = document.getElementById("prompt").value.trim();
-      const resultContainer = document.getElementById("generatedPrompt");
-      const resultContent = document.getElementById("resultContent");
-
-      if (input === "") {
-        alert("Veuillez entrer un texte pour générer un prompt.");
-        return;
-      }
-
-      const optimizedPrompt = `Agis comme un expert en intelligence artificielle et génère une réponse à cette demande : "${input}"`;
-
-      resultContent.textContent = optimizedPrompt;
-      resultContainer.style.display = "block";
-
-      // Reset previous AI response
-      document.getElementById("chatResponse").style.display = "none";
-    }
-
     function copyText(elementId) {
       const text = document.getElementById(elementId).textContent;
       navigator.clipboard.writeText(text).then(() => {
-        alert("Texte copié dans le presse-papiers !");
-      }).catch(err => {
-        alert("Échec de la copie : " + err);
+        alert("Texte copié !");
       });
     }
 
-    function sendToChatGPT() {
-      const optimizedPrompt = document.getElementById("resultContent").textContent;
-      const chatResponseBox = document.getElementById("chatResponse");
-      const chatContent = document.getElementById("chatContent");
+    async function generatePrompt() {
+      const userPrompt = document.getElementById("userPrompt").value.trim();
+      if (!userPrompt) {
+        alert("Veuillez entrer une idée ou une demande.");
+        return;
+      }
 
-      // Simule une réponse d'IA
-      chatContent.textContent = "Voici une réponse simulée pour : " + optimizedPrompt;
-      chatResponseBox.style.display = "block";
+      const response = await fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: userPrompt })
+      });
+
+      const data = await response.json();
+      document.getElementById("optimizedPrompt").textContent = data.response || "Erreur dans la génération.";
+      document.getElementById("generatedPromptBox").style.display = "block";
+      document.getElementById("aiResponseBox").style.display = "none";
+    }
+
+    async function getAIResponse() {
+      const improvedPrompt = document.getElementById("optimizedPrompt").textContent.trim();
+      if (!improvedPrompt) {
+        alert("Aucun prompt optimisé trouvé.");
+        return;
+      }
+
+      const response = await fetch("/respond", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: improvedPrompt })
+      });
+
+      const data = await response.json();
+      document.getElementById("aiResponse").textContent = data.response || "Erreur dans la réponse.";
+      document.getElementById("aiResponseBox").style.display = "block";
     }
   </script>
 </body>
