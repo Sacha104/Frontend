@@ -15,6 +15,59 @@ h1 {
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
 }
 
+#authSection {
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+#authSection h2 {
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 1.5rem;
+  color: #38bdf8;
+}
+
+#authSection input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+#authSection button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #3b82f6, #06b6d4);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#authSection button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+}
+
+#authStatus {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #facc15;
+}
+
 textarea {
   width: 100%;
   height: 140px;
@@ -102,28 +155,9 @@ button:hover {
   flex: 1 1 45%;
   min-width: 300px;
 }
+
+
 #aiResponse h1, #aiResponse h2, #aiResponse h3 {
-  color: #38bdf8;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-#aiResponse p {
-  margin-bottom: 0.8rem;
-  line-height: 1.5;
-}
-
-#aiResponse ul {
-  padding-left: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-#aiResponse li::marker {
-  color: #22d3ee;
-}
-#aiResponse h1,
-#aiResponse h2,
-#aiResponse h3 {
   color: #38bdf8;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
@@ -147,6 +181,10 @@ button:hover {
   margin-bottom: 0.3rem;
 }
 
+#aiResponse li::marker {
+  color: #22d3ee;
+}
+
 #aiResponse code {
   background-color: #0f172a;
   padding: 0.2rem 0.4rem;
@@ -163,6 +201,7 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
+
 #optimizedPrompt h1,
 #optimizedPrompt h2,
 #optimizedPrompt h3 {
@@ -205,32 +244,3 @@ button:hover {
   overflow-x: auto;
   margin-top: 1rem;
 }
-.auth-box {
-  margin: 20px auto;
-  text-align: center;
-}
-
-.auth-box input {
-  padding: 8px;
-  margin: 5px;
-  border-radius: 5px;
-  border: none;
-  font-size: 1rem;
-}
-
-.auth-box button {
-  padding: 10px 15px;
-  margin: 5px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(45deg, #007BFF, #00C6FF);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.auth-box button:hover {
-  opacity: 0.85;
-}
-
