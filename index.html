@@ -19,10 +19,6 @@
     <button onclick="generatePrompt()">🎯 Générer le prompt</button>
   </div>
 
-  <div id="loadingPrompt" class="loading-message" style="display: none;">
-    ⏳ Génération du prompt en cours...
-  </div>
-
 <div class="response-section">
   <div id="generatedPromptBox" class="output response-column">
   <div class="label">📌 Prompt optimisé :</div>
@@ -40,11 +36,6 @@
     <button onclick="copyText('aiResponse')">📋 Copier</button>
   </div>
 </div>
-
-<div id="loadingAI" class="loading-message" style="display: none;">
-  🤖 Envoi à l'IA en cours...
-</div>
-
 
   <script>
     const backendURL = "https://prompt-ai-naa1.onrender.com";
