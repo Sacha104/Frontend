@@ -141,3 +141,47 @@ auth.onAuthStateChanged(user => {
     document.getElementById("userPrompt").focus({ preventScroll: true });
   }
 });
+function sendFromInput() {
+  const input = document.getElementById("userPrompt");
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = "";
+  addMessage("user", text);
+  document.getElementById("userPrompt").dataset.optimized = ""; // reset
+
+  // Lance génération puis réponse IA
+  generatePromptFromText(text);
+}
+
+async function generatePromptFromText(text) {
+  addMessage("system", "⏳ Génération du prompt…");
+  try {
+    const res = await fetch(`${backendURL}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: text })
+    });
+    const data = await res.json();
+    const optimized = data.response || "⚠️ Erreur.";
+    addMessage("system", optimized);
+    getAIResponseFromPrompt(optimized);
+  } catch {
+    addMessage("system", "⚠️ Erreur réseau.");
+  }
+}
+
+async function getAIResponseFromPrompt(prompt) {
+  addMessage("system", "🤖 Réponse en cours…");
+  try {
+    const res = await fetch(`${backendURL}/respond`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    addMessage("system", marked.parse(data.response || "⚠️ Erreur IA."), true);
+  } catch {
+    addMessage("system", "⚠️ Erreur réseau.");
+  }
+}
