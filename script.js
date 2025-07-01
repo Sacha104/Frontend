@@ -1,27 +1,18 @@
-// Configuration Firebase
+// === Configuration Firebase ===
 const firebaseConfig = {
   apiKey: "AIzaSyBzEFTyOLMinVglWBmGSVqCwCtUfg40-l8",
   authDomain: "prompt-app-82523.firebaseapp.com",
   projectId: "prompt-app-82523",
-  storageBucket: "prompt-app-82523.firebasestorage.app",
+  storageBucket: "prompt-app-82523.appspot.com",
   messagingSenderId: "573537645411",
   appId: "1:573537645411:web:da0782831b6358db319956"
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-
 const backendURL = "https://prompt-ai-naa1.onrender.com";
 
-// Copie de texte
-function copyText(elementId) {
-  const text = document.getElementById(elementId).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    alert("Texte copié !");
-  });
-}
-
-// Génération du prompt
+// === Génération de prompt ===
 async function generatePrompt() {
   const userPrompt = document.getElementById("userPrompt").value.trim();
   if (!userPrompt) {
@@ -40,21 +31,19 @@ async function generatePrompt() {
     });
 
     const data = await response.json();
-    console.log("Prompt généré :", data);
-
     document.getElementById("optimizedPrompt").textContent = data.response || "Erreur dans la génération.";
     document.getElementById("generatedPromptBox").style.display = "block";
   } catch (error) {
-    console.error("Erreur dans generatePrompt:", error);
-    alert("Erreur lors de la génération du prompt.");
+    console.error("Erreur:", error);
+    alert("Erreur lors de la génération.");
   }
 }
 
-// Réponse de l'IA
+// === Réponse IA ===
 async function getAIResponse() {
   const improvedPrompt = document.getElementById("optimizedPrompt").textContent.trim();
   if (!improvedPrompt) {
-    alert("Aucun prompt optimisé trouvé.");
+    alert("Aucun prompt optimisé.");
     return;
   }
 
@@ -68,45 +57,24 @@ async function getAIResponse() {
     });
 
     const data = await response.json();
-    console.log("Réponse IA :", data);
-
-    document.getElementById("aiResponse").innerHTML = marked.parse(data.response || "Erreur dans la réponse.");
+    document.getElementById("aiResponse").innerHTML = marked.parse(data.response || "Erreur.");
     document.getElementById("aiResponseBox").style.display = "block";
   } catch (error) {
-    console.error("Erreur dans getAIResponse:", error);
-    alert("Erreur lors de la réponse de l'IA.");
+    console.error("Erreur:", error);
+    alert("Erreur lors de la réponse.");
   }
 }
 
-// Authentification Firebase
-function signUp() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  if (!email || !password || !confirmPassword) {
-    alert("Veuillez remplir tous les champs.");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    alert("❌ Les mots de passe ne correspondent pas.");
-    return;
-  }
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
-    })
-    .catch((error) => {
-      document.getElementById("authStatus").textContent = "❌ " + error.message;
-    });
+// === Copier du texte ===
+function copyText(elementId) {
+  const text = document.getElementById(elementId).textContent;
+  navigator.clipboard.writeText(text).then(() => alert("Texte copié !"));
 }
 
-
+// === Authentification ===
 function signIn() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
   if (!email || !password) {
     alert("Veuillez remplir tous les champs.");
@@ -122,33 +90,80 @@ function signIn() {
     });
 }
 
-function signOut() {
-  auth.signOut()
+function signUp() {
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (!email || !password || !confirmPassword) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("❌ Les mots de passe ne correspondent pas.");
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
-      document.getElementById("authStatus").textContent = "👋 Déconnecté.";
+      document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
+    })
+    .catch(error => {
+      document.getElementById("authStatus").textContent = "❌ " + error.message;
     });
 }
 
-// Changement d'état utilisateur
+function forgotPassword() {
+  const email = document.getElementById("loginEmail").value.trim();
+
+  if (!email) {
+    alert("Veuillez entrer votre email.");
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => alert("📧 Email de réinitialisation envoyé !"))
+    .catch(error => alert("❌ " + error.message));
+}
+
+function signOut() {
+  auth.signOut().then(() => {
+    document.getElementById("authStatus").textContent = "👋 Déconnecté.";
+  });
+}
+
+// === Changement d'état ===
 auth.onAuthStateChanged(user => {
   const authSection = document.getElementById("authSection");
   const appSection = document.getElementById("appSection");
 
   if (user) {
-    console.log("Connecté :", user.email);
     authSection.style.display = "none";
     appSection.style.display = "block";
   } else {
-    console.log("Utilisateur non connecté");
     authSection.style.display = "block";
     appSection.style.display = "none";
   }
 });
 
-// 👁️ Fonction pour afficher/masquer le mot de passe
-function togglePassword() {
-  const passwordInput = document.getElementById("password");
-  const eyeIcon = document.getElementById("eyeIcon");
+// === Bascule Login / SignUp ===
+function showSignUp() {
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("signupForm").style.display = "block";
+  document.getElementById("authStatus").textContent = "";
+}
+
+function showLogin() {
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("signupForm").style.display = "none";
+  document.getElementById("authStatus").textContent = "";
+}
+
+// === Affichage mot de passe ===
+function togglePassword(inputId, iconId) {
+  const passwordInput = document.getElementById(inputId);
+  const eyeIcon = document.getElementById(iconId);
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
@@ -160,54 +175,3 @@ function togglePassword() {
     eyeIcon.classList.add("fa-eye");
   }
 }
-function forgotPassword() {
-  const email = document.getElementById("email").value.trim();
-
-  if (!email) {
-    alert("Veuillez entrer votre adresse email pour réinitialiser le mot de passe.");
-    return;
-  }
-
-  auth.sendPasswordResetEmail(email)
-    .then(() => {
-      alert("📧 Un email de réinitialisation a été envoyé !");
-    })
-    .catch(error => {
-      console.error("Erreur de réinitialisation :", error);
-      alert("❌ " + error.message);
-    });
-}
-function showResetSection() {
-  document.getElementById("authSection").style.display = "none";
-  document.getElementById("resetSection").style.display = "block";
-}
-
-function showLogin() {
-  document.getElementById("resetSection").style.display = "none";
-  document.getElementById("authSection").style.display = "block";
-}
-
-function sendPasswordReset() {
-  const email = document.getElementById("resetEmail").value.trim();
-  const newPassword = document.getElementById("newPassword").value;
-  const confirmPassword = document.getElementById("confirmNewPassword").value;
-
-  if (!email || !newPassword || !confirmPassword) {
-    alert("Veuillez remplir tous les champs.");
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    alert("❌ Les mots de passe ne correspondent pas.");
-    return;
-  }
-
-  auth.sendPasswordResetEmail(email)
-    .then(() => {
-      document.getElementById("resetStatus").textContent = "📧 Lien de réinitialisation envoyé.";
-    })
-    .catch(error => {
-      document.getElementById("resetStatus").textContent = "❌ " + error.message;
-    });
-}
-
