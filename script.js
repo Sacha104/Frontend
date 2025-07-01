@@ -103,7 +103,7 @@ async function generatePrompt() {
   // ...
   try {
     const data = await fetch(
-    appendBubble(data.response || "⚠️ Erreur génération.", false);
+    appendBubble(data.response || "⚠️ Erreur génération.", false));
   } catch {
     appendBubble("⚠️ Erreur réseau.", false);
   }
