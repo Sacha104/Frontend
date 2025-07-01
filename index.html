@@ -5,88 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Générateur de Prompts IA</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script defer src="script.js"></script>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 20px;
-    }
-    .hidden { display: none; }
-    .section {
-      background-color: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    input, textarea {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-    button {
-      padding: 10px 15px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover { background-color: #0056b3; }
-    .link { color: #007bff; cursor: pointer; text-decoration: underline; }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 
 <body>
+  <div class="wrapper">
+    <div id="authSection" class="auth-section">
+      <div class="auth-box">
+        <h1 class="logo">PromptApp</h1>
 
-  <!-- Auth Section -->
-  <div id="authSection" class="section">
-    <h2>Connexion</h2>
-    <input id="loginEmail" type="email" placeholder="Email">
-    <input id="loginPassword" type="password" placeholder="Mot de passe">
-    <button onclick="signIn()">Se connecter</button>
-    <p id="authStatus" style="color:red;"></p>
-    <p><span class="link" onclick="showSignUp()">Créer un compte</span> | <span class="link" onclick="showReset()">Mot de passe oublié ?</span></p>
+        <!-- Formulaire de connexion -->
+        <form id="loginForm" class="auth-form">
+          <input type="email" id="loginEmail" placeholder="Email" />
+          <div class="password-wrapper">
+            <input type="password" id="loginPassword" placeholder="Mot de passe" />
+            <span class="toggle-password" onclick="togglePassword('loginPassword', 'eyeIconLogin')">
+              <i class="fa-solid fa-eye" id="eyeIconLogin"></i>
+            </span>
+          </div>
+          <button type="button" onclick="signIn()" class="btn-primary">Se connecter</button>
+          <a href="#" class="forgot-password" onclick="showReset()">Mot de passe oublié ?</a>
+          <div class="signup-footer">
+            <span>Vous n’avez pas de compte ?</span>
+            <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
+          </div>
+        </form>
 
-    <!-- Signup Form -->
-    <div id="signupForm" class="hidden">
-      <h3>Inscription</h3>
-      <input id="signupEmail" type="email" placeholder="Email">
-      <input id="signupPassword" type="password" placeholder="Mot de passe">
-      <input id="confirmPassword" type="password" placeholder="Confirmer le mot de passe">
-      <button onclick="signUp()">S’inscrire</button>
-      <button onclick="showLogin()">Retour</button>
-    </div>
+        <!-- Formulaire d’inscription -->
+        <form id="signupForm" class="auth-form" style="display: none;">
+          <input type="email" id="signupEmail" placeholder="Email" />
+          <div class="password-wrapper">
+            <input type="password" id="signupPassword" placeholder="Mot de passe" />
+            <span class="toggle-password" onclick="togglePassword('signupPassword', 'eyeIconSignup')">
+              <i class="fa-solid fa-eye" id="eyeIconSignup"></i>
+            </span>
+          </div>
+          <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" />
+          <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
+          <div class="signup-footer">
+            <span>Vous avez déjà un compte ?</span>
+            <a href="#" onclick="showLogin()">Se connecter</a>
+          </div>
+        </form>
 
-    <!-- Reset Form -->
-    <div id="resetSection" class="hidden">
-      <h3>Réinitialisation du mot de passe</h3>
-      <input id="resetEmail" type="email" placeholder="Votre email">
-      <button onclick="sendPasswordReset()">Envoyer</button>
-      <p id="resetStatus" style="color:green;"></p>
-      <button onclick="showLogin()">Retour</button>
+        <p id="authStatus" class="auth-status"></p>
+
+        <!-- Réinitialisation -->
+        <div id="resetSection" style="display: none;" class="auth-box">
+          <h2>Réinitialiser le mot de passe</h2>
+          <input type="email" id="resetEmail" placeholder="Votre email" />
+          <button onclick="sendPasswordReset()">Envoyer le lien de réinitialisation</button>
+          <p id="resetStatus" class="auth-status"></p>
+          <a href="#" onclick="showLogin()">🔙 Retour</a>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- App Section -->
-  <div id="appSection" class="section hidden">
-    <h2>Générateur de Prompts IA</h2>
+  <div id="appSection" style="display: none;">
+    <h1>Générateur de Prompts IA</h1>
     <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
-    <button onclick="generatePrompt()">🎯 Générer le prompt</button>
-    <div id="optimizedPrompt" style="margin-top:10px;"></div>
-    <button onclick="getAIResponse()" style="margin-top:10px;">💬 Obtenir une réponse IA</button>
-    <div id="aiResponse" style="margin-top:10px;"></div>
-    <button onclick="signOut()" style="margin-top:20px;">🚪 Se déconnecter</button>
-  </div>
+    <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
 
+    <div class="buttons">
+      <button onclick="generatePrompt()">🎯 Générer le prompt</button>
+    </div>
+
+    <div class="response-section">
+      <div id="generatedPromptBox" class="output response-column">
+        <div class="label">📌 Prompt optimisé :</div>
+        <div id="optimizedPrompt">Aucun prompt généré pour l’instant.</div>
+        <div class="action-buttons">
+          <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
+          <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
+        </div>
+      </div>
+
+      <div id="aiResponseBox" class="output response-column">
+        <div class="label">🤖 Réponse de l'IA :</div>
+        <div id="aiResponse">Aucune réponse générée pour l’instant.</div>
+        <div class="action-buttons">
+          <button onclick="copyText('aiResponse')">📋 Copier</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
