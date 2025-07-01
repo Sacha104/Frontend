@@ -67,15 +67,25 @@
       </div>
     </div>
   </div>
+  
+  <div id="appSection" style="display: none; position: relative;">
+  <button onclick="signOut()" class="logout-btn">🚪 Se déconnecter</button>
 
   <div id="appSection" style="display: none;">
-    <h1>Générateur de Prompts IA</h1>
-    <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
-    <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
+  <h1>Générateur de Prompts IA</h1>
+  <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
+  <div class="buttons">
+    <button onclick="generatePrompt()">🎯 Générer le prompt</button>
+  </div>
 
-    <div class="buttons">
-      <button onclick="generatePrompt()">🎯 Générer le prompt</button>
-    </div>
+  <div id="chatBox" class="chat-box">
+    <!-- Les messages apparaîtront ici -->
+  </div>
+
+  <div class="action-buttons" style="text-align: center; margin-top: 1rem;">
+    <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
+  </div>
+</div>
 
     <div class="response-section">
       <div id="generatedPromptBox" class="output response-column">
