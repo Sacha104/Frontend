@@ -82,20 +82,27 @@ async function getAIResponse() {
 function signUp() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
 
-  if (!email || !password) {
+  if (!email || !password || !confirmPassword) {
     alert("Veuillez remplir tous les champs.");
     return;
   }
 
+  if (password !== confirmPassword) {
+    alert("❌ Les mots de passe ne correspondent pas.");
+    return;
+  }
+
   auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
+    .then((userCredential) => {
       document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
     })
-    .catch(error => {
+    .catch((error) => {
       document.getElementById("authStatus").textContent = "❌ " + error.message;
     });
 }
+
 
 function signIn() {
   const email = document.getElementById("email").value;
