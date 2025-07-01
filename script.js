@@ -1,4 +1,4 @@
-// === Configuration Firebase ===
+// Configuration Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBzEFTyOLMinVglWBmGSVqCwCtUfg40-l8",
   authDomain: "prompt-app-82523.firebaseapp.com",
@@ -12,7 +12,15 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
 
-// === Génération de prompt ===
+// Copie de texte
+function copyText(elementId) {
+  const text = document.getElementById(elementId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Texte copié !");
+  });
+}
+
+// Génération du prompt
 async function generatePrompt() {
   const userPrompt = document.getElementById("userPrompt").value.trim();
   if (!userPrompt) {
@@ -34,16 +42,16 @@ async function generatePrompt() {
     document.getElementById("optimizedPrompt").textContent = data.response || "Erreur dans la génération.";
     document.getElementById("generatedPromptBox").style.display = "block";
   } catch (error) {
-    console.error("Erreur:", error);
-    alert("Erreur lors de la génération.");
+    console.error("Erreur dans generatePrompt:", error);
+    alert("Erreur lors de la génération du prompt.");
   }
 }
 
-// === Réponse IA ===
+// Réponse de l'IA
 async function getAIResponse() {
   const improvedPrompt = document.getElementById("optimizedPrompt").textContent.trim();
   if (!improvedPrompt) {
-    alert("Aucun prompt optimisé.");
+    alert("Aucun prompt optimisé trouvé.");
     return;
   }
 
@@ -57,24 +65,42 @@ async function getAIResponse() {
     });
 
     const data = await response.json();
-    document.getElementById("aiResponse").innerHTML = marked.parse(data.response || "Erreur.");
+    document.getElementById("aiResponse").innerHTML = marked.parse(data.response || "Erreur dans la réponse.");
     document.getElementById("aiResponseBox").style.display = "block";
   } catch (error) {
-    console.error("Erreur:", error);
-    alert("Erreur lors de la réponse.");
+    console.error("Erreur dans getAIResponse:", error);
+    alert("Erreur lors de la réponse de l'IA.");
   }
 }
 
-// === Copier du texte ===
-function copyText(elementId) {
-  const text = document.getElementById(elementId).textContent;
-  navigator.clipboard.writeText(text).then(() => alert("Texte copié !"));
+// === Auth ===
+function signUp() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (!email || !password || !confirmPassword) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("❌ Les mots de passe ne correspondent pas.");
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
+    })
+    .catch((error) => {
+      document.getElementById("authStatus").textContent = "❌ " + error.message;
+    });
 }
 
-// === Authentification ===
 function signIn() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
   if (!email || !password) {
     alert("Veuillez remplir tous les champs.");
@@ -90,80 +116,51 @@ function signIn() {
     });
 }
 
-function signUp() {
-  const email = document.getElementById("signupEmail").value;
-  const password = document.getElementById("signupPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  if (!email || !password || !confirmPassword) {
-    alert("Veuillez remplir tous les champs.");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    alert("❌ Les mots de passe ne correspondent pas.");
-    return;
-  }
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
-    })
-    .catch(error => {
-      document.getElementById("authStatus").textContent = "❌ " + error.message;
-    });
-}
-
 function forgotPassword() {
-  const email = document.getElementById("loginEmail").value.trim();
+  const email = document.getElementById("email").value.trim();
 
   if (!email) {
-    alert("Veuillez entrer votre email.");
+    alert("Veuillez entrer votre adresse email pour réinitialiser le mot de passe.");
     return;
   }
 
   auth.sendPasswordResetEmail(email)
-    .then(() => alert("📧 Email de réinitialisation envoyé !"))
-    .catch(error => alert("❌ " + error.message));
+    .then(() => {
+      alert("📧 Un email de réinitialisation a été envoyé !");
+    })
+    .catch(error => {
+      console.error("Erreur de réinitialisation :", error);
+      alert("❌ " + error.message);
+    });
 }
 
 function signOut() {
-  auth.signOut().then(() => {
-    document.getElementById("authStatus").textContent = "👋 Déconnecté.";
-  });
+  auth.signOut()
+    .then(() => {
+      document.getElementById("authStatus").textContent = "👋 Déconnecté.";
+    });
 }
 
-// === Changement d'état ===
+// Changement d'état utilisateur
 auth.onAuthStateChanged(user => {
   const authSection = document.getElementById("authSection");
   const appSection = document.getElementById("appSection");
 
   if (user) {
+    console.log("Connecté :", user.email);
     authSection.style.display = "none";
     appSection.style.display = "block";
   } else {
+    console.log("Utilisateur non connecté");
     authSection.style.display = "block";
     appSection.style.display = "none";
   }
 });
 
-// === Bascule Login / SignUp ===
-function showSignUp() {
-  document.getElementById("loginForm").style.display = "none";
-  document.getElementById("signupForm").style.display = "block";
-  document.getElementById("authStatus").textContent = "";
-}
-
-function showLogin() {
-  document.getElementById("loginForm").style.display = "block";
-  document.getElementById("signupForm").style.display = "none";
-  document.getElementById("authStatus").textContent = "";
-}
-
-// === Affichage mot de passe ===
-function togglePassword(inputId, iconId) {
-  const passwordInput = document.getElementById(inputId);
-  const eyeIcon = document.getElementById(iconId);
+// 👁️ Fonction pour afficher/masquer le mot de passe
+function togglePassword() {
+  const passwordInput = document.getElementById("password");
+  const eyeIcon = document.getElementById("eyeIcon");
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
