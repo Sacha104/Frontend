@@ -1,9 +1,8 @@
-// 🔧 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAiBioPsbDZT3nrMgeHdntS0QIXjQTIzIk",
   authDomain: "prompt-app-d4692.firebaseapp.com",
   projectId: "prompt-app-d4692",
-  storageBucket: "prompt-app-d4692.appspot.com",
+  storageBucket: "prompt-app-d4692.firebasestorage.app",
   messagingSenderId: "1090823184353",
   appId: "1:1090823184353:web:86a03e89a3e632e402bca0"
 };
@@ -12,17 +11,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
 
-// 📩 Affiche message dans chat
-function addMessage(sender, text, isHTML = false) {
-  const chatBox = document.getElementById("chatBox");
-  const msg = document.createElement("div");
-  msg.className = `message ${sender}-message`;
-  msg.innerHTML = isHTML ? text : text.replace(/\n/g, "<br>");
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// 🔓 Authentification
 function signIn() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
@@ -30,7 +18,7 @@ function signIn() {
     .then(() => {
       document.getElementById("authSection").style.display = "none";
       document.getElementById("appSection").style.display = "block";
-      document.getElementById("chatBox").innerHTML = "";
+      forceScrollToTop();
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
 }
@@ -40,8 +28,7 @@ function signUp() {
   const password = document.getElementById("signupPassword").value;
   const confirm = document.getElementById("confirmPassword").value;
   if (password !== confirm) {
-    document.getElementById("authStatus").textContent = "❌ Mots de passe différents.";
-    return;
+    return void (document.getElementById("authStatus").textContent = "❌ Mots de passe différents.");
   }
   auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
@@ -59,26 +46,37 @@ function sendPasswordReset() {
 }
 
 function signOut() {
-  auth.signOut().then(() => {
-    document.getElementById("authSection").style.display = "block";
-    document.getElementById("appSection").style.display = "none";
-    document.getElementById("chatBox").innerHTML = "";
-    document.getElementById("userPrompt").value = "";
-  });
+  auth.signOut()
+    .then(() => {
+      document.getElementById("authSection").style.display = "block";
+      document.getElementById("appSection").style.display = "none";
+      forceScrollToTop();
+    });
 }
 
-// 📋 Interface auth
-function showLogin() {
-  document.getElementById("loginForm").style.display = "block";
-  document.getElementById("signupForm").style.display = "none";
-  document.getElementById("resetSection").style.display = "none";
-  document.getElementById("authStatus").textContent = "";
+function togglePassword(inId, icoId) {
+  const input = document.getElementById(inId);
+  const icon = document.getElementById(icoId);
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
 }
 
 function showSignUp() {
   document.getElementById("loginForm").style.display = "none";
   document.getElementById("signupForm").style.display = "block";
   document.getElementById("resetSection").style.display = "none";
+}
+
+function showLogin() {
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("signupForm").style.display = "none";
+  document.getElementById("resetSection").style.display = "none";
+  document.getElementById("authStatus").textContent = "";
 }
 
 function showReset() {
@@ -88,36 +86,41 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
-// 🧠 Génération du prompt
-async function generatePrompt() {
-  const input = document.getElementById("userPrompt").value.trim();
-  if (!input) return alert("✍️ Entre une demande.");
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("authSection").style.display = "none";
+    document.getElementById("appSection").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "auto" });
+    document.getElementById("userPrompt").focus({ preventScroll: true });
+  }
+});
 
-  addMessage("user", input);
-  addMessage("system", "⏳ Génération du prompt…");
+async function generatePrompt() {
+  const userPrompt = document.getElementById("userPrompt").value.trim();
+  if (!userPrompt) return alert("🔍 Entre une idée ou demande.");
+
+  document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
+  document.getElementById("aiResponse").textContent = "";
 
   try {
     const res = await fetch(`${backendURL}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: input })
+      body: JSON.stringify({ prompt: userPrompt })
     });
     const data = await res.json();
-    const generated = data.response || "⚠️ Erreur.";
-    addMessage("system", generated);
-    document.getElementById("userPrompt").dataset.optimized = generated;
+    document.getElementById("optimizedPrompt").textContent = data.response || "⚠️ Erreur génération.";
   } catch {
-    addMessage("system", "⚠️ Erreur réseau.");
+    document.getElementById("optimizedPrompt").textContent = "⚠️ Erreur réseau.";
   }
 }
 
-// 🤖 Réponse IA
 async function getAIResponse() {
-  const improved = document.getElementById("userPrompt").dataset.optimized;
-  if (!improved) return alert("📌 Génère d’abord un prompt.");
+  const improved = document.getElementById("optimizedPrompt").textContent.trim();
+  if (!improved) return alert("📌 Génère d'abord un prompt.");
 
-  addMessage("user", improved);
-  addMessage("system", "🤖 Réponse en cours…");
+  const aiBox = document.getElementById("aiResponse");
+  aiBox.textContent = "🤖 Réponse en cours…";
 
   try {
     const res = await fetch(`${backendURL}/respond`, {
@@ -126,83 +129,14 @@ async function getAIResponse() {
       body: JSON.stringify({ prompt: improved })
     });
     const data = await res.json();
-    addMessage("system", marked.parse(data.response || "⚠️ Erreur IA."), true);
+    aiBox.innerHTML = marked.parse(data.response || "⚠️ Erreur IA.");
   } catch {
-    addMessage("system", "⚠️ Erreur réseau.");
+    aiBox.textContent = "⚠️ Erreur réseau.";
   }
 }
 
-// 🔁 État utilisateur
-auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById("authSection").style.display = "none";
-    document.getElementById("appSection").style.display = "block";
-    document.getElementById("chatBox").innerHTML = "";
-    document.getElementById("userPrompt").focus({ preventScroll: true });
-  }
-});
-function sendFromInput() {
-  const input = document.getElementById("userPrompt");
-  const text = input.value.trim();
-  if (!text) return;
-
-  input.value = "";
-  addMessage("user", text);
-  document.getElementById("userPrompt").dataset.optimized = ""; // reset
-
-  // Lance génération puis réponse IA
-  generatePromptFromText(text);
+function copyText(elId) {
+  const text = document.getElementById(elId).textContent;
+  navigator.clipboard.writeText(text).then(() => alert("✅ Copié !"));
 }
 
-async function generatePrompt() {
-  const input = document.getElementById("userPrompt").value.trim();
-  if (!input) return alert("✍️ Entre une demande.");
-
-  addMessage("user", input);
-  addMessage("system", "⏳ Génération du prompt…");
-
-  try {
-    const res = await fetch(`${backendURL}/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input })
-    });
-    const data = await res.json();
-
-    // Remplace l'ancien message système
-    const chatBox = document.getElementById("chatBox");
-    chatBox.lastChild.remove(); // supprime le "⏳ Génération..." message
-
-    // Affiche le prompt optimisé
-    const prompt = data.optimizedPrompt || "⚠️ Aucun prompt généré.";
-    const botMsg = document.createElement("div");
-    botMsg.className = "message bot-message";
-    botMsg.innerHTML = `${prompt}<br><button onclick="sendToGPT(\`${prompt.replace(/`/g, '\\`')}\`)">💬 Envoyer à GPT</button>`;
-    chatBox.appendChild(botMsg);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-  } catch (err) {
-    console.error(err);
-    addMessage("system", "❌ Erreur lors de la génération.");
-  }
-}
-
-async function sendToGPT(text) {
-  addMessage("user", text); // rejoue comme utilisateur
-  addMessage("system", "⏳ Réponse en cours…");
-
-  try {
-    const res = await fetch(`${backendURL}/ask`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: text })
-    });
-    const data = await res.json();
-
-    document.getElementById("chatBox").lastChild.remove(); // retire "⏳ Réponse en cours…"
-    addMessage("bot", data.reply || "🤖 Aucune réponse.");
-  } catch (err) {
-    console.error(err);
-    addMessage("system", "❌ Erreur IA.");
-  }
-}
