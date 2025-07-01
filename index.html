@@ -81,6 +81,11 @@
   <div id="chatBox" class="chat-box">
     <!-- Les messages apparaîtront ici -->
   </div>
+  <div id="inputSection" class="input-section">
+  <textarea id="userPrompt" placeholder="Écris ici..." rows="2"></textarea>
+  <button onclick="sendFromInput()">Envoyer</button>
+</div>
+
 
   <div class="action-buttons" style="text-align: center; margin-top: 1rem;">
     <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
