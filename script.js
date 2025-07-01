@@ -147,13 +147,3 @@ function copyText(elId) {
   navigator.clipboard.writeText(text).then(() => alert("✅ Copié !"));
 }
 
-// ⬆️ Force le scroll tout en haut (après affichage)
-function forceScrollToTop() {
-  setTimeout(() => {
-    document.body.style.overflow = "hidden";
-    window.scrollTo({ top: 0, behavior: "auto" });
-    setTimeout(() => {
-      document.body.style.overflow = "";
-    }, 100);
-  }, 50);
-}
