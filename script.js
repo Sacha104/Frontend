@@ -89,10 +89,17 @@ function showReset() {
 
 // 🔁 État utilisateur
 auth.onAuthStateChanged(user => {
-  document.getElementById("authSection").style.display = user ? "none" : "block";
-  document.getElementById("appSection").style.display = user ? "block" : "none";
-  if (user) forceScrollToTop();
+  if (user) {
+    document.getElementById("authSection").style.display = "none";
+    document.getElementById("appSection").style.display = "block";
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+
+    // Focus sans scroll automatique :
+    document.getElementById("userPrompt").focus({ preventScroll: true });
+  }
 });
+
 
 // 🧠 Fonctions IA via ton backend
 async function generatePrompt() {
