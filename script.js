@@ -177,3 +177,37 @@ function forgotPassword() {
       alert("❌ " + error.message);
     });
 }
+function showResetSection() {
+  document.getElementById("authSection").style.display = "none";
+  document.getElementById("resetSection").style.display = "block";
+}
+
+function showLogin() {
+  document.getElementById("resetSection").style.display = "none";
+  document.getElementById("authSection").style.display = "block";
+}
+
+function sendPasswordReset() {
+  const email = document.getElementById("resetEmail").value.trim();
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmNewPassword").value;
+
+  if (!email || !newPassword || !confirmPassword) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    alert("❌ Les mots de passe ne correspondent pas.");
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => {
+      document.getElementById("resetStatus").textContent = "📧 Lien de réinitialisation envoyé.";
+    })
+    .catch(error => {
+      document.getElementById("resetStatus").textContent = "❌ " + error.message;
+    });
+}
+
