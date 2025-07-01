@@ -7,10 +7,8 @@ const firebaseConfig = {
   appId: "1:1090823184353:web:86a03e89a3e632e402bca0"
 };
 
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-
 const backendURL = "https://prompt-ai-naa1.onrender.com";
 
 // 🔓 Authentification et gestion des formulaires
@@ -21,7 +19,7 @@ function signIn() {
     .then(() => {
       document.getElementById("authSection").style.display = "none";
       document.getElementById("appSection").style.display = "block";
-      window.scrollTo(0, 0);
+      forceScrollToTop();
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
 }
@@ -53,7 +51,7 @@ function signOut() {
     .then(() => {
       document.getElementById("authSection").style.display = "block";
       document.getElementById("appSection").style.display = "none";
-      window.scrollTo(0, 0);
+      forceScrollToTop();
     });
 }
 
@@ -93,7 +91,7 @@ function showReset() {
 auth.onAuthStateChanged(user => {
   document.getElementById("authSection").style.display = user ? "none" : "block";
   document.getElementById("appSection").style.display = user ? "block" : "none";
-  if (user) window.scrollTo(0, 0);
+  if (user) forceScrollToTop();
 });
 
 // 🧠 Fonctions IA via ton backend
@@ -141,4 +139,15 @@ async function getAIResponse() {
 function copyText(elId) {
   const text = document.getElementById(elId).textContent;
   navigator.clipboard.writeText(text).then(() => alert("✅ Copié !"));
+}
+
+// ⬆️ Force le scroll tout en haut (après affichage)
+function forceScrollToTop() {
+  setTimeout(() => {
+    document.body.style.overflow = "hidden";
+    window.scrollTo({ top: 0, behavior: "auto" });
+    setTimeout(() => {
+      document.body.style.overflow = "";
+    }, 100);
+  }, 50);
 }
