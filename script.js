@@ -1,4 +1,4 @@
-// Configuration Firebase
+// === Configuration Firebase ===
 const firebaseConfig = {
   apiKey: "AIzaSyBzEFTyOLMinVglWBmGSVqCwCtUfg40-l8",
   authDomain: "prompt-app-82523.firebaseapp.com",
@@ -12,7 +12,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
 
-// Copie de texte
+// === Copier du texte ===
 function copyText(elementId) {
   const text = document.getElementById(elementId).textContent;
   navigator.clipboard.writeText(text).then(() => {
@@ -20,7 +20,7 @@ function copyText(elementId) {
   });
 }
 
-// Génération du prompt
+// === Générer le prompt ===
 async function generatePrompt() {
   const userPrompt = document.getElementById("userPrompt").value.trim();
   if (!userPrompt) {
@@ -47,7 +47,7 @@ async function generatePrompt() {
   }
 }
 
-// Réponse de l'IA
+// === Obtenir une réponse de l'IA ===
 async function getAIResponse() {
   const improvedPrompt = document.getElementById("optimizedPrompt").textContent.trim();
   if (!improvedPrompt) {
@@ -73,10 +73,10 @@ async function getAIResponse() {
   }
 }
 
-// === Auth ===
+// === Authentification ===
 function signUp() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
   if (!email || !password || !confirmPassword) {
@@ -90,17 +90,18 @@ function signUp() {
   }
 
   auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
+    .then(() => {
       document.getElementById("authStatus").textContent = "✅ Inscription réussie !";
+      showLogin();
     })
-    .catch((error) => {
+    .catch(error => {
       document.getElementById("authStatus").textContent = "❌ " + error.message;
     });
 }
 
 function signIn() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
   if (!email || !password) {
     alert("Veuillez remplir tous les champs.");
@@ -116,21 +117,21 @@ function signIn() {
     });
 }
 
-function forgotPassword() {
-  const email = document.getElementById("email").value.trim();
+function sendPasswordReset() {
+  const email = document.getElementById("resetEmail").value.trim();
 
   if (!email) {
-    alert("Veuillez entrer votre adresse email pour réinitialiser le mot de passe.");
+    alert("Veuillez entrer votre adresse email.");
     return;
   }
 
   auth.sendPasswordResetEmail(email)
     .then(() => {
-      alert("📧 Un email de réinitialisation a été envoyé !");
+      document.getElementById("resetStatus").textContent = "📧 Lien envoyé ! Vérifiez votre boîte mail.";
     })
     .catch(error => {
-      console.error("Erreur de réinitialisation :", error);
-      alert("❌ " + error.message);
+      console.error("Erreur réinitialisation :", error);
+      document.getElementById("resetStatus").textContent = "❌ " + error.message;
     });
 }
 
@@ -141,34 +142,54 @@ function signOut() {
     });
 }
 
-// Changement d'état utilisateur
+// === Affichage dynamique ===
+function showSignUp() {
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("signupForm").style.display = "block";
+  document.getElementById("resetSection").style.display = "none";
+  document.getElementById("authStatus").textContent = "";
+}
+
+function showLogin() {
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("signupForm").style.display = "none";
+  document.getElementById("resetSection").style.display = "none";
+  document.getElementById("authStatus").textContent = "";
+}
+
+function showReset() {
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("signupForm").style.display = "none";
+  document.getElementById("resetSection").style.display = "block";
+  document.getElementById("resetStatus").textContent = "";
+}
+
+// === Affichage conditionnel de sections ===
 auth.onAuthStateChanged(user => {
   const authSection = document.getElementById("authSection");
   const appSection = document.getElementById("appSection");
 
   if (user) {
-    console.log("Connecté :", user.email);
     authSection.style.display = "none";
     appSection.style.display = "block";
   } else {
-    console.log("Utilisateur non connecté");
-    authSection.style.display = "block";
+    authSection.style.display = "flex";
     appSection.style.display = "none";
   }
 });
 
-// 👁️ Fonction pour afficher/masquer le mot de passe
-function togglePassword() {
-  const passwordInput = document.getElementById("password");
-  const eyeIcon = document.getElementById("eyeIcon");
+// === Affichage/Masquage des mots de passe ===
+function togglePassword(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
 
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    eyeIcon.classList.remove("fa-eye");
-    eyeIcon.classList.add("fa-eye-slash");
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
   } else {
-    passwordInput.type = "password";
-    eyeIcon.classList.remove("fa-eye-slash");
-    eyeIcon.classList.add("fa-eye");
+    input.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
   }
 }
