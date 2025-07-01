@@ -299,3 +299,18 @@ button:hover {
   margin-right: auto;
   border-top-left-radius: 0;
 }
+.input-section {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.input-section textarea {
+  flex: 1;
+  resize: none;
+  height: 60px;
+}
+
+.input-section button {
+  height: 60px;
+}
