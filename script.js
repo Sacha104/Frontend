@@ -153,3 +153,20 @@ function togglePassword() {
     eyeIcon.classList.add("fa-eye");
   }
 }
+function forgotPassword() {
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    alert("Veuillez entrer votre adresse email pour réinitialiser le mot de passe.");
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => {
+      alert("📧 Un email de réinitialisation a été envoyé !");
+    })
+    .catch(error => {
+      console.error("Erreur de réinitialisation :", error);
+      alert("❌ " + error.message);
+    });
+}
