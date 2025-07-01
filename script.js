@@ -154,34 +154,55 @@ function sendFromInput() {
   generatePromptFromText(text);
 }
 
-async function generatePromptFromText(text) {
+async function generatePrompt() {
+  const input = document.getElementById("userPrompt").value.trim();
+  if (!input) return alert("✍️ Entre une demande.");
+
+  addMessage("user", input);
   addMessage("system", "⏳ Génération du prompt…");
+
   try {
     const res = await fetch(`${backendURL}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input })
+    });
+    const data = await res.json();
+
+    // Remplace l'ancien message système
+    const chatBox = document.getElementById("chatBox");
+    chatBox.lastChild.remove(); // supprime le "⏳ Génération..." message
+
+    // Affiche le prompt optimisé
+    const prompt = data.optimizedPrompt || "⚠️ Aucun prompt généré.";
+    const botMsg = document.createElement("div");
+    botMsg.className = "message bot-message";
+    botMsg.innerHTML = `${prompt}<br><button onclick="sendToGPT(\`${prompt.replace(/`/g, '\\`')}\`)">💬 Envoyer à GPT</button>`;
+    chatBox.appendChild(botMsg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+  } catch (err) {
+    console.error(err);
+    addMessage("system", "❌ Erreur lors de la génération.");
+  }
+}
+
+async function sendToGPT(text) {
+  addMessage("user", text); // rejoue comme utilisateur
+  addMessage("system", "⏳ Réponse en cours…");
+
+  try {
+    const res = await fetch(`${backendURL}/ask`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: text })
     });
     const data = await res.json();
-    const optimized = data.response || "⚠️ Erreur.";
-    addMessage("system", optimized);
-    getAIResponseFromPrompt(optimized);
-  } catch {
-    addMessage("system", "⚠️ Erreur réseau.");
-  }
-}
 
-async function getAIResponseFromPrompt(prompt) {
-  addMessage("system", "🤖 Réponse en cours…");
-  try {
-    const res = await fetch(`${backendURL}/respond`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-    const data = await res.json();
-    addMessage("system", marked.parse(data.response || "⚠️ Erreur IA."), true);
-  } catch {
-    addMessage("system", "⚠️ Erreur réseau.");
+    document.getElementById("chatBox").lastChild.remove(); // retire "⏳ Réponse en cours…"
+    addMessage("bot", data.reply || "🤖 Aucune réponse.");
+  } catch (err) {
+    console.error(err);
+    addMessage("system", "❌ Erreur IA.");
   }
 }
