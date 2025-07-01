@@ -4,7 +4,6 @@ body {
   color: #f8fafc;
   font-family: 'Segoe UI', 'Roboto', sans-serif;
   margin: 0;
-  padding: 2rem;
 }
 
 h1, h2, h3 {
@@ -251,4 +250,11 @@ button:hover {
   color: #cbd5e1;
   font-size: 1.2rem;
   z-index: 10;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0; /* pour éviter le décalage haut dû au padding initial */
 }
