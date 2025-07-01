@@ -12,15 +12,12 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="script.js" defer></script>
 </head>
-
 <body>
   <div class="wrapper">
-    <!-- 🔐 Authentification -->
     <div id="authSection" class="auth-section">
       <div class="auth-box">
         <h1 class="logo">PromptApp</h1>
 
-        <!-- Connexion -->
         <form id="loginForm" class="auth-form">
           <input type="email" id="loginEmail" placeholder="Email" />
           <div class="password-wrapper">
@@ -37,7 +34,6 @@
           </div>
         </form>
 
-        <!-- Inscription -->
         <form id="signupForm" class="auth-form" style="display: none;">
           <input type="email" id="signupEmail" placeholder="Email" />
           <div class="password-wrapper">
@@ -54,38 +50,46 @@
           </div>
         </form>
 
-        <!-- Réinitialisation -->
-        <div id="resetSection" class="auth-box" style="display: none;">
+        <p id="authStatus" class="auth-status"></p>
+
+        <div id="resetSection" style="display: none;" class="auth-box">
           <h2>Réinitialiser le mot de passe</h2>
           <input type="email" id="resetEmail" placeholder="Votre email" />
           <button onclick="sendPasswordReset()">Envoyer le lien de réinitialisation</button>
           <p id="resetStatus" class="auth-status"></p>
           <a href="#" onclick="showLogin()">🔙 Retour</a>
         </div>
-
-        <p id="authStatus" class="auth-status"></p>
       </div>
     </div>
-
-    <!-- 🧠 Application principale -->
-<div id="appSection" style="display: none; position: relative;">
-  <button onclick="signOut()" class="logout-btn">🚪 Se déconnecter</button>
-  <h1>Générateur de Prompts IA</h1>
-
-  <!-- Zone de saisie initiale -->
-  <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
-  <div class="buttons">
-    <button onclick="generatePrompt()">🎯 Générer le prompt</button>
   </div>
 
-  <!-- Chat dynamique -->
-  <div id="chatBox" class="chat-box"></div>
+  <div id="appSection" style="display: none;">
+    <h1>Générateur de Prompts IA</h1>
+    <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
+    <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
 
-  <!-- Bouton pour envoyer à GPT (masqué par défaut) -->
-  <div id="sendToGPTContainer" class="action-buttons" style="display: none; text-align: center;">
-    <button onclick="sendPromptToGPT()">💬 Envoyer à GPT</button>
+    <div class="buttons">
+      <button onclick="generatePrompt()">🎯 Générer le prompt</button>
+    </div>
+
+    <div class="response-section">
+      <div id="generatedPromptBox" class="output response-column">
+        <div class="label">📌 Prompt optimisé :</div>
+        <div id="optimizedPrompt">Aucun prompt généré pour l’instant.</div>
+        <div class="action-buttons">
+          <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
+          <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
+        </div>
+      </div>
+
+      <div id="aiResponseBox" class="output response-column">
+        <div class="label">🤖 Réponse de l'IA :</div>
+        <div id="aiResponse">Aucune réponse générée pour l’instant.</div>
+        <div class="action-buttons">
+          <button onclick="copyText('aiResponse')">📋 Copier</button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-    
 </body>
 </html>
