@@ -10,74 +10,63 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" defer></script>
-  <script src="script.js" defer></script> <!-- Ton script séparé ici -->
+  <script src="script.js" defer></script>
 </head>
 
 <body>
-  
   <div id="authSection" class="auth-section">
-  <div class="auth-box">
-    <h1 class="logo">PromptApp</h1>
+    <div class="auth-box">
+      <h1 class="logo">PromptApp</h1>
 
-    <!-- Formulaire de connexion -->
-<form id="loginForm" class="auth-form">
-  <input type="email" id="loginEmail" placeholder="Email" />
+      <!-- Formulaire de connexion -->
+      <form id="loginForm" class="auth-form">
+        <input type="email" id="email" placeholder="Email" />
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Mot de passe" />
+          <span class="toggle-password" onclick="togglePassword('password', 'eyeIconLogin')">
+            <i class="fa-solid fa-eye" id="eyeIconLogin"></i>
+          </span>
+        </div>
+        <button type="button" onclick="signIn()" class="btn-primary">Se connecter</button>
+        <a href="#" class="forgot-password" onclick="showReset()">Mot de passe oublié ?</a>
+        <div class="signup-footer">
+          <span>Vous n’avez pas de compte ?</span>
+          <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
+        </div>
+      </form>
 
-  <div class="password-wrapper">
-    <input type="password" id="loginPassword" placeholder="Mot de passe" />
-    <span class="toggle-password" onclick="togglePassword('loginPassword', 'eyeIconLogin')">
-      <i class="fa-solid fa-eye" id="eyeIconLogin"></i>
-    </span>
+      <!-- Formulaire d’inscription -->
+      <form id="signupForm" class="auth-form" style="display: none;">
+        <input type="email" id="email" placeholder="Email" />
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Mot de passe" />
+          <span class="toggle-password" onclick="togglePassword('password', 'eyeIconSignup')">
+            <i class="fa-solid fa-eye" id="eyeIconSignup"></i>
+          </span>
+        </div>
+        <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" />
+        <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
+        <div class="signup-footer">
+          <span>Vous avez déjà un compte ?</span>
+          <a href="#" onclick="showLogin()">Se connecter</a>
+        </div>
+      </form>
+
+      <p id="authStatus" class="auth-status"></p>
+
+      <!-- Réinitialisation -->
+      <div id="resetSection" style="display: none;" class="auth-box">
+        <h2>Réinitialiser le mot de passe</h2>
+        <input type="email" id="email" placeholder="Votre email" />
+        <button onclick="forgotPassword()">Envoyer le lien de réinitialisation</button>
+        <p id="resetStatus" class="auth-status"></p>
+        <a href="#" onclick="showLogin()">🔙 Retour</a>
+      </div>
+    </div>
   </div>
-
-  <button type="button" onclick="signIn()" class="btn-primary">Se connecter</button>
-  <a href="#" class="forgot-password" onclick="showReset()">Mot de passe oublié ?</a>
-
-  <div class="signup-footer">
-    <span>Vous n’avez pas de compte ?</span>
-    <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
-  </div>
-</form>
-
-<!-- Formulaire d’inscription -->
-<form id="signupForm" class="auth-form" style="display: none;">
-  <input type="email" id="signupEmail" placeholder="Email" />
-
-  <div class="password-wrapper">
-    <input type="password" id="signupPassword" placeholder="Mot de passe" />
-    <span class="toggle-password" onclick="togglePassword('signupPassword', 'eyeIconSignup')">
-      <i class="fa-solid fa-eye" id="eyeIconSignup"></i>
-    </span>
-  </div>
-
-  <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" />
-  <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
-
-  <div class="signup-footer">
-    <span>Vous avez déjà un compte ?</span>
-    <a href="#" onclick="showLogin()">Se connecter</a>
-  </div>
-</form>
-
-<p id="authStatus" class="auth-status"></p>
-
-  <div id="resetSection" style="display: none;" class="auth-box">
-  <h2>Réinitialiser le mot de passe</h2>
-
-  <input type="email" id="resetEmail" placeholder="Votre email" />
-  <input type="password" id="newPassword" placeholder="Nouveau mot de passe" />
-  <input type="password" id="confirmNewPassword" placeholder="Confirmez le mot de passe" />
-
-  <button onclick="sendPasswordReset()">Envoyer le lien de réinitialisation</button>
-
-  <p id="resetStatus" class="auth-status"></p>
-
-  <a href="#" onclick="showLogin()">🔙 Retour</a>
-</div>
 
   <div id="appSection" style="display: none;">
     <h1>Générateur de Prompts IA</h1>
-
     <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
     <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
 
@@ -104,6 +93,5 @@
       </div>
     </div>
   </div>
-
 </body>
 </html>
