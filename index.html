@@ -73,14 +73,15 @@
     </div>
 
     <div class="response-section">
-      <div id="generatedPromptBox" class="output response-column">
-        <div class="label">📌 Prompt optimisé :</div>
-        <div id="optimizedPrompt">Aucun prompt généré pour l’instant.</div>
-        <div class="action-buttons">
-          <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
-          <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
-        </div>
-      </div>
+  <div class="chat-container" id="chatContainer">
+    <!-- Les bulles de chat apparaîtront ici dynamiquement -->
+  </div>
+  <div class="action-buttons" style="text-align: center; margin-top: 1em;">
+    <button onclick="generatePrompt()">🚀 Générer le prompt</button>
+    <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
+  </div>
+</div>
+
 
       <div id="aiResponseBox" class="output response-column">
         <div class="label">🤖 Réponse de l'IA :</div>
