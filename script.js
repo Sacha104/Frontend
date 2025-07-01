@@ -86,32 +86,26 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
-auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById("authSection").style.display = "none";
-    document.getElementById("appSection").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "auto" });
-    document.getElementById("userPrompt").focus({ preventScroll: true });
-  }
-});
+function appendBubble(text, fromUser) {
+  const container = document.getElementById('chatContainer');
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble ' + (fromUser ? 'right' : 'left');
+  bubble.textContent = text;
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+}
 
 async function generatePrompt() {
   const userPrompt = document.getElementById("userPrompt").value.trim();
   if (!userPrompt) return alert("🔍 Entre une idée ou demande.");
 
-  document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
-  document.getElementById("aiResponse").textContent = "";
-
+  appendBubble(userPrompt, true);
+  // ...
   try {
-    const res = await fetch(`${backendURL}/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: userPrompt })
-    });
-    const data = await res.json();
-    document.getElementById("optimizedPrompt").textContent = data.response || "⚠️ Erreur génération.";
+    const data = await fetch(...);
+    appendBubble(data.response || "⚠️ Erreur génération.", false);
   } catch {
-    document.getElementById("optimizedPrompt").textContent = "⚠️ Erreur réseau.";
+    appendBubble("⚠️ Erreur réseau.", false);
   }
 }
 
@@ -119,19 +113,13 @@ async function getAIResponse() {
   const improved = document.getElementById("optimizedPrompt").textContent.trim();
   if (!improved) return alert("📌 Génère d'abord un prompt.");
 
-  const aiBox = document.getElementById("aiResponse");
-  aiBox.textContent = "🤖 Réponse en cours…";
-
+  appendBubble(improved, true);
+  // ...
   try {
-    const res = await fetch(`${backendURL}/respond`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: improved })
-    });
-    const data = await res.json();
-    aiBox.innerHTML = marked.parse(data.response || "⚠️ Erreur IA.");
+    const data = await fetch(...);
+    appendBubble(marked.parse(data.response || "⚠️ Erreur IA."), false);
   } catch {
-    aiBox.textContent = "⚠️ Erreur réseau.";
+    appendBubble("⚠️ Erreur réseau.", false);
   }
 }
 
