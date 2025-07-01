@@ -20,9 +20,9 @@ h1 {
 
 /* === Auth Section === */
 #authSection {
-  max-width: 460px;
+  max-width: 540px;
   margin: 0 auto;
-  padding: 2.5rem;
+  padding: 3rem;
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 10px;
