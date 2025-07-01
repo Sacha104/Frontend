@@ -86,26 +86,32 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
-function appendBubble(text, fromUser) {
-  const container = document.getElementById('chatContainer');
-  const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble ' + (fromUser ? 'right' : 'left');
-  bubble.textContent = text;
-  container.appendChild(bubble);
-  container.scrollTop = container.scrollHeight;
-}
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("authSection").style.display = "none";
+    document.getElementById("appSection").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "auto" });
+    document.getElementById("userPrompt").focus({ preventScroll: true });
+  }
+});
 
 async function generatePrompt() {
   const userPrompt = document.getElementById("userPrompt").value.trim();
   if (!userPrompt) return alert("🔍 Entre une idée ou demande.");
 
-  appendBubble(userPrompt, true);
-  // ...
+  document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
+  document.getElementById("aiResponse").textContent = "";
+
   try {
-    const data = await fetch(
-    appendBubble(data.response || "⚠️ Erreur génération.", false));
+    const res = await fetch(`${backendURL}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: userPrompt })
+    });
+    const data = await res.json();
+    document.getElementById("optimizedPrompt").textContent = data.response || "⚠️ Erreur génération.";
   } catch {
-    appendBubble("⚠️ Erreur réseau.", false);
+    document.getElementById("optimizedPrompt").textContent = "⚠️ Erreur réseau.";
   }
 }
 
@@ -113,13 +119,19 @@ async function getAIResponse() {
   const improved = document.getElementById("optimizedPrompt").textContent.trim();
   if (!improved) return alert("📌 Génère d'abord un prompt.");
 
-  appendBubble(improved, true);
-  // ...
+  const aiBox = document.getElementById("aiResponse");
+  aiBox.textContent = "🤖 Réponse en cours…";
+
   try {
-    const data = await fetch(...);
-    appendBubble(marked.parse(data.response || "⚠️ Erreur IA."), false);
+    const res = await fetch(`${backendURL}/respond`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: improved })
+    });
+    const data = await res.json();
+    aiBox.innerHTML = marked.parse(data.response || "⚠️ Erreur IA.");
   } catch {
-    appendBubble("⚠️ Erreur réseau.", false);
+    aiBox.textContent = "⚠️ Erreur réseau.";
   }
 }
 
@@ -127,4 +139,3 @@ function copyText(elId) {
   const text = document.getElementById(elId).textContent;
   navigator.clipboard.writeText(text).then(() => alert("✅ Copié !"));
 }
-
