@@ -257,3 +257,8 @@ button:hover {
   align-items: center;
   min-height: 100vh;
 }
+#appSection {
+  min-height: 100vh;
+  padding: 2rem;
+  background: #0f172a; /* ou autre selon ton besoin */
+}
