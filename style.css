@@ -262,3 +262,40 @@ button:hover {
   padding: 2rem;
   background: #0f172a; /* ou autre selon ton besoin */
 }
+.chat-box {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #1e293b;
+  border-radius: 10px;
+  height: auto;
+  min-height: 300px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.chat-message {
+  max-width: 80%;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.user-message {
+  background: #2563eb;
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+  text-align: right;
+  border-top-right-radius: 0;
+}
+
+.bot-message {
+  background: #334155;
+  color: #f8fafc;
+  align-self: flex-start;
+  margin-right: auto;
+  border-top-left-radius: 0;
+}
