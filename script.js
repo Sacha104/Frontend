@@ -1,9 +1,12 @@
-// Configuration Firebase
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
+  apiKey: "AIzaSyBzEFTyOLMinVglWBmGSVqCwCtUfg40-l8",
+  authDomain: "prompt-app-82523.firebaseapp.com",
+  projectId: "prompt-app-82523",
+  storageBucket: "prompt-app-82523.appspot.com",
+  messagingSenderId: "573537645411",
+  appId: "1:573537645411:web:da0782831b6358db319956"
 };
+
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
