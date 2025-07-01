@@ -1,5 +1,5 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyBzEFTyOLMinVglWBmGSVqCwCtUfg40-l8",
+  apiKey: "AIzaSyBqF1YHR_hO4QUQ6RVzaNMSbu612vO9uL0",
   authDomain: "prompt-app-82523.firebaseapp.com",
   projectId: "prompt-app-82523",
   storageBucket: "prompt-app-82523.appspot.com",
