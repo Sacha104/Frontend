@@ -100,7 +100,6 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-
 // 🧠 Fonctions IA via ton backend
 async function generatePrompt() {
   const userPrompt = document.getElementById("userPrompt").value.trim();
