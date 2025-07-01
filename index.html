@@ -47,6 +47,20 @@
   </div>
 </div>
 
+  <div id="resetSection" style="display: none;" class="auth-box">
+  <h2>Réinitialiser le mot de passe</h2>
+
+  <input type="email" id="resetEmail" placeholder="Votre email" />
+  <input type="password" id="newPassword" placeholder="Nouveau mot de passe" />
+  <input type="password" id="confirmNewPassword" placeholder="Confirmez le mot de passe" />
+
+  <button onclick="sendPasswordReset()">Envoyer le lien de réinitialisation</button>
+
+  <p id="resetStatus" class="auth-status"></p>
+
+  <a href="#" onclick="showLogin()">🔙 Retour</a>
+</div>
+
   <div id="appSection" style="display: none;">
     <h1>Générateur de Prompts IA</h1>
 
