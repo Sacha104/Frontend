@@ -139,3 +139,7 @@ function copyText(elId) {
   const text = document.getElementById(elId).textContent;
   navigator.clipboard.writeText(text).then(() => alert("✅ Copié !"));
 }
+
+function forceScrollToTop() {
+  window.scrollTo(0, 0);
+}
