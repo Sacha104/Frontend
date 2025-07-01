@@ -1,8 +1,9 @@
+// 🔧 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAiBioPsbDZT3nrMgeHdntS0QIXjQTIzIk",
   authDomain: "prompt-app-d4692.firebaseapp.com",
   projectId: "prompt-app-d4692",
-  storageBucket: "prompt-app-d4692.firebasestorage.app",
+  storageBucket: "prompt-app-d4692.appspot.com",
   messagingSenderId: "1090823184353",
   appId: "1:1090823184353:web:86a03e89a3e632e402bca0"
 };
@@ -11,7 +12,17 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
 
-// 🔓 Authentification et gestion des formulaires
+// 📩 Affiche message dans chat
+function addMessage(sender, text, isHTML = false) {
+  const chatBox = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.className = `message ${sender}-message`;
+  msg.innerHTML = isHTML ? text : text.replace(/\n/g, "<br>");
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// 🔓 Authentification
 function signIn() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
@@ -19,7 +30,7 @@ function signIn() {
     .then(() => {
       document.getElementById("authSection").style.display = "none";
       document.getElementById("appSection").style.display = "block";
-      forceScrollToTop();
+      document.getElementById("chatBox").innerHTML = "";
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
 }
@@ -29,7 +40,8 @@ function signUp() {
   const password = document.getElementById("signupPassword").value;
   const confirm = document.getElementById("confirmPassword").value;
   if (password !== confirm) {
-    return void (document.getElementById("authStatus").textContent = "❌ Mots de passe différents.");
+    document.getElementById("authStatus").textContent = "❌ Mots de passe différents.";
+    return;
   }
   auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
@@ -47,37 +59,26 @@ function sendPasswordReset() {
 }
 
 function signOut() {
-  auth.signOut()
-    .then(() => {
-      document.getElementById("authSection").style.display = "block";
-      document.getElementById("appSection").style.display = "none";
-      forceScrollToTop();
-    });
+  auth.signOut().then(() => {
+    document.getElementById("authSection").style.display = "block";
+    document.getElementById("appSection").style.display = "none";
+    document.getElementById("chatBox").innerHTML = "";
+    document.getElementById("userPrompt").value = "";
+  });
 }
 
-function togglePassword(inId, icoId) {
-  const input = document.getElementById(inId);
-  const icon = document.getElementById(icoId);
-  if (input.type === "password") {
-    input.type = "text";
-    icon.classList.replace("fa-eye", "fa-eye-slash");
-  } else {
-    input.type = "password";
-    icon.classList.replace("fa-eye-slash", "fa-eye");
-  }
+// 📋 Interface auth
+function showLogin() {
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("signupForm").style.display = "none";
+  document.getElementById("resetSection").style.display = "none";
+  document.getElementById("authStatus").textContent = "";
 }
 
 function showSignUp() {
   document.getElementById("loginForm").style.display = "none";
   document.getElementById("signupForm").style.display = "block";
   document.getElementById("resetSection").style.display = "none";
-}
-
-function showLogin() {
-  document.getElementById("loginForm").style.display = "block";
-  document.getElementById("signupForm").style.display = "none";
-  document.getElementById("resetSection").style.display = "none";
-  document.getElementById("authStatus").textContent = "";
 }
 
 function showReset() {
@@ -87,46 +88,36 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
-// 🔁 État utilisateur
-auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById("authSection").style.display = "none";
-    document.getElementById("appSection").style.display = "block";
-
-    window.scrollTo({ top: 0, behavior: "auto" });
-
-    // Focus sans scroll automatique :
-    document.getElementById("userPrompt").focus({ preventScroll: true });
-  }
-});
-
-// 🧠 Fonctions IA via ton backend
+// 🧠 Génération du prompt
 async function generatePrompt() {
-  const userPrompt = document.getElementById("userPrompt").value.trim();
-  if (!userPrompt) return alert("🔍 Entre une idée ou demande.");
+  const input = document.getElementById("userPrompt").value.trim();
+  if (!input) return alert("✍️ Entre une demande.");
 
-  document.getElementById("optimizedPrompt").textContent = "⏳ Génération en cours…";
-  document.getElementById("aiResponse").textContent = "";
+  addMessage("user", input);
+  addMessage("system", "⏳ Génération du prompt…");
 
   try {
     const res = await fetch(`${backendURL}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: userPrompt })
+      body: JSON.stringify({ prompt: input })
     });
     const data = await res.json();
-    document.getElementById("optimizedPrompt").textContent = data.response || "⚠️ Erreur génération.";
+    const generated = data.response || "⚠️ Erreur.";
+    addMessage("system", generated);
+    document.getElementById("userPrompt").dataset.optimized = generated;
   } catch {
-    document.getElementById("optimizedPrompt").textContent = "⚠️ Erreur réseau.";
+    addMessage("system", "⚠️ Erreur réseau.");
   }
 }
 
+// 🤖 Réponse IA
 async function getAIResponse() {
-  const improved = document.getElementById("optimizedPrompt").textContent.trim();
-  if (!improved) return alert("📌 Génère d'abord un prompt.");
-  
-  const aiBox = document.getElementById("aiResponse");
-  aiBox.textContent = "🤖 Réponse en cours…";
+  const improved = document.getElementById("userPrompt").dataset.optimized;
+  if (!improved) return alert("📌 Génère d’abord un prompt.");
+
+  addMessage("user", improved);
+  addMessage("system", "🤖 Réponse en cours…");
 
   try {
     const res = await fetch(`${backendURL}/respond`, {
@@ -135,15 +126,18 @@ async function getAIResponse() {
       body: JSON.stringify({ prompt: improved })
     });
     const data = await res.json();
-    aiBox.innerHTML = marked.parse(data.response || "⚠️ Erreur IA.");
+    addMessage("system", marked.parse(data.response || "⚠️ Erreur IA."), true);
   } catch {
-    aiBox.textContent = "⚠️ Erreur réseau.";
+    addMessage("system", "⚠️ Erreur réseau.");
   }
 }
 
-// 📋 Copier le texte
-function copyText(elId) {
-  const text = document.getElementById(elId).textContent;
-  navigator.clipboard.writeText(text).then(() => alert("✅ Copié !"));
-}
-
+// 🔁 État utilisateur
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("authSection").style.display = "none";
+    document.getElementById("appSection").style.display = "block";
+    document.getElementById("chatBox").innerHTML = "";
+    document.getElementById("userPrompt").focus({ preventScroll: true });
+  }
+});
