@@ -65,30 +65,17 @@
 
   <div id="appSection" style="display: none;">
     <h1>Générateur de Prompts IA</h1>
-    <textarea id="userPrompt" placeholder="Décris ici ton idée ou ta demande…"></textarea>
     <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
 
-    <div class="buttons">
-      <button onclick="generatePrompt()">🎯 Générer le prompt</button>
+    <div id="chatContainer" class="chat-container"></div>
+
+    <div class="chat-input-wrapper">
+      <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
+      <button onclick="handleUserMessage()">Envoyer</button>
     </div>
 
-    <div class="response-section">
-      <div id="generatedPromptBox" class="output response-column">
-        <div class="label">📌 Prompt optimisé :</div>
-        <div id="optimizedPrompt">Aucun prompt généré pour l’instant.</div>
-        <div class="action-buttons">
-          <button onclick="copyText('optimizedPrompt')">📋 Copier</button>
-          <button onclick="getAIResponse()">💬 Envoyer à GPT</button>
-        </div>
-      </div>
-
-      <div id="aiResponseBox" class="output response-column">
-        <div class="label">🤖 Réponse de l'IA :</div>
-        <div id="aiResponse">Aucune réponse générée pour l’instant.</div>
-        <div class="action-buttons">
-          <button onclick="copyText('aiResponse')">📋 Copier</button>
-        </div>
-      </div>
+    <div style="text-align: right; margin-top: 0.5rem;">
+      <button id="sendToIA" style="display:none;" onclick="sendToChat()">💬 Envoyer à l'IA</button>
     </div>
   </div>
 </body>
