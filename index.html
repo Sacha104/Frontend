@@ -12,7 +12,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="script.js" defer></script>
 </head>
-<body>
+ <body>
   <div class="wrapper">
     <div id="authSection" class="auth-section">
       <div class="auth-box">
@@ -64,6 +64,16 @@
   </div>
 
   <div id="appSection" style="display: none;">
+   <button id="toggleHistoryBtn" onclick="toggleHistory()" style="margin: 10px;">📁 Afficher / Masquer l’historique</button>
+   <div id="sidebar" class="sidebar">
+    <h2>📜 Historique</h2>
+    <button onclick="handleNewConversation()">🆕 Nouvelle discussion</button>
+    <ul id="conversationList"></ul>
+   </div>
+
+
+   <!-- 🟦 Contenu principal existant -->
+   <div class="main-content">
     <h1>Générateur de Prompts IA</h1>
     <button onclick="signOut()" style="float: right; margin-bottom: 10px;">🚪 Se déconnecter</button>
 
@@ -77,6 +87,7 @@
     <div style="text-align: right; margin-top: 0.5rem;">
       <button id="sendToIA" style="display:none;" onclick="sendToChat()">💬 Envoyer à l'IA</button>
     </div>
-  </div>
+    </div> <!-- fin de .main-content -->
+  </div> <!-- ✅ fermeture manquante de #appSection -->
 </body>
 </html>
