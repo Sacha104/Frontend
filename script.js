@@ -362,6 +362,7 @@ function confirmDelete(e, id) {
 function toggleArchive(e, id, archive) {
   e.stopPropagation();
   fetch(`${backendURL}/conversation/archive`, {
+  console.log("toggleArchive called", id, archive);
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id, archive })
