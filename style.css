@@ -294,3 +294,40 @@ h1 {
   display: block; /* visible par défaut */
   float: left;
 }
+.conversation-item {
+  position: relative;
+  padding-right: 60px;
+}
+
+.conversation-actions {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.conversation-actions i {
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.conversation-actions i:hover {
+  color: #f87171;
+}
+
+.fa-box-archive.archived {
+  color: #22d3ee;
+}
+
+.conversation-preview {
+  display: inline-block;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
