@@ -238,17 +238,18 @@ async function loadConversationHistory() {
  (data.conversations || []).forEach(c => {
   const li = document.createElement("li");
 
-  li.innerHTML = `
-    <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
-    <span class="conversation-actions">
-      <i class="fa-solid fa-box-archive ${c.archived ? 'archived' : ''}" title="${c.archived ? 'Désarchiver' : 'Archiver'}" onclick="toggleArchive(event, '${c.id}', ${!c.archived})"></i>
-      <i class="fa-solid fa-trash" title="Supprimer" onclick="confirmDelete(event, '${c.id}')"></i>
-    </span>
-  `;
-  li.classList.add("conversation-item");
-  list.appendChild(li);
+    li.innerHTML = `
+     <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
+     <span class="conversation-actions">
+       <i class="fa-solid fa-box-archive ${c.archived ? 'archived' : ''}" title="${c.archived ? 'Désarchiver' : 'Archiver'}" onclick="toggleArchive(event, '${c.id}', ${!c.archived})"></i>
+       <i class="fa-solid fa-trash" title="Supprimer" onclick="confirmDelete(event, '${c.id}')"></i>
+     </span>
+  `  ;
+    li.classList.add("conversation-item");
+    list.appendChild(li);
  });
 }
+
 
 
 async function loadConversation(conversationId) {
