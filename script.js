@@ -247,7 +247,7 @@ async function loadConversationHistory() {
   `;
   li.classList.add("conversation-item");
   list.appendChild(li);
-});
+ });
 }
 
 
