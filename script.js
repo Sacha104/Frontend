@@ -235,13 +235,20 @@ async function loadConversationHistory() {
   const list = document.getElementById("conversationList");
   list.innerHTML = "";
 
-  (data.conversations || []).forEach(c => {
-    const li = document.createElement("li");
-    li.textContent = c.preview.slice(0, 40) + "...";
-    li.onclick = () => loadConversation(c.id);
-    list.appendChild(li);
-  });
-}
+ (data.conversations || []).forEach(c => {
+  const li = document.createElement("li");
+
+  li.innerHTML = `
+    <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
+    <span class="conversation-actions">
+      <i class="fa-solid fa-box-archive ${c.archived ? 'archived' : ''}" title="${c.archived ? 'Désarchiver' : 'Archiver'}" onclick="toggleArchive(event, '${c.id}', ${!c.archived})"></i>
+      <i class="fa-solid fa-trash" title="Supprimer" onclick="confirmDelete(event, '${c.id}')"></i>
+    </span>
+  `;
+  li.classList.add("conversation-item");
+  list.appendChild(li);
+});
+
 
 async function loadConversation(conversationId) {
   try {
@@ -334,3 +341,60 @@ function handleNewConversation() {
   // ✅ Lancer la nouvelle conversation
   startNewConversation(true);
 }
+
+function confirmDelete(e, id) {
+  e.stopPropagation();
+  if (confirm("❌ Es-tu sûr de vouloir supprimer cette conversation ?")) {
+    fetch(`${backendURL}/conversation/delete`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) loadConversationHistory();
+      });
+  }
+}
+
+function toggleArchive(e, id, archive) {
+  e.stopPropagation();
+  fetch(`${backendURL}/conversation/archive`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, archive })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) loadConversationHistory();
+    });
+}
+
+function showArchived() {
+  fetch(`${backendURL}/conversations`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid: currentUID })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("conversationList");
+    list.innerHTML = "";
+
+    (data.conversations || []).forEach(c => {
+      if (!c.archived) return;
+
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
+        <span class="conversation-actions">
+          <i class="fa-solid fa-box-archive archived" title="Désarchiver" onclick="toggleArchive(event, '${c.id}', false)"></i>
+          <i class="fa-solid fa-trash" title="Supprimer" onclick="confirmDelete(event, '${c.id}')"></i>
+        </span>
+      `;
+      li.classList.add("conversation-item");
+      list.appendChild(li);
+    });
+  });
+}
+
