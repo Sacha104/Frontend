@@ -361,8 +361,9 @@ function confirmDelete(e, id) {
 
 function toggleArchive(e, id, archive) {
   e.stopPropagation();
+  console.log("toggleArchive called", id, archive); // ✅ ici, en dehors de fetch()
+
   fetch(`${backendURL}/conversation/archive`, {
-  console.log("toggleArchive called", id, archive);
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id, archive })
@@ -372,6 +373,7 @@ function toggleArchive(e, id, archive) {
       if (data.success) loadConversationHistory();
     });
 }
+
 
 function showArchived() {
   fetch(`${backendURL}/conversations`, {
