@@ -3,9 +3,11 @@ body {
   color: #f8fafc;
   font-family: 'Segoe UI', 'Roboto', sans-serif;
   margin: 0;
-  overflow-y: auto;
+  overflow: hidden;  /* ← fixe la page */
+  height: 100vh;      /* ← hauteur fixe */
   display: block;
 }
+
 
 h1, h2, h3 {
   font-family: 'Orbitron', sans-serif;
@@ -22,8 +24,9 @@ h1 {
 #appSection {
   display: flex;
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden;  /* empêche tout débordement */
 }
+
 
 .sidebar {
   width: 250px;
@@ -234,8 +237,10 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100vh;
 }
+
+
 
 /* === Common Content (Prompt/Response) === */
 #aiResponse, #optimizedPrompt {
@@ -294,40 +299,162 @@ h1 {
   display: block; /* visible par défaut */
   float: left;
 }
-.conversation-item {
-  position: relative;
-  padding-right: 60px;
-}
-
-.conversation-actions {
+#headerBar {
   position: absolute;
+  top: 10px;
   right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
-  gap: 10px;
+  gap: 1rem;
+  align-items: center;
+  z-index: 1000;
 }
 
-.conversation-actions i {
+#historyToggleIcon {
+  font-size: 1.5rem;
   cursor: pointer;
-  color: #94a3b8;
-  font-size: 1rem;
+  color: #f1f5f9;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.close-history {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #f8fafc;
+  padding: 0.25rem;
   transition: color 0.2s;
 }
 
-.conversation-actions i:hover {
+.close-history:hover {
   color: #f87171;
 }
 
-.fa-box-archive.archived {
-  color: #22d3ee;
+.reopen-history {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #1e293b;
+  color: #38bdf8;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 1000;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 
-.conversation-preview {
-  display: inline-block;
-  max-width: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.reopen-history:hover {
+  background-color: #334155;
+}
+
+.main-content {
+  transition: margin-left 0.3s ease;
+}
+#accountIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
+  display: none;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+}
+
+.account-menu {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 10px;
+  width: 200px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.account-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.account-menu li {
+  padding: 0.75rem;
+  border-radius: 5px;
+  color: #f8fafc;
+}
+
+.account-menu li:hover {
+  background-color: #334155;
+}
+#accountWrapper {
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  z-index: 999;
+}
+
+#accountIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  font-size: 1rem;
+}
+
+.account-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 180px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.account-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-menu li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: #f1f5f9;
+  border-radius: 5px;
+}
+
+.account-menu li:hover {
+  background-color: #334155;
+}
+
+.account-menu hr {
+  border: 0;
+  border-top: 1px solid #475569;
+  margin: 0.5rem 0;
+}
+
+#logoutBtn {
+  color: #f87171;
+  font-weight: bold;
 }
