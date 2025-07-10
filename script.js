@@ -147,6 +147,7 @@ async function handleUserMessage() {
     updateLastBotMessage(optimized);
 
     const actions = document.createElement("div");
+    msg.className = "chat-message bot rendered-content";
     actions.className = "chat-actions";
     actions.innerHTML = `
       <a href="#" onclick="sendToChat(this)">💬 Envoyer à l'IA</a> |
