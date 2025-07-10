@@ -64,14 +64,38 @@
   </div>
 
   <div id="appSection" style="display: none;">
-   <button id="toggleHistoryBtn" onclick="toggleHistory()" style="margin: 10px;">📁 Afficher / Masquer l’historique</button>
-   <div id="sidebar" class="sidebar">
-    <h2>📜 Historique</h2>
-    <button onclick="handleNewConversation()">🆕 Nouvelle discussion</button>
-    <button onclick="showArchived()">📦 Discussions archivées</button>
-    <ul id="conversationList"></ul>
-   </div>
 
+    <div id="sidebar" class="sidebar">
+     <div class="sidebar-header">
+       <h2>📜 Historique</h2>
+        <div class="close-history" onclick="toggleHistory()" title="Fermer">
+         <i class="fa-solid fa-xmark"></i>
+        </div>
+      </div>
+     <button onclick="handleNewConversation()">🆕 Nouvelle discussion</button>
+     <button onclick="showArchived()">📦 Discussions archivées</button>
+     <ul id="conversationList"></ul>
+    </div>
+
+    <div id="accountWrapper">
+      <div id="accountIcon" title="Mon compte"></div>
+    </div>
+
+
+    <div id="accountMenu" class="account-menu" style="display: none;">
+      <ul>
+       <li>🔒 Confidentialité</li>
+       <li>🛡️ Sécurité</li>
+       <hr>
+       <li onclick="signOut()" style="color: #f87171; cursor: pointer;">🚪 Se déconnecter</li>
+      </ul>
+    </div>
+    
+    <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
+     <i class="fa-solid fa-bars"></i>
+    </div>
+
+    
 
    <!-- 🟦 Contenu principal existant -->
    <div class="main-content">
