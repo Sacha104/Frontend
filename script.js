@@ -152,7 +152,6 @@ async function handleUserMessage() {
       <a href="#" onclick="sendToChat(this)">💬 Envoyer à l'IA</a> |
       <a href="#" onclick="copyFromText(this)">📋 Copier</a>
     `;
-    msg.className = "chat-message bot rendered-content";
     document.getElementById("chatContainer").appendChild(actions);
     scrollToBottom();
   } catch {
