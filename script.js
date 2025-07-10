@@ -14,13 +14,48 @@ const backendURL = "https://prompt-ai-naa1.onrender.com";
 let currentUID = null;
 let currentConversationId = null;
 
+async function loadLastConversation() {
+  try {
+    const res = await fetch(`${backendURL}/conversations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: currentUID })
+    });
+
+    const data = await res.json();
+    const last = (data.conversations || []).find(c => !c.archived);
+    if (last) await loadConversation(last.id);
+  } catch (err) {
+    console.error("❌ Erreur chargement dernière conversation :", err);
+  }
+}
+
+
 auth.onAuthStateChanged(user => {
+  console.log(user ? "✅ Utilisateur connecté" : "🟠 Aucun utilisateur connecté");
+
+  const wrapper = document.querySelector(".wrapper");
+  const icon = document.getElementById("accountIcon");
+
   if (user) {
     currentUID = user.uid;
     document.getElementById("authSection").style.display = "none";
     document.getElementById("appSection").style.display = "flex";
+    if (wrapper) wrapper.style.display = "none";
+    if (icon) {
+      icon.textContent = user.email[0].toUpperCase();
+      icon.style.display = "flex";
+    }
+
+    // ✅ Charger l’historique ET la dernière conversation automatiquement
     loadConversationHistory();
-    startNewConversation();
+    loadLastConversation();
+
+  } else {
+    document.getElementById("authSection").style.display = "block";
+    document.getElementById("appSection").style.display = "none";
+    if (wrapper) wrapper.style.display = "flex";
+    if (icon) icon.style.display = "none";
   }
 });
 
@@ -31,10 +66,13 @@ function signIn() {
     .then(() => {
       document.getElementById("authSection").style.display = "none";
       document.getElementById("appSection").style.display = "flex";
+      const wrapper = document.querySelector(".wrapper");
+      if (wrapper) wrapper.style.display = "none"; // ✅ Masquer .wrapper
       forceScrollToTop();
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
 }
+
 
 function signUp() {
   const email = document.getElementById("signupEmail").value;
@@ -318,16 +356,21 @@ async function startNewConversation(force = false) {
 
 function toggleHistory() {
   const sidebar = document.getElementById("sidebar");
-  const toggleBtn = document.getElementById("toggleHistoryBtn");
+  const reopenBtn = document.getElementById("reopenHistoryBtn");
+  const mainContent = document.querySelector(".main-content");
 
   if (sidebar.style.display === "none") {
     sidebar.style.display = "block";
-    toggleBtn.textContent = "📁 Masquer l’historique";
+    reopenBtn.style.display = "none";
+    mainContent.style.marginLeft = "260px";
   } else {
     sidebar.style.display = "none";
-    toggleBtn.textContent = "📂 Afficher l’historique";
+    reopenBtn.style.display = "block";
+    mainContent.style.marginLeft = "0";
   }
 }
+
+
 function isCurrentConversationEmpty() {
   const userMessages = document.querySelectorAll(".chat-message.user");
   return userMessages.length === 0;
@@ -402,4 +445,29 @@ function showArchived() {
     });
   });
 }
+window.addEventListener("DOMContentLoaded", () => {
+  const icon = document.getElementById("accountIcon");
+  const menu = document.getElementById("accountMenu");
+  const logout = document.getElementById("logoutBtn");
+
+  // ✅ Gérer clic sur icône compte
+  if (icon && menu) {
+    icon.addEventListener("click", () => {
+      menu.style.display = menu.style.display === "none" ? "block" : "none";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && e.target !== icon) {
+        menu.style.display = "none";
+      }
+    });
+  }
+
+  // ✅ Gérer déconnexion
+  if (logout) {
+    logout.addEventListener("click", () => {
+      signOut();
+    });
+  }
+});
 
