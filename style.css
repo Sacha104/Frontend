@@ -143,14 +143,13 @@ h1 {
 
 /* === Chat === */
 .chat-container {
+  max-width: 800px;
+  width: 100%;
+  padding: 1rem 2rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;  /* Alignement des messages (gauche) */
-  padding: 1rem;
-  max-width: 800px;         /* Largeur maximale du chat */
-  margin: 0 auto;           /* Centrage horizontal */
-  width: 100%;              /* Utiliser toute la largeur disponible */
-  overflow-y: auto;
+  align-items: stretch;
 }
 
 
