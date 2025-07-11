@@ -165,29 +165,25 @@ h1 {
   white-space: pre-wrap;
 }
 
-/* Messages de l'utilisateur (alignés à droite avec une largeur réduite) */
 .chat-message.user {
   background: #3b82f6;
   color: white;
-  align-self: flex-end;           /* Aligner à droite */
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.chat-message.bot {
+  background: #334155;
+  color: #f8fafc;
+  align-self: flex-start;
+  margin: 0.5rem 0; /* réduit l’espace vertical */
+  padding: 0.75rem 1rem;
   border-radius: 10px;
-  max-width: 70%;                 /* Limiter la largeur du message utilisateur */
-  margin: 0.5rem;                 /* Espacement vertical */
+  max-width: 70%;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
 
-/* Messages du bot (alignés à gauche avec une largeur maximale) */
-.chat-message.bot {
-  background: #334155;
-  color: #f8fafc;
-  align-self: flex-start;         /* Aligner à gauche */
-  border-radius: 10px;
-  max-width: 100%;                /* Largeur complète pour le bot */
-  margin: 0.5rem;                 /* Espacement vertical */
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
 
 
 .chat-input-wrapper {
