@@ -65,10 +65,11 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 260px;
-  padding: 20px;
+  margin-left: 0;     /* ✅ enlever le décalage dû à la sidebar */
+  padding: 0;         /* ✅ enlever l’espace interne */
   overflow: hidden;
 }
+
 
 
 /* === Auth Section === */
@@ -173,10 +174,11 @@ h1 {
 }
 
 .chat-input-wrapper {
-  display: flex;
-  gap: 0.5rem;
-  padding-top: 1rem;
+  padding: 1rem;
+  background-color: #0f172a;  /* pour séparer légèrement */
+  border-top: 1px solid #334155;
 }
+
 
 #chatInput {
   flex: 1;
