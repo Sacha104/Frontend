@@ -184,9 +184,9 @@ h1 {
 
 
 .chat-input-wrapper {
-  padding: 1rem;
-  background-color: #0f172a;  /* pour séparer légèrement */
-  border-top: 1px solid #334155;
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
 }
 
 
