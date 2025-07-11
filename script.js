@@ -325,8 +325,13 @@ async function loadConversation(conversationId) {
     currentConversationId = conversationId;
 
     data.messages.forEach(m => {
-      console.log("✉️ Message :", m.role, m.text); // 🔍 utile
-      appendMessage(m.text, m.role);
+    appendMessage(m.text, m.role);
+    if (m.role === "bot") {
+    const last = document.querySelectorAll(".chat-message.bot");
+    const lastMsg = last[last.length - 1];
+    lastMsg.innerHTML = marked.parse(m.text);
+    lastMsg.classList.add("markdown");
+    }
     });
 
     scrollToBottom();
