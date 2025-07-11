@@ -462,3 +462,38 @@ h1 {
   color: #f87171;
   font-weight: bold;
 }
+.markdown h1, .markdown h2, .markdown h3 {
+  font-family: 'Orbitron', sans-serif;
+  color: #38bdf8;
+  margin: 1rem 0 0.5rem;
+}
+
+.markdown p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.markdown ul, .markdown ol {
+  margin: 0.5rem 0 1rem 1.5rem;
+}
+
+.markdown li::marker {
+  color: #22d3ee;
+}
+
+.markdown code {
+  background-color: #0f172a;
+  padding: 0.2rem 0.4rem;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  color: #38bdf8;
+}
+
+.markdown pre {
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin-top: 1rem;
+}
