@@ -174,8 +174,14 @@ h1 {
   background: #334155;
   color: #f8fafc;
   align-self: flex-start;
-  margin-right: auto;
+  margin: 0.5rem 0; /* réduit l’espace vertical */
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
+
 
 .chat-input-wrapper {
   padding: 1rem;
@@ -496,4 +502,21 @@ h1 {
   border-radius: 10px;
   overflow-x: auto;
   margin-top: 1rem;
+}
+.chat-message.bot .markdown {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+/* Réduit l'espacement vertical à l’intérieur du contenu Markdown */
+.chat-message.bot .markdown p,
+.chat-message.bot .markdown ul,
+.chat-message.bot .markdown ol,
+.chat-message.bot .markdown pre,
+.chat-message.bot .markdown h1,
+.chat-message.bot .markdown h2,
+.chat-message.bot .markdown h3 {
+  margin: 0.2rem 0;
+  padding: 0;
 }
