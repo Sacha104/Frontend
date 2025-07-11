@@ -132,12 +132,18 @@ async function handleUserMessage() {
 
   appendMessage("⏳ Optimisation du prompt en cours…", "bot");
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000); // ⏱️ 30 sec timeout
+
   try {
     const res = await fetch(`${backendURL}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
       body: JSON.stringify({ prompt: message, uid: currentUID, conversationId: currentConversationId })
     });
+
+    clearTimeout(timeout);
 
     const data = await res.json();
     currentConversationId = data.conversationId;
@@ -154,8 +160,9 @@ async function handleUserMessage() {
     `;
     document.getElementById("chatContainer").appendChild(actions);
     scrollToBottom();
-  } catch {
-    updateLastBotMessage("⚠️ Erreur réseau.");
+  } catch (error) {
+    console.error("❌ Erreur réseau :", error);
+    updateLastBotMessage("⚠️ Erreur réseau ou délai dépassé.");
   }
 }
 
