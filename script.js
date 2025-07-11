@@ -384,11 +384,9 @@ function toggleHistory() {
   if (sidebar.style.display === "none") {
     sidebar.style.display = "block";
     reopenBtn.style.display = "none";
-    mainContent.style.marginLeft = "260px";
   } else {
     sidebar.style.display = "none";
     reopenBtn.style.display = "block";
-    mainContent.style.marginLeft = "0";
   }
 }
 
