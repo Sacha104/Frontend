@@ -321,6 +321,13 @@ async function loadConversation(conversationId) {
       container.innerHTML = "<p style='color: #94a3b8; font-style: italic;'>Aucun message dans cette conversation.</p>";
       return;
     }
+    const tempMessages = [
+    "Optimisation du prompt en cours…",
+    "Réponse en cours…",
+    "Erreur réseau ou délai dépassé.",
+    "Erreur IA.",
+];
+
 
     currentConversationId = conversationId;
 
