@@ -167,17 +167,32 @@ async function handleUserMessage() {
 }
 
 function appendMessage(text, type) {
-  if (!text || !text.trim()) return; // ⛔ ignore les messages vides
+  const tempMessages = [
+    "⏳ Optimisation du prompt en cours…",
+    "🤖 Réponse en cours…",
+    "⚠️ Erreur réseau ou délai dépassé.",
+    "⚠️ Erreur IA."
+  ];
 
+  const cleanText = text?.trim();
+  if (!cleanText || tempMessages.includes(cleanText)) return;
+
+  // Création du bloc message
   const msg = document.createElement("div");
   msg.className = `chat-message ${type}`;
-  if (type === "bot") msg.classList.add("markdown");
-  msg.textContent = text;
+
+  if (type === "bot") {
+    msg.classList.add("markdown");
+    msg.innerHTML = marked.parse(cleanText);  // Affiche le markdown
+  } else {
+    msg.textContent = cleanText;
+  }
+
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
 
-  // ✅ Enregistre uniquement si conversation existe
-  if (currentUID && currentConversationId && text.trim().length > 0) {
+  // Sauvegarde uniquement si c’est un vrai message
+  if (currentUID && currentConversationId) {
     fetch(`${backendURL}/message/save`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -185,7 +200,7 @@ function appendMessage(text, type) {
         uid: currentUID,
         conversationId: currentConversationId,
         role: type,
-        text: text.trim()
+        text: cleanText
       })
     })
     .then(res => res.json())
