@@ -65,10 +65,11 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 0;     /* ❌ plus de décalage à gauche */
-  padding: 0;         /* ❌ plus de padding */
-  overflow: hidden;
+  align-items: center;
+  padding: 1rem;
+  overflow-y: auto;
 }
+
 
 
 
@@ -142,14 +143,13 @@ h1 {
 
 /* === Chat === */
 .chat-container {
-  flex: 1;
+  max-width: 800px;
+  width: 100%;
+  padding: 1rem 2rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;           /* ✅ centre horizontalement */
-  padding: 1rem 2rem;            /* ✅ marge latérale */
-  overflow-y: auto;
-  max-width: 800px;              /* ✅ largeur max comme ChatGPT */
-  margin: 0 auto;                /* ✅ centré horizontalement */
+  align-items: stretch;
 }
 
 
