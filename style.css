@@ -145,13 +145,14 @@ h1 {
 .chat-container {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;  /* Alignement des messages (gauche) */
   padding: 1rem;
-  max-width: 800px;
-  margin: 0 auto;
-  width: 100%;
+  max-width: 800px;         /* Largeur maximale du chat */
+  margin: 0 auto;           /* Centrage horizontal */
+  width: 100%;              /* Utiliser toute la largeur disponible */
   overflow-y: auto;
 }
+
 
 
 
@@ -165,27 +166,28 @@ h1 {
   white-space: pre-wrap;
 }
 
+/* Messages de l'utilisateur (alignés à droite avec une largeur réduite) */
 .chat-message.user {
   background: #3b82f6;
   color: white;
-  align-self: flex-end;           /* 📍 Aligné à droite */
+  align-self: flex-end;           /* Aligner à droite */
   border-radius: 10px;
-  max-width: 70%;                 /* 📍 Limiter la largeur des messages de l'utilisateur */
+  max-width: 70%;                 /* Limiter la largeur du message utilisateur */
+  margin: 0.5rem;                 /* Espacement vertical */
   word-wrap: break-word;
   white-space: pre-wrap;
-  margin-left: auto;              /* 📍 Déplace à droite */
 }
 
-
+/* Messages du bot (alignés à gauche avec une largeur maximale) */
 .chat-message.bot {
   background: #334155;
   color: #f8fafc;
-  align-self: flex-start;         /* 📍 Aligné à gauche */
+  align-self: flex-start;         /* Aligner à gauche */
   border-radius: 10px;
-  max-width: 100%;                /* 📍 Largeur maximale */
+  max-width: 100%;                /* Largeur complète pour le bot */
+  margin: 0.5rem;                 /* Espacement vertical */
   word-wrap: break-word;
   white-space: pre-wrap;
-  margin-right: auto;             /* 📍 Déplace à gauche */
 }
 
 
