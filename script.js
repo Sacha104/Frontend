@@ -171,6 +171,7 @@ function appendMessage(text, type) {
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${type}`;
+  if (type === "bot") msg.classList.add("markdown");
   msg.textContent = text;
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
