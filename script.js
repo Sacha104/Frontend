@@ -203,7 +203,9 @@ function appendMessage(text, type) {
 function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
   if (messages.length > 0) {
-    messages[messages.length - 1].innerHTML = marked.parse(text);
+    const lastBotMsg = messages[messages.length - 1];
+    lastBotMsg.innerHTML = marked.parse(text);
+    lastBotMsg.classList.add("markdown");
   }
 }
 
