@@ -133,7 +133,7 @@ async function handleUserMessage() {
   appendMessage("⏳ Optimisation du prompt en cours…", "bot");
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000); // ⏱️ 30 sec timeout
+  const timeout = setTimeout(() => controller.abort(), 70000); // ⏱️ 30 sec timeout
 
   try {
     const res = await fetch(`${backendURL}/generate`, {
@@ -202,7 +202,7 @@ function appendMessage(text, type) {
 function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
   if (messages.length > 0) {
-    messages[messages.length - 1].textContent = text;
+    messages[messages.length - 1].innerHTML = marked.parse(text);
   }
 }
 
