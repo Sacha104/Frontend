@@ -143,13 +143,16 @@ h1 {
 /* === Chat === */
 .chat-container {
   flex: 1;
-  background: #1e293b;
-  border: none;              /* ✅ supprimer la bordure */
-  border-radius: 0;          /* ✅ supprimer les coins arrondis */
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  background: transparent;     /* ❌ pas de fond */
+  border: none;                /* ❌ aucune bordure */
+  border-radius: 0;            /* ❌ pas d'arrondi */
+  padding: 0;                  /* ❌ pas d’espace intérieur */
   overflow-y: auto;
-  margin-bottom: 0;
+  margin: 0;                   /* ❌ pas de marge */
 }
+
 
 .chat-message {
   margin: 1rem 0;
