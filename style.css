@@ -143,14 +143,16 @@ h1 {
 
 /* === Chat === */
 .chat-container {
-  max-width: 800px;
-  width: 100%;
-  padding: 1rem 2rem;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-y: auto;
 }
+
 
 
 .chat-message {
@@ -166,20 +168,24 @@ h1 {
 .chat-message.user {
   background: #3b82f6;
   color: white;
-  align-self: flex-end;
-  margin-left: auto;
+  align-self: flex-end;           /* 📍 Aligné à droite */
+  border-radius: 10px;
+  max-width: 70%;                 /* 📍 Limiter la largeur des messages de l'utilisateur */
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-left: auto;              /* 📍 Déplace à droite */
 }
+
 
 .chat-message.bot {
   background: #334155;
   color: #f8fafc;
-  align-self: flex-start;
-  margin: 0.5rem 0; /* réduit l’espace vertical */
-  padding: 0.75rem 1rem;
+  align-self: flex-start;         /* 📍 Aligné à gauche */
   border-radius: 10px;
-  max-width: 70%;
+  max-width: 100%;                /* 📍 Largeur maximale */
   word-wrap: break-word;
   white-space: pre-wrap;
+  margin-right: auto;             /* 📍 Déplace à gauche */
 }
 
 
