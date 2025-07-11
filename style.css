@@ -145,20 +145,20 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: transparent;     /* ❌ pas de fond */
-  border: none;                /* ❌ aucune bordure */
-  border-radius: 0;            /* ❌ pas d'arrondi */
-  padding: 0;                  /* ❌ pas d’espace intérieur */
+  align-items: center;           /* ✅ centre horizontalement */
+  padding: 1rem 2rem;            /* ✅ marge latérale */
   overflow-y: auto;
-  margin: 0;                   /* ❌ pas de marge */
+  max-width: 800px;              /* ✅ largeur max comme ChatGPT */
+  margin: 0 auto;                /* ✅ centré horizontalement */
 }
 
 
 .chat-message {
-  margin: 1rem 0;
-  padding: 0.75rem;
+  width: 100%;
+  max-width: 700px;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
   border-radius: 10px;
-  max-width: 80%;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -184,19 +184,41 @@ h1 {
 
 
 .chat-input-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  border-top: 1px solid #334155;
+  background: #0f172a;
   display: flex;
+  align-items: center;
   gap: 0.5rem;
-  padding-top: 1rem;
+}
+
+.chat-input-wrapper button {
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.2rem;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.chat-input-wrapper button:hover {
+  background: #2563eb;
 }
 
 
 #chatInput {
   flex: 1;
-  padding: 1rem;
-  border-radius: 10px;
-  border: 1px solid #334155;
-  background: #0f172a;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #475569;
+  background: #1e293b;
   color: #f8fafc;
+  font-size: 1rem;
 }
 
 .chat-actions {
