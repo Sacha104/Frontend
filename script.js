@@ -167,31 +167,17 @@ async function handleUserMessage() {
 }
 
 function appendMessage(text, type) {
-  const tempMessages = [
-    "⏳ Optimisation du prompt en cours…",
-    "🤖 Réponse en cours…",
-    "⚠️ Erreur réseau ou délai dépassé.",
-    "⚠️ Erreur IA."
-  ];
-
-  const cleanText = text?.trim();
-  if (!cleanText || tempMessages.includes(cleanText)) return;
+  if (!text || !text.trim()) return; // ⛔ ignore les messages vides
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${type}`;
-
-  if (type === "bot") {
-    msg.innerHTML = marked.parse(cleanText);
-    msg.classList.add("markdown");
-  } else {
-    msg.textContent = cleanText;
-  }
-
+  if (type === "bot") msg.classList.add("markdown");
+  msg.textContent = text;
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
 
-  // Sauvegarde uniquement si ce n'est pas un message temporaire
-  if (currentUID && currentConversationId) {
+  // ✅ Enregistre uniquement si conversation existe
+  if (currentUID && currentConversationId && text.trim().length > 0) {
     fetch(`${backendURL}/message/save`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -199,7 +185,7 @@ function appendMessage(text, type) {
         uid: currentUID,
         conversationId: currentConversationId,
         role: type,
-        text: cleanText
+        text: text.trim()
       })
     })
     .then(res => res.json())
@@ -212,16 +198,14 @@ function appendMessage(text, type) {
   }
 }
 
+
+
 function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
-  console.log("🧠 updateLastBotMessage:", text);
-
   if (messages.length > 0) {
     const lastBotMsg = messages[messages.length - 1];
     lastBotMsg.innerHTML = marked.parse(text);
     lastBotMsg.classList.add("markdown");
-  } else {
-    console.warn("⚠️ Aucun message bot trouvé à mettre à jour !");
   }
 }
 
@@ -400,9 +384,11 @@ function toggleHistory() {
   if (sidebar.style.display === "none") {
     sidebar.style.display = "block";
     reopenBtn.style.display = "none";
+    mainContent.style.marginLeft = "260px";
   } else {
     sidebar.style.display = "none";
     reopenBtn.style.display = "block";
+    mainContent.style.marginLeft = "0";
   }
 }
 
