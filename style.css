@@ -171,8 +171,12 @@ h1 {
   background: #334155;
   color: #f8fafc;
   align-self: flex-start;
-  max-width: 100%; /* ✅ largeur complète */
-  text-align: left;
+  border-radius: 10px;
+  max-width: 90%;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .chat-input-wrapper {
