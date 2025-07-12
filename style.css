@@ -3,11 +3,10 @@ body {
   color: #f8fafc;
   font-family: 'Segoe UI', 'Roboto', sans-serif;
   margin: 0;
-  overflow: hidden;  /* ← fixe la page */
-  height: 100vh;      /* ← hauteur fixe */
+  overflow: hidden;
+  height: 100vh;
   display: block;
 }
-
 
 h1, h2, h3 {
   font-family: 'Orbitron', sans-serif;
@@ -24,9 +23,8 @@ h1 {
 #appSection {
   display: flex;
   height: 100vh;
-  overflow: hidden;  /* empêche tout débordement */
+  overflow: hidden;
 }
-
 
 .sidebar {
   width: 250px;
@@ -65,13 +63,10 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 0;     /* ❌ plus de décalage à gauche */
-  padding: 0;         /* ❌ plus de padding */
+  margin-left: 0;
+  padding: 0;
   overflow: hidden;
 }
-
-
-
 
 /* === Auth Section === */
 #authSection {
@@ -145,14 +140,13 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: transparent;     /* ❌ pas de fond */
-  border: none;                /* ❌ aucune bordure */
-  border-radius: 0;            /* ❌ pas d'arrondi */
-  padding: 0;                  /* ❌ pas d’espace intérieur */
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   overflow-y: auto;
-  margin: 0;                   /* ❌ pas de marge */
+  margin: 0;
 }
-
 
 .chat-message {
   margin: 1rem 0;
@@ -174,7 +168,7 @@ h1 {
   background: #334155;
   color: #f8fafc;
   align-self: flex-start;
-  margin: 0.5rem 0; /* réduit l’espace vertical */
+  margin: 0.5rem 0;
   padding: 0.75rem 1rem;
   border-radius: 10px;
   max-width: 70%;
@@ -182,13 +176,11 @@ h1 {
   white-space: pre-wrap;
 }
 
-
 .chat-input-wrapper {
   display: flex;
   gap: 0.5rem;
   padding-top: 1rem;
 }
-
 
 #chatInput {
   flex: 1;
@@ -250,8 +242,6 @@ h1 {
   height: 100vh;
 }
 
-
-
 /* === Common Content (Prompt/Response) === */
 #aiResponse, #optimizedPrompt {
   color: #f8fafc;
@@ -299,6 +289,7 @@ h1 {
   overflow-x: auto;
   margin-top: 1rem;
 }
+
 #sidebar {
   width: 250px;
   background-color: #1f2937;
@@ -306,9 +297,10 @@ h1 {
   padding: 10px;
   overflow-y: auto;
   height: 100vh;
-  display: block; /* visible par défaut */
+  display: block;
   float: left;
 }
+
 #headerBar {
   position: absolute;
   top: 10px;
@@ -366,6 +358,7 @@ h1 {
 .main-content {
   transition: margin-left 0.3s ease;
 }
+
 #accountIcon {
   width: 36px;
   height: 36px;
@@ -407,6 +400,7 @@ h1 {
 .account-menu li:hover {
   background-color: #334155;
 }
+
 #accountWrapper {
   position: absolute;
   top: 10px;
@@ -468,6 +462,7 @@ h1 {
   color: #f87171;
   font-weight: bold;
 }
+
 .markdown h1, .markdown h2, .markdown h3 {
   font-family: 'Orbitron', sans-serif;
   color: #38bdf8;
@@ -503,13 +498,13 @@ h1 {
   overflow-x: auto;
   margin-top: 1rem;
 }
+
 .chat-message.bot .markdown {
   text-align: left;
   margin: 0;
   padding: 0;
 }
 
-/* Réduit l'espacement vertical à l’intérieur du contenu Markdown */
 .chat-message.bot .markdown p,
 .chat-message.bot .markdown ul,
 .chat-message.bot .markdown ol,
