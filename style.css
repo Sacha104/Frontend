@@ -140,40 +140,39 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   background: transparent;
   border: none;
   border-radius: 0;
-  padding: 0;
+  padding: 1rem;
   overflow-y: auto;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .chat-message {
-  margin: 1rem 0;
-  padding: 0.75rem;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
   border-radius: 10px;
-  max-width: 80%;
   word-wrap: break-word;
   white-space: pre-wrap;
+  box-sizing: border-box;
 }
-
 .chat-message.user {
   background: #3b82f6;
   color: white;
   align-self: flex-end;
-  margin-left: auto;
+  max-width: 60%; /* ✅ largeur limitée à droite */
+  text-align: left;
 }
-
 .chat-message.bot {
   background: #334155;
   color: #f8fafc;
   align-self: flex-start;
-  margin: 0.5rem 0;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  max-width: 70%;
-  word-wrap: break-word;
-  white-space: pre-wrap;
+  max-width: 100%; /* ✅ largeur complète */
+  text-align: left;
 }
 
 .chat-input-wrapper {
