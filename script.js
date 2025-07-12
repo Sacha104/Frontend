@@ -1,3 +1,12 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyAiBioPsbDZT3nrMgeHdntS0QIXjQTIzIk",
+  authDomain: "prompt-app-d4692.firebaseapp.com",
+  projectId: "prompt-app-d4692",
+  storageBucket: "prompt-app-d4692.appspot.com",
+  messagingSenderId: "1090823184353",
+  appId: "1:1090823184353:web:86a03e89a3e632e402bca0"
+};
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
