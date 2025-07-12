@@ -177,13 +177,12 @@ function appendMessage(text, type) {
   const cleanText = text?.trim();
   if (!cleanText || tempMessages.includes(cleanText)) return;
 
-  // Création du bloc message
   const msg = document.createElement("div");
   msg.className = `chat-message ${type}`;
 
   if (type === "bot") {
+    msg.innerHTML = marked.parse(cleanText);
     msg.classList.add("markdown");
-    msg.innerHTML = marked.parse(cleanText);  // Affiche le markdown
   } else {
     msg.textContent = cleanText;
   }
@@ -191,7 +190,7 @@ function appendMessage(text, type) {
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
 
-  // Sauvegarde uniquement si c’est un vrai message
+  // Sauvegarde uniquement si ce n'est pas un message temporaire
   if (currentUID && currentConversationId) {
     fetch(`${backendURL}/message/save`, {
       method: "POST",
@@ -213,14 +212,16 @@ function appendMessage(text, type) {
   }
 }
 
-
-
 function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
+  console.log("🧠 updateLastBotMessage:", text);
+
   if (messages.length > 0) {
     const lastBotMsg = messages[messages.length - 1];
     lastBotMsg.innerHTML = marked.parse(text);
     lastBotMsg.classList.add("markdown");
+  } else {
+    console.warn("⚠️ Aucun message bot trouvé à mettre à jour !");
   }
 }
 
