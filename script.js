@@ -467,6 +467,38 @@ function showArchived() {
     });
   });
 }
+
+function toggleLang() {
+  const translations = {
+    "Se connecter": "Log in",
+    "S’inscrire": "Sign up",
+    "Mot de passe oublié ?": "Forgot password?",
+    "Vous n’avez pas de compte ?": "Don't have an account?",
+    "Vous avez déjà un compte ?": "Already have an account?",
+    "Confirmez le mot de passe": "Confirm password",
+    "Nouvelle discussion": "New conversation",
+    "Discussions archivées": "Archived chats",
+    "Écris ta demande ici…": "Type your request here…",
+    "Envoyer": "Send",
+    "Réinitialiser le mot de passe": "Reset password",
+    "Votre email": "Your email",
+    "Envoyer le lien de réinitialisation": "Send reset link",
+    "🔙 Retour": "🔙 Back"
+  };
+
+  const reverse = Object.fromEntries(Object.entries(translations).map(([k, v]) => [v, k]));
+  const all = { ...translations, ...reverse };
+
+  document.querySelectorAll("button, input, a, span, h2, h1, label").forEach(el => {
+    if (el.placeholder && all[el.placeholder]) {
+      el.placeholder = all[el.placeholder];
+    }
+    if (el.textContent && all[el.textContent.trim()]) {
+      el.textContent = all[el.textContent.trim()];
+    }
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   const icon = document.getElementById("accountIcon");
   const menu = document.getElementById("accountMenu");
