@@ -473,6 +473,7 @@ function toggleLang() {
     
   "Se connecter": "Log in",
   "S’inscrire": "Sign up",
+  "Mot de passe": "Password",
   "Mot de passe oublié ?": "Forgot password?",
   "Vous n’avez pas de compte ?": "Don't have an account?",
   "Vous avez déjà un compte ?": "Already have an account?",
