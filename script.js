@@ -511,9 +511,9 @@ function toggleLang() {
 
   // Compte
   "Mon compte": "My account",
-  "🔒 Confidentialité": "🔒 Privacy",
-  "🛡️ Sécurité": "🛡️ Security",
-  "🚪 Se déconnecter": "🚪 Log out"
+  "Confidentialité": "Privacy",
+  "Sécurité": "Security",
+  "Se déconnecter": "Log out"
   };
 
   const reverse = Object.fromEntries(Object.entries(translations).map(([k, v]) => [v, k]));
