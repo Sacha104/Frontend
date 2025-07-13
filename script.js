@@ -26,13 +26,13 @@ async function loadLastConversation() {
     const last = (data.conversations || []).find(c => !c.archived);
     if (last) await loadConversation(last.id);
   } catch (err) {
-    console.error("❌ Erreur chargement dernière conversation :", err);
+    console.error("Erreur chargement dernière conversation :", err);
   }
 }
 
 
 auth.onAuthStateChanged(user => {
-  console.log(user ? "✅ Utilisateur connecté" : "🟠 Aucun utilisateur connecté");
+  console.log(user ? "Utilisateur connecté" : "Aucun utilisateur connecté");
 
   const wrapper = document.querySelector(".wrapper");
   const icon = document.getElementById("accountIcon");
@@ -79,12 +79,12 @@ function signUp() {
   const password = document.getElementById("signupPassword").value;
   const confirm = document.getElementById("confirmPassword").value;
   if (password !== confirm) {
-    document.getElementById("authStatus").textContent = "❌ Mots de passe différents.";
+    document.getElementById("authStatus").textContent = "Mots de passe différents.";
     return;
   }
   auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
-      document.getElementById("authStatus").textContent = "✅ Inscription réussie.";
+      document.getElementById("authStatus").textContent = "Inscription réussie.";
       showLogin();
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
@@ -93,7 +93,7 @@ function signUp() {
 function sendPasswordReset() {
   const email = document.getElementById("resetEmail").value;
   auth.sendPasswordResetEmail(email)
-    .then(() => document.getElementById("resetStatus").textContent = "📧 Email envoyé.")
+    .then(() => document.getElementById("resetStatus").textContent = "Email envoyé.")
     .catch(e => document.getElementById("resetStatus").textContent = e.message);
 }
 
@@ -130,7 +130,7 @@ async function handleUserMessage() {
   appendMessage(message, "user");
   input.value = "";
 
-  appendMessage("⏳ Optimisation du prompt en cours…", "bot");
+  appendMessage("Optimisation du prompt en cours…", "bot");
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 70000); // ⏱️ 30 sec timeout
@@ -149,20 +149,20 @@ async function handleUserMessage() {
     currentConversationId = data.conversationId;
     await loadConversationHistory();
 
-    const optimized = data.response || "⚠️ Erreur IA.";
+    const optimized = data.response || "Erreur IA.";
     updateLastBotMessage(optimized);
 
     const actions = document.createElement("div");
     actions.className = "chat-actions";
     actions.innerHTML = `
-      <a href="#" onclick="sendToChat(this)">💬 Envoyer à l'IA</a> |
-      <a href="#" onclick="copyFromText(this)">📋 Copier</a>
+      <a href="#" onclick="sendToChat(this)">Envoyer à l'IA</a> |
+      <a href="#" onclick="copyFromText(this)">Copier</a>
     `;
     document.getElementById("chatContainer").appendChild(actions);
     scrollToBottom();
   } catch (error) {
-    console.error("❌ Erreur réseau :", error);
-    updateLastBotMessage("⚠️ Erreur réseau ou délai dépassé.");
+    console.error("Erreur réseau :", error);
+    updateLastBotMessage("Erreur réseau ou délai dépassé.");
   }
 }
 
@@ -191,10 +191,10 @@ function appendMessage(text, type) {
     .then(res => res.json())
     .then(data => {
       if (!data.success) {
-        console.warn("⚠️ Erreur sauvegarde message :", data);
+        console.warn("Erreur sauvegarde message :", data);
       }
     })
-    .catch(err => console.error("❌ Sauvegarde échouée :", err));
+    .catch(err => console.error("Sauvegarde échouée :", err));
   }
 }
 
@@ -220,7 +220,7 @@ function sendToChat(linkElement) {
 
   const prompt = botMessages[botMessages.length - 1].textContent.trim();
   appendMessage(prompt, "user");
-  appendMessage("🤖 Réponse en cours…", "bot");
+  appendMessage("Réponse en cours…", "bot");
 
   if (linkElement?.parentElement) linkElement.parentElement.remove();
 
@@ -231,20 +231,20 @@ function sendToChat(linkElement) {
   })
     .then(res => res.json())
     .then(data => {
-      updateLastBotMessage(data.response || "⚠️ Erreur IA.");
+      updateLastBotMessage(data.response || "Erreur IA.");
       const copy = document.createElement("div");
       copy.className = "chat-actions";
-      copy.innerHTML = `<a href="#" onclick="copyFromText(this)">📋 Copier la réponse</a>`;
+      copy.innerHTML = `<a href="#" onclick="copyFromText(this)">Copier la réponse</a>`;
       document.getElementById("chatContainer").appendChild(copy);
       scrollToBottom();
     })
-    .catch(() => updateLastBotMessage("⚠️ Erreur réseau."));
+    .catch(() => updateLastBotMessage("Erreur réseau."));
 }
 
 function copyFromText(link) {
   const msg = link.closest(".chat-container").querySelector(".chat-message.bot:last-of-type");
   if (msg) {
-    navigator.clipboard.writeText(msg.textContent).then(() => alert("✅ Copié !"));
+    navigator.clipboard.writeText(msg.textContent).then(() => alert("Copié !"));
   }
 }
 
@@ -343,14 +343,14 @@ async function loadConversation(conversationId) {
 
     scrollToBottom();
   } catch (err) {
-    console.error("❌ Erreur chargement conversation :", err);
+    console.error("Erreur chargement conversation :", err);
   }
 }
 
 
 async function startNewConversation(force = false) {
   if (!force && isCurrentConversationEmpty()) {
-    console.log("🚫 Conversation vide — aucune nouvelle discussion créée.");
+    console.log("Conversation vide — aucune nouvelle discussion créée.");
     return;
   }
 
@@ -371,7 +371,7 @@ async function startNewConversation(force = false) {
     document.getElementById("chatContainer").innerHTML = "";
     await loadConversationHistory();
   } catch (err) {
-    console.error("❌ Erreur nouvelle conversation :", err);
+    console.error("Erreur nouvelle conversation :", err);
   }
 }
 
@@ -411,7 +411,7 @@ function handleNewConversation() {
 
 function confirmDelete(e, id) {
   e.stopPropagation();
-  if (confirm("❌ Es-tu sûr de vouloir supprimer cette conversation ?")) {
+  if (confirm("Es-tu sûr de vouloir supprimer cette conversation ?")) {
     fetch(`${backendURL}/conversation/delete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -469,21 +469,51 @@ function showArchived() {
 }
 
 function toggleLang() {
-  const translations = {
-    "Se connecter": "Log in",
-    "S’inscrire": "Sign up",
-    "Mot de passe oublié ?": "Forgot password?",
-    "Vous n’avez pas de compte ?": "Don't have an account?",
-    "Vous avez déjà un compte ?": "Already have an account?",
-    "Confirmez le mot de passe": "Confirm password",
-    "Nouvelle discussion": "New conversation",
-    "Discussions archivées": "Archived chats",
-    "Écris ta demande ici…": "Type your request here…",
-    "Envoyer": "Send",
-    "Réinitialiser le mot de passe": "Reset password",
-    "Votre email": "Your email",
-    "Envoyer le lien de réinitialisation": "Send reset link",
-    "🔙 Retour": "🔙 Back"
+  const translations = {  
+    
+  "Se connecter": "Log in",
+  "S’inscrire": "Sign up",
+  "Mot de passe oublié ?": "Forgot password?",
+  "Vous n’avez pas de compte ?": "Don't have an account?",
+  "Vous avez déjà un compte ?": "Already have an account?",
+  "Confirmez le mot de passe": "Confirm password",
+  "Réinitialiser le mot de passe": "Reset password",
+  "Votre email": "Your email",
+  "Envoyer le lien de réinitialisation": "Send reset link",
+  "🔙 Retour": "🔙 Back",
+  "Inscription réussie.": "Registration successful.",
+  "Mots de passe différents.": "Passwords do not match.",
+  "Email envoyé.": "Email sent.",
+  "Copié !": "Copied!",
+
+  // Interface principale
+  "Nouvelle discussion": "New conversation",
+  "Discussions archivées": "Archived conversations",
+  "Type your request here…": "Écris ta demande ici…", // sens inverse
+  "Écris ta demande ici…": "Type your request here…",
+  "Envoyer": "Send",
+
+  // Chat messages
+  "Optimisation du prompt en cours…": "Optimizing prompt…",
+  "Réponse en cours…": "Generating response…",
+  "Erreur réseau ou délai dépassé.": "Network error or timeout.",
+  "Erreur IA.": "AI error.",
+  "Erreur réseau.": "Network error.",
+  "Aucun message dans cette conversation.": "No messages in this conversation.",
+  "⚠️ Tu n’as encore rien écrit dans cette conversation.": "⚠️ You haven't written anything in this conversation yet.",
+  "Conversation vide — aucune nouvelle discussion créée.": "Empty conversation — no new chat created.",
+
+  // Actions
+  "Envoyer à l'IA": "Send to AI",
+  "Copier": "Copy",
+  "Copier la réponse": "Copy response",
+  "Es-tu sûr de vouloir supprimer cette conversation ?": "Are you sure you want to delete this conversation ?",
+
+  // Compte
+  "Mon compte": "My account",
+  "🔒 Confidentialité": "🔒 Privacy",
+  "🛡️ Sécurité": "🛡️ Security",
+  "🚪 Se déconnecter": "🚪 Log out"
   };
 
   const reverse = Object.fromEntries(Object.entries(translations).map(([k, v]) => [v, k]));
