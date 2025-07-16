@@ -167,38 +167,27 @@ async function handleUserMessage() {
   }
 }
 
-function appendMessage(text, type) {
-  if (!text || !text.trim()) return; // ⛔ ignore les messages vides
+function appendMessage(role, text) {
+  const messageDiv = document.createElement("div");
+  messageDiv.className = `chat-message ${role}`;
 
-  const msg = document.createElement("div");
-  msg.className = `chat-message ${type}`;
-  if (type === "bot") msg.classList.add("markdown");
-  msg.textContent = text;
-  document.getElementById("chatContainer").appendChild(msg);
-  scrollToBottom();
-  updateChatLayout();
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "markdown";
+  contentDiv.innerHTML = text;
+  messageDiv.appendChild(contentDiv);
 
-
-  // ✅ Enregistre uniquement si conversation existe
-  if (currentUID && currentConversationId && text.trim().length > 0) {
-    fetch(`${backendURL}/message/save`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: currentUID,
-        conversationId: currentConversationId,
-        role: type,
-        text: text.trim()
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (!data.success) {
-        console.warn("Erreur sauvegarde message :", data);
-      }
-    })
-    .catch(err => console.error("Sauvegarde échouée :", err));
+  // 👉 Ajouter le bouton seulement pour les messages de l'IA
+  if (role === "bot") {
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "📋 Copier";
+    copyBtn.onclick = function () {
+      copyMessage(this);
+    };
+    messageDiv.appendChild(copyBtn);
   }
+
+  document.querySelector(".chat-container").appendChild(messageDiv);
 }
 
 
