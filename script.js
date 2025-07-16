@@ -557,5 +557,4 @@ window.addEventListener("DOMContentLoaded", () => {
       signOut();
     });
   }
- });
-}
+
