@@ -25,6 +25,8 @@ async function loadLastConversation() {
     const data = await res.json();
     const last = (data.conversations || []).find(c => !c.archived);
     if (last) await loadConversation(last.id);
+    updateChatLayout();
+
   } catch (err) {
     console.error("Erreur chargement dernière conversation :", err);
   }
@@ -175,6 +177,8 @@ function appendMessage(text, type) {
   msg.textContent = text;
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
+  updateChatLayout();
+
 
   // ✅ Enregistre uniquement si conversation existe
   if (currentUID && currentConversationId && text.trim().length > 0) {
@@ -221,6 +225,23 @@ function copyMessage(button) {
 function scrollToBottom() {
   const container = document.getElementById("chatContainer");
   container.scrollTop = container.scrollHeight;
+}
+
+function updateChatLayout() {
+  const container = document.getElementById("chatContainer");
+  const wrapper = document.querySelector(".main-content");
+
+  if (!container || !wrapper) return;
+
+  const hasMessages = container.querySelectorAll(".chat-message").length > 0;
+
+  if (hasMessages) {
+    wrapper.classList.remove("chat-wrapper-empty");
+    wrapper.classList.add("chat-wrapper-active");
+  } else {
+    wrapper.classList.remove("chat-wrapper-active");
+    wrapper.classList.add("chat-wrapper-empty");
+  }
 }
 
 function sendToChat(linkElement) {
@@ -325,6 +346,8 @@ async function loadConversation(conversationId) {
     if (!data.messages || data.messages.length === 0) {
       container.innerHTML = "<p style='color: #94a3b8; font-style: italic;'>Aucun message dans cette conversation.</p>";
       return;
+
+
     }
 
     // Exclure les messages système temporaires
@@ -347,6 +370,7 @@ async function loadConversation(conversationId) {
     });
 
     scrollToBottom();
+    updateChatLayout();
   } catch (err) {
     console.error("Erreur chargement conversation :", err);
   }
