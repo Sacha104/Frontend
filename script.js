@@ -208,12 +208,17 @@ function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
   if (messages.length > 0) {
     const lastBotMsg = messages[messages.length - 1];
+
+    // Créer la structure propre
     lastBotMsg.innerHTML = `
       <div class="markdown">${marked.parse(text)}</div>
-      <button class="copy-btn" onclick="copyMessage(this)">Copier</button>
+      <div class="chat-actions">
+        <a href="#" onclick="copyMessage(this)">Copier</a>
+      </div>
     `;
   }
 }
+
 
 function copyMessage(button) {
   const msgText = button.previousElementSibling?.innerText;
@@ -221,6 +226,18 @@ function copyMessage(button) {
     navigator.clipboard.writeText(msgText).then(() => alert("Copié !"));
   }
 }
+
+function copyFromText(link) {
+  const parent = link.closest(".chat-actions");
+  const msg = parent?.previousElementSibling;
+  if (msg?.classList.contains("chat-message") && msg?.classList.contains("bot")) {
+    const text = msg.innerText.trim();
+    navigator.clipboard.writeText(text)
+      .then(() => alert("✅ Copié dans le presse-papiers"))
+      .catch(() => alert("❌ Erreur lors de la copie"));
+  }
+}
+
 
 function scrollToBottom() {
   const container = document.getElementById("chatContainer");
@@ -364,9 +381,15 @@ async function loadConversation(conversationId) {
       if (m.role === "bot") {
         const last = document.querySelectorAll(".chat-message.bot");
         const lastMsg = last[last.length - 1];
-        lastMsg.innerHTML = marked.parse(m.text);
-        lastMsg.classList.add("markdown");
-      }
+
+        lastMsg.innerHTML = `
+           <div class="markdown">${marked.parse(m.text)}</div>
+           <div class="chat-actions">
+             <a href="#" onclick="copyMessage(this)">Copier</a>
+           </div>
+  `      ;
+       }
+
     });
 
     scrollToBottom();
