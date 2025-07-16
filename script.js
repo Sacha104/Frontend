@@ -272,8 +272,6 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
-});
-
 async function loadConversation(conversationId) {
   try {
     console.log("📥 Chargement conversation ID :", conversationId);
