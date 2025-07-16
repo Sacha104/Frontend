@@ -285,6 +285,8 @@ async function loadConversationHistory() {
 
  (data.conversations || []).forEach(c => {
   const li = document.createElement("li");
+  document.getElementById("exitArchiveBtn").style.display = "none";
+
 
     li.innerHTML = `
      <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
@@ -321,12 +323,19 @@ async function loadConversation(conversationId) {
       container.innerHTML = "<p style='color: #94a3b8; font-style: italic;'>Aucun message dans cette conversation.</p>";
       return;
     }
+    // Exclure les messages système temporaires
     const tempMessages = [
-    "Optimisation du prompt en cours…",
-    "Réponse en cours…",
-    "Erreur réseau ou délai dépassé.",
-    "Erreur IA.",
-];
+      "Optimisation du prompt en cours…",
+      "Réponse en cours…",
+      "Erreur réseau ou délai dépassé.",
+      "Erreur IA."
+    ];
+
+   data.messages.forEach(m => {
+       if (tempMessages.includes(m.text)) return; // ⛔ ignore les messages système
+       appendMessage(m.text, m.role);
+       ...
+    });
 
 
     currentConversationId = conversationId;
@@ -449,6 +458,8 @@ function showArchived() {
   .then(res => res.json())
   .then(data => {
     const list = document.getElementById("conversationList");
+    document.getElementById("exitArchiveBtn").style.display = "block";
+
     list.innerHTML = "";
 
     (data.conversations || []).forEach(c => {
