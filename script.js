@@ -250,12 +250,6 @@ function sendToChat(linkElement) {
     .catch(() => updateLastBotMessage("Erreur réseau."));
 }
 
-function copyFromText(link) {
-  const msg = link.closest(".chat-container").querySelector(".chat-message.bot:last-of-type");
-  if (msg) {
-    navigator.clipboard.writeText(msg.textContent).then(() => alert("Copié !"));
-  }
-}
 
 function forceScrollToTop() {
   window.scrollTo(0, 0);
