@@ -559,3 +559,43 @@ h1 {
 .dropdown-container:hover .dropdown-menu {
   display: block;
 }
+/* Chat input position centrale quand vide */
+.chat-wrapper-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Barre d’écriture fixe en bas quand messages présents */
+.chat-wrapper-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+/* Textarea responsive */
+#chatInput {
+  resize: none;
+  overflow-y: auto;
+  min-height: 50px;
+  max-height: 150px;
+  line-height: 1.5;
+}
+
+/* Copier intégré à chaque message bot */
+.copy-btn {
+  display: inline-block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  background: transparent;
+  color: #60a5fa;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.copy-btn:hover {
+  text-decoration: underline;
+}
