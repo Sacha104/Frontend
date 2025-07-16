@@ -289,16 +289,16 @@ async function loadConversationHistory() {
 
 
     li.innerHTML = `
-     <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
-     <span class="conversation-actions">
-       <i class="fa-solid fa-box-archive ${c.archived ? 'archived' : ''}" title="${c.archived ? 'Désarchiver' : 'Archiver'}" onclick="toggleArchive(event, '${c.id}', ${!c.archived})"></i>
-       <i class="fa-solid fa-trash" title="Supprimer" onclick="confirmDelete(event, '${c.id}')"></i>
-     </span>
-  `  ;
-    li.classList.add("conversation-item");
-    list.appendChild(li);
- });
-}
+      <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
+     <div class="dropdown-container">
+        <i class="fa-solid fa-ellipsis-vertical options-icon"></i>
+      <div class="dropdown-menu">
+        <div onclick="toggleArchive(event, '${c.id}', ${!c.archived})">${c.archived ? "Désarchiver" : "Archiver"}</div>
+        <div onclick="confirmDelete(event, '${c.id}')">Supprimer</div>
+      </div>
+     </div>
+`;
+
 
 
 
