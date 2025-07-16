@@ -220,11 +220,22 @@ function updateLastBotMessage(text) {
 
 
 function copyMessage(button) {
-  const msgText = button.previousElementSibling?.innerText;
+  const msgContainer = button.closest(".chat-message.bot");
+  const markdown = msgContainer?.querySelector(".markdown");
+  const msgText = markdown?.innerText;
+
   if (msgText) {
-    navigator.clipboard.writeText(msgText).then(() => alert("Copié !"));
+    navigator.clipboard.writeText(msgText)
+      .then(() => {
+        button.textContent = "✅ Copié !";
+        setTimeout(() => {
+          button.textContent = "📋 Copier";
+        }, 1500);
+      })
+      .catch(() => alert("❌ Erreur lors de la copie"));
   }
 }
+
 
 function copyFromText(link) {
   const parent = link.closest(".chat-actions");
