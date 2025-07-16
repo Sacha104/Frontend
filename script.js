@@ -169,14 +169,14 @@ async function handleUserMessage() {
 
 function appendMessage(role, text) {
   const messageDiv = document.createElement("div");
-  messageDiv.className = `chat-message ${role}`;
+  messageDiv.className = `chat-message ${role}`;  // ici on ajoute 'chat-message bot' ou 'chat-message user'
 
   const contentDiv = document.createElement("div");
   contentDiv.className = "markdown";
   contentDiv.innerHTML = text;
   messageDiv.appendChild(contentDiv);
 
-  // 👉 Ajouter le bouton seulement pour les messages de l'IA
+  // bouton seulement pour bot
   if (role === "bot") {
     const copyBtn = document.createElement("button");
     copyBtn.className = "copy-btn";
@@ -189,6 +189,7 @@ function appendMessage(role, text) {
 
   document.querySelector(".chat-container").appendChild(messageDiv);
 }
+
 
 
 
