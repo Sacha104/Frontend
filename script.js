@@ -6,7 +6,7 @@ const firebaseConfig = {
   messagingSenderId: "1090823184353",
   appId: "1:1090823184353:web:86a03e89a3e632e402bca0"
 };
-
+ 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
