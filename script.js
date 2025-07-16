@@ -325,30 +325,23 @@ async function loadConversation(conversationId) {
     }
     // Exclure les messages système temporaires
     const tempMessages = [
-      "Optimisation du prompt en cours…",
-      "Réponse en cours…",
-      "Erreur réseau ou délai dépassé.",
-      "Erreur IA."
-    ];
+  "Optimisation du prompt en cours…",
+  "Réponse en cours…",
+  "Erreur réseau ou délai dépassé.",
+  "Erreur IA."
+];
 
-   data.messages.forEach(m => {
-       if (tempMessages.includes(m.text)) return; // ⛔ ignore les messages système
-       appendMessage(m.text, m.role);
-       ...
-    });
+data.messages.forEach(m => {
+  if (tempMessages.includes(m.text)) return;
+  appendMessage(m.text, m.role);
 
-
-    currentConversationId = conversationId;
-
-    data.messages.forEach(m => {
-    appendMessage(m.text, m.role);
-    if (m.role === "bot") {
+  if (m.role === "bot") {
     const last = document.querySelectorAll(".chat-message.bot");
     const lastMsg = last[last.length - 1];
     lastMsg.innerHTML = marked.parse(m.text);
     lastMsg.classList.add("markdown");
-    }
-    });
+  }
+});
 
     scrollToBottom();
   } catch (err) {
