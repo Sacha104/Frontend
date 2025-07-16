@@ -69,23 +69,25 @@
 
   <div id="appSection" style="display: none;">
 
-    <div id="sidebar" class="sidebar">
-  <!-- Barre du haut de la sidebar -->
-  <div class="sidebar-header-row">
+   <div id="sidebar" class="sidebar">
+  <!-- Ligne du haut : bouton + icônes -->
+  <div class="sidebar-top-row">
     <button onclick="handleNewConversation()" class="new-chat-button">
-      <i class="fa-regular fa-pen-to-square"></i> Nouveau prompt
+      <i class="fa-regular fa-pen-to-square"></i>
+      Nouveau prompt
     </button>
 
-    <div class="right-icons">
+    <div class="sidebar-icons">
       <div id="accountIcon" title="Mon compte"></div>
       <i id="historyToggleIcon" class="fa-solid fa-bars" onclick="toggleHistory()" title="Cacher l'historique"></i>
     </div>
   </div>
 
-  <!-- Historique -->
+  <!-- Boutons secondaires -->
   <button onclick="showArchived()">Discussions archivées</button>
   <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
 
+  <!-- Liste des conversations -->
   <ul id="conversationList"></ul>
 </div>
 
