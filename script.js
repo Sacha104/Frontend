@@ -220,19 +220,33 @@ function updateLastBotMessage(text) {
 
 
 function copyMessage(button) {
+  // Empêche le comportement par défaut (utile si <a>)
+  if (event) event.preventDefault();
+
   const msgContainer = button.closest(".chat-message.bot");
-  const markdown = msgContainer?.querySelector(".markdown");
+  if (!msgContainer) {
+    console.error("Impossible de trouver .chat-message.bot");
+    alert("Erreur : impossible de trouver le message à copier.");
+    return;
+  }
+
+  const markdown = msgContainer.querySelector(".markdown");
   const msgText = markdown?.innerText;
+
+  console.log("DEBUG copyText:", msgText);
 
   if (msgText) {
     navigator.clipboard.writeText(msgText)
       .then(() => {
-        button.textContent = "✅ Copié !";
+        button.textContent = "✅ Copié !";
         setTimeout(() => {
           button.textContent = "📋 Copier";
         }, 1500);
       })
-      .catch(() => alert("❌ Erreur lors de la copie"));
+      .catch(err => {
+        console.error("Erreur writeText:", err);
+        alert("❌ Erreur lors de la copie");
+      });
   }
 }
 
