@@ -278,7 +278,13 @@ function sendToChat(linkElement) {
   const botMessages = document.querySelectorAll(".chat-message.bot");
   if (!botMessages.length) return;
 
-  const prompt = botMessages[botMessages.length - 1].textContent.trim();
+  // On cible uniquement la partie markdown, qui contient le texte "propre"
+  const lastBotMessage = botMessages[botMessages.length - 1];
+  const markdownDiv = lastBotMessage.querySelector(".markdown");
+  if (!markdownDiv) return;
+
+  const prompt = markdownDiv.textContent.trim();
+
   appendMessage(prompt, "user");
   appendMessage("Réponse en cours…", "bot");
 
@@ -289,17 +295,18 @@ function sendToChat(linkElement) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt, uid: currentUID, conversationId: currentConversationId })
   })
-    .then(res => res.json())
-    .then(data => {
-      updateLastBotMessage(data.response || "Erreur IA.");
-      const copy = document.createElement("div");
-      copy.className = "chat-actions";
-      copy.innerHTML = `<a href="#" onclick="copyFromText(this)">Copier la réponse</a>`;
-      document.getElementById("chatContainer").appendChild(copy);
-      scrollToBottom();
-    })
-    .catch(() => updateLastBotMessage("Erreur réseau."));
+  .then(res => res.json())
+  .then(data => {
+    updateLastBotMessage(data.response || "Erreur IA.");
+    const copy = document.createElement("div");
+    copy.className = "chat-actions";
+    copy.innerHTML = `<a href="#" onclick="copyFromText(this)">Copier la réponse</a>`;
+    document.getElementById("chatContainer").appendChild(copy);
+    scrollToBottom();
+  })
+  .catch(() => updateLastBotMessage("Erreur réseau."));
 }
+
 
 
 function forceScrollToTop() {
