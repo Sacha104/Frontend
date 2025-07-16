@@ -204,8 +204,17 @@ function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
   if (messages.length > 0) {
     const lastBotMsg = messages[messages.length - 1];
-    lastBotMsg.innerHTML = marked.parse(text);
-    lastBotMsg.classList.add("markdown");
+    lastBotMsg.innerHTML = `
+      <div class="markdown">${marked.parse(text)}</div>
+      <button class="copy-btn" onclick="copyMessage(this)">Copier</button>
+    `;
+  }
+}
+
+function copyMessage(button) {
+  const msgText = button.previousElementSibling?.innerText;
+  if (msgText) {
+    navigator.clipboard.writeText(msgText).then(() => alert("Copié !"));
   }
 }
 
