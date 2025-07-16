@@ -331,17 +331,16 @@ async function loadConversation(conversationId) {
   "Erreur IA."
 ];
 
-data.messages.forEach(m => {
-  if (tempMessages.includes(m.text)) return;
-  appendMessage(m.text, m.role);
-
-  if (m.role === "bot") {
-    const last = document.querySelectorAll(".chat-message.bot");
-    const lastMsg = last[last.length - 1];
-    lastMsg.innerHTML = marked.parse(m.text);
-    lastMsg.classList.add("markdown");
-  }
-});
+   data.messages.forEach(m => {
+     if (tempMessages.includes(m.text)) return;
+     appendMessage(m.text, m.role) 
+     if (m.role === "bot") {
+       const last = document.querySelectorAll(".chat-message.bot");
+       const lastMsg = last[last.length - 1];
+       lastMsg.innerHTML = marked.parse(m.text);
+       lastMsg.classList.add("markdown");
+     }
+    });
 
     scrollToBottom();
   } catch (err) {
