@@ -272,35 +272,7 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
-async function loadConversationHistory() {
-  const res = await fetch(`${backendURL}/conversations`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid: currentUID })
-  });
-
-  const data = await res.json();
-  const list = document.getElementById("conversationList");
-  list.innerHTML = "";
-
- (data.conversations || []).forEach(c => {
-  const li = document.createElement("li");
-  document.getElementById("exitArchiveBtn").style.display = "none";
-
-
-    li.innerHTML = `
-      <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
-     <div class="dropdown-container">
-        <i class="fa-solid fa-ellipsis-vertical options-icon"></i>
-      <div class="dropdown-menu">
-        <div onclick="toggleArchive(event, '${c.id}', ${!c.archived})">${c.archived ? "Désarchiver" : "Archiver"}</div>
-        <div onclick="confirmDelete(event, '${c.id}')">Supprimer</div>
-      </div>
-     </div>
-`;
-
-
-
+});
 
 async function loadConversation(conversationId) {
   try {
@@ -557,4 +529,4 @@ window.addEventListener("DOMContentLoaded", () => {
       signOut();
     });
   }
-
+});
