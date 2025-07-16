@@ -157,8 +157,7 @@ async function handleUserMessage() {
     const actions = document.createElement("div");
     actions.className = "chat-actions";
     actions.innerHTML = `
-      <a href="#" onclick="sendToChat(this)">Envoyer à l'IA</a> |
-      <a href="#" onclick="copyFromText(this)">Copier</a>
+      <a href="#" onclick="sendToChat(this)">Envoyer à l'IA</a> 
     `;
     document.getElementById("chatContainer").appendChild(actions);
     scrollToBottom();
