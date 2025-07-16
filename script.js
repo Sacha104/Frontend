@@ -272,6 +272,36 @@ function showReset() {
   document.getElementById("resetStatus").textContent = "";
 }
 
+async function loadConversationHistory() {
+  const res = await fetch(`${backendURL}/conversations`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid: currentUID })
+  });
+
+  const data = await res.json();
+  const list = document.getElementById("conversationList");
+  list.innerHTML = "";
+
+  document.getElementById("exitArchiveBtn").style.display = "none";
+
+  (data.conversations || []).forEach(c => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
+      <div class="dropdown-container">
+        <i class="fa-solid fa-ellipsis-vertical options-icon"></i>
+        <div class="dropdown-menu">
+          <div onclick="toggleArchive(event, '${c.id}', ${!c.archived})">${c.archived ? "Désarchiver" : "Archiver"}</div>
+          <div onclick="confirmDelete(event, '${c.id}')">Supprimer</div>
+        </div>
+      </div>
+    `;
+    li.classList.add("conversation-item");
+    list.appendChild(li);
+  });
+}
+
 async function loadConversation(conversationId) {
   try {
     console.log("📥 Chargement conversation ID :", conversationId);
@@ -284,7 +314,7 @@ async function loadConversation(conversationId) {
 
     const data = await res.json();
 
-    console.log("📦 Messages reçus :", data.messages); // ✅ ici !
+    console.log("📦 Messages reçus :", data.messages);
 
     const container = document.getElementById("chatContainer");
     container.innerHTML = "";
@@ -293,23 +323,24 @@ async function loadConversation(conversationId) {
       container.innerHTML = "<p style='color: #94a3b8; font-style: italic;'>Aucun message dans cette conversation.</p>";
       return;
     }
+
     // Exclure les messages système temporaires
     const tempMessages = [
-  "Optimisation du prompt en cours…",
-  "Réponse en cours…",
-  "Erreur réseau ou délai dépassé.",
-  "Erreur IA."
-];
+      "Optimisation du prompt en cours…",
+      "Réponse en cours…",
+      "Erreur réseau ou délai dépassé.",
+      "Erreur IA."
+    ];
 
-   data.messages.forEach(m => {
-     if (tempMessages.includes(m.text)) return;
-     appendMessage(m.text, m.role) 
-     if (m.role === "bot") {
-       const last = document.querySelectorAll(".chat-message.bot");
-       const lastMsg = last[last.length - 1];
-       lastMsg.innerHTML = marked.parse(m.text);
-       lastMsg.classList.add("markdown");
-     }
+    data.messages.forEach(m => {
+      if (tempMessages.includes(m.text)) return;
+      appendMessage(m.text, m.role);
+      if (m.role === "bot") {
+        const last = document.querySelectorAll(".chat-message.bot");
+        const lastMsg = last[last.length - 1];
+        lastMsg.innerHTML = marked.parse(m.text);
+        lastMsg.classList.add("markdown");
+      }
     });
 
     scrollToBottom();
