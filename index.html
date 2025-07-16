@@ -69,71 +69,57 @@
 
   <div id="appSection" style="display: none;">
 
-  <!-- === Barre supérieure === -->
-  <div id="headerBar">
-    <i id="historyToggleIcon" class="fa-solid fa-bars" onclick="toggleHistory()" title="Afficher/Masquer l'historique"></i>
-
+    <div id="sidebar" class="sidebar">
+  <!-- Barre du haut de la sidebar -->
+  <div class="sidebar-header-row">
     <button onclick="handleNewConversation()" class="new-chat-button">
       <i class="fa-regular fa-pen-to-square"></i> Nouveau prompt
     </button>
 
+    <div class="right-icons">
+      <div id="accountIcon" title="Mon compte"></div>
+      <i id="historyToggleIcon" class="fa-solid fa-bars" onclick="toggleHistory()" title="Cacher l'historique"></i>
+    </div>
+  </div>
+
+  <!-- Historique -->
+  <button onclick="showArchived()">Discussions archivées</button>
+  <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
+
+  <ul id="conversationList"></ul>
+</div>
+
     <div id="accountWrapper">
       <div id="accountIcon" title="Mon compte"></div>
-      <div id="accountMenu" class="account-menu" style="display: none;">
-        <ul>
-          <li>Confidentialité</li>
-          <li>Sécurité</li>
-          <hr />
-          <li id="logoutBtn">Se déconnecter</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- === Barre latérale === -->
-  <div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <div class="close-history" onclick="toggleHistory()" title="Fermer">
-        <i class="fa-solid fa-xmark"></i>
-      </div>
-    </div>
-    <button onclick="handleNewConversation()">Nouvelle discussion</button>
-    <button onclick="showArchived()">Discussions archivées</button>
-    <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
-
-    <ul id="conversationList"></ul>
-  </div>
-
-  <!-- Bouton pour rouvrir la sidebar -->
-  <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
-    <i class="fa-solid fa-bars"></i>
-  </div>
-
-  <!-- === Zone principale === -->
-  <div class="main-content">
-
-    <!-- Si aucune discussion : -->
-    <div id="emptyState" class="empty-state" style="display: none;">
-      <div class="centered-input-box">
-        <input type="text" id="chatInput" placeholder="Sur quoi travaillez-vous ?" onkeydown="handleChatEnter(event)">
-        <button onclick="handleUserMessage()">
-          <i class="fa-solid fa-arrow-up"></i>
-        </button>
-      </div>
     </div>
 
-    <!-- Zone de chat -->
+
+    <div id="accountMenu" class="account-menu" style="display: none;">
+      <ul>
+       <li>Confidentialité</li>
+       <li>Sécurité</li>
+       <hr>
+       <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
+      </ul>
+    </div>
+    
+    <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
+     <i class="fa-solid fa-bars"></i>
+    </div>
+
+    
+
+   <!-- 🟦 Contenu principal existant -->
+   <div class="main-content">
+
     <div id="chatContainer" class="chat-container"></div>
 
-    <!-- Zone d’entrée standard (visible quand conversation existe) -->
     <div class="chat-input-wrapper">
-      <textarea id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)"></textarea>
+      <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
       <button onclick="handleUserMessage()">Envoyer</button>
     </div>
 
-  </div> <!-- .main-content -->
-
-</div> <!-- #appSection -->
- <!-- ✅ fermeture manquante de #appSection -->
+    </div> <!-- fin de .main-content -->
+  </div> <!-- ✅ fermeture manquante de #appSection -->
 </body>
 </html>
