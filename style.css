@@ -148,9 +148,9 @@ h1 {
   background: transparent;     /* ❌ pas de fond */
   border: none;                /* ❌ aucune bordure */
   border-radius: 0;            /* ❌ pas d'arrondi */
-  padding: 0;                  /* ❌ pas d’espace intérieur */
+  padding: 1rem;                  /* ❌ pas d’espace intérieur */
   overflow-y: auto;
-  margin: 0;                   /* ❌ pas de marge */
+  margin: 0 auto;                   /* ❌ pas de marge */
 }
 
 
@@ -211,10 +211,10 @@ h1 {
 }
 
 .chat-actions a {
-  color: #60a5fa;
-  text-decoration: none;
-  margin-right: 10px;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
 }
 
 .chat-actions a:hover {
