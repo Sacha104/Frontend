@@ -211,7 +211,9 @@ function updateLastBotMessage(text) {
     lastBotMsg.innerHTML = `
       <div class="markdown">${marked.parse(text)}</div>
       <div class="chat-actions">
-        <a href="#" onclick="copyMessage(this)">Copier</a>
+       <a href="#" onclick="copyMessage(this)">
+        <i class="fa-regular fa-copy"></i> Copier
+       </a>;
       </div>
     `;
   }
@@ -419,7 +421,9 @@ async function loadConversation(conversationId) {
         lastMsg.innerHTML = `
            <div class="markdown">${marked.parse(m.text)}</div>
            <div class="chat-actions">
-             <a href="#" onclick="copyMessage(this)">Copier</a>
+              <a href="#" onclick="copyMessage(this)">
+                 <i class="fa-regular fa-copy"></i> Copier
+              </a>;
            </div>
   `      ;
        }
