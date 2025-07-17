@@ -388,6 +388,10 @@ async function loadConversation(conversationId) {
     console.log("📦 Messages reçus :", data.messages);
 
     const container = document.getElementById("chatContainer");
+    if (!container) {
+      console.error("⛔ Élément #chatContainer introuvable dans le DOM !");
+      return;
+    }
     container.innerHTML = "";
 
     if (!data.messages || data.messages.length === 0) {
