@@ -205,12 +205,16 @@ h1 {
 }
 
 .chat-actions {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #94a3b8;
-  margin-top: -0.5rem;
-  margin-bottom: 1rem;
+  margin: 0;                /* 🔧 Supprime espace vertical */
+  padding: 0 1rem;          /* 🔧 Garde un peu de padding horizontal */
   text-align: left;
-  padding-left: 1rem;
+}
+
+.chat-message.bot .chat-actions {
+  margin-top: 0.2rem;       /* 🔧 Très petit espace au-dessus du bouton */
+  margin-bottom: 0.2rem;    /* 🔧 Idem en bas */
 }
 
 .chat-actions a {
