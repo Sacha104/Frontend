@@ -176,13 +176,16 @@ h1 {
   background: #334155;
   color: #f8fafc;
   align-self: flex-start;
-  margin: 0.5rem 0; /* réduit l’espace vertical */
-  padding: 0.75rem 1rem;
+  margin: 0.2rem 0; /* 🔧 réduit espace vertical */
+  padding: 0.6rem 1rem; /* 🔧 réduit padding vertical */
   border-radius: 10px;
   max-width: 700px;
   word-wrap: break-word;
   white-space: pre-wrap;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 
 
 .chat-input-wrapper {
@@ -519,7 +522,7 @@ h1 {
 .chat-message.bot .markdown h1,
 .chat-message.bot .markdown h2,
 .chat-message.bot .markdown h3 {
-  margin: 0.2rem 0;
+  margin: 0;
   padding: 0;
 }
 .dropdown-container {
