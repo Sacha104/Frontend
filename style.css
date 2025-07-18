@@ -212,10 +212,12 @@ h1 {
   text-align: left;
 }
 
-.chat-message.bot .chat-actions {
-  margin-top: 0.2rem;       /* 🔧 Très petit espace au-dessus du bouton */
-  margin-bottom: 0.2rem;    /* 🔧 Idem en bas */
+.chat-message.bot .chat-actions a {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
 }
+
 
 .chat-actions a {
   display: inline-flex;
