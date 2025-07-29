@@ -187,22 +187,45 @@ h1 {
 }
 
 
-
 .chat-input-wrapper {
   display: flex;
-  gap: 0.5rem;
-  padding-top: 1rem;
+  justify-content: center;
+  margin: 1rem auto;
+  max-width: 700px; /* même largeur que les messages */
+  width: 100%;
+  gap: 0;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0f172a;
 }
-
 
 #chatInput {
   flex: 1;
+  border: none;
   padding: 1rem;
-  border-radius: 10px;
-  border: 1px solid #334155;
-  background: #0f172a;
+  background: transparent;
   color: #f8fafc;
+  font-size: 1rem;
+  border-radius: 0;
 }
+
+.chat-input-wrapper button {
+  border: none;
+  background: #3b82f6;
+  color: white;
+  padding: 0 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-left: 1px solid #334155;
+  transition: background 0.3s;
+  border-radius: 0;
+}
+
+.chat-input-wrapper button:hover {
+  background: #2563eb;
+}
+
 
 .chat-actions {
   font-size: 0.85rem;
@@ -584,14 +607,6 @@ h1 {
   height: 100%;
 }
 
-/* Textarea responsive */
-#chatInput {
-  resize: none;
-  overflow-y: auto;
-  min-height: 50px;
-  max-height: 150px;
-  line-height: 1.5;
-}
 
 /* Copier intégré à chaque message bot */
 .copy-btn {
@@ -680,22 +695,6 @@ h1 {
 
 #historyToggleIcon:hover {
   color: #38bdf8;
-}
-.chat-input-wrapper button {
-  background: linear-gradient(to right, #3b82f6, #06b6d4);
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  padding: 0.75rem 1.2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.chat-input-wrapper button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
 .sidebar button {
   width: 100%;
