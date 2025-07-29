@@ -170,19 +170,11 @@ async function handleUserMessage() {
 function appendMessage(text, type) {
   if (!text || !text.trim()) return; // ⛔ ignore les messages vides
 
-  const container = document.getElementById("chatContainer");
-
-  if (type === "bot") {
-    const botBlock = document.createElement("div");
-    botBlock.className = "markdown";
-    botBlock.innerHTML = marked.parse(text);
-    container.appendChild(botBlock);
-  } else {
-    const msg = document.createElement("div");
-    msg.className = `chat-message user`;
-    msg.textContent = text;
-    container.appendChild(msg);
-  }
+  const msg = document.createElement("div");
+     msg.className = `chat-message ${type}`;
+     if (type === "bot") msg.classList.add("markdown"); 
+     msg.textContent = text;
+     document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
 
   // ✅ Enregistre uniquement si conversation existe
