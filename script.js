@@ -171,10 +171,10 @@ function appendMessage(text, type) {
   if (!text || !text.trim()) return; // ⛔ ignore les messages vides
 
   const msg = document.createElement("div");
-     msg.className = `chat-message ${type}`;
-     if (type === "bot") msg.classList.add("markdown"); 
-     msg.textContent = text;
-     document.getElementById("chatContainer").appendChild(msg);
+  msg.className = `chat-message ${type}`;
+  if (type === "bot") msg.classList.add("markdown");
+  msg.textContent = text;
+  document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
 
   // ✅ Enregistre uniquement si conversation existe
