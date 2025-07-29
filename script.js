@@ -209,13 +209,11 @@ function updateLastBotMessage(text) {
 
     // Créer la structure propre
     lastBotMsg.innerHTML = `
-      <div class="markdown">${marked.parse(text)}</div>
-      <div class="chat-actions">
-       <a href="#" onclick="copyMessage(this)">
-        <i class="fa-regular fa-copy"></i> Copier
-       </a>;
+      <div class="markdown" style="margin-bottom:0;">${marked.parse(text).trim()}</div><div class="chat-actions" style="margin-top:0;">
+          <a href="#" onclick="copyMessage(this)"><i class="fa-regular fa-copy"></i> Copier</a>
       </div>
     `;
+
   }
 }
 
