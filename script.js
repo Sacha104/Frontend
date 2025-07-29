@@ -204,17 +204,35 @@ function appendMessage(text, type) {
 
 function updateLastBotMessage(text) {
   const messages = document.querySelectorAll(".chat-message.bot");
-  if (messages.length > 0) {
-    const lastBotMsg = messages[messages.length - 1];
+  if (messages.length === 0) return;
 
-    // Créer la structure propre
-    lastBotMsg.innerHTML = `
-      <div class="markdown" style="margin-bottom:0;">${marked.parse(text).trim()}</div><div class="chat-actions" style="margin-top:0;">
-          <a href="#" onclick="copyMessage(this)"><i class="fa-regular fa-copy"></i> Copier</a>
-      </div>
-    `;
+  const lastBotMsg = messages[messages.length - 1];
+  lastBotMsg.innerHTML = `
+    <div class="markdown" id="typingArea"></div>
+    <div class="chat-actions" style="margin-top: 0;">
+      <a href="#" onclick="copyMessage(this)">
+        <i class="fa-regular fa-copy"></i> Copier
+      </a>
+    </div>
+  `;
 
+  const typingArea = lastBotMsg.querySelector("#typingArea");
+
+  let index = 0;
+  const plainText = text.trim();
+  
+  function typeNextChar() {
+    if (index < plainText.length) {
+      typingArea.textContent += plainText.charAt(index);
+      index++;
+      setTimeout(typeNextChar, 12); // ⏱️ Vitesse (ms) entre chaque caractère
+    } else {
+      // Une fois fini : convertir tout en Markdown (optionnel)
+      typingArea.innerHTML = marked.parse(plainText);
+    }
   }
+
+  typeNextChar();
 }
 
 
