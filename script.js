@@ -207,38 +207,46 @@ function updateLastBotMessage(text) {
   if (messages.length === 0) return;
 
   const lastBotMsg = messages[messages.length - 1];
-  lastBotMsg.innerHTML = `
-    <div class="markdown" id="typingArea"></div>
-  `;
+  const isFirstBotMessage = messages.length === 1;
 
-  const typingArea = lastBotMsg.querySelector("#typingArea");
+  // Texte brut qui va être typé
+  const plainText = text.trim();
+
+  // Affichage progressif
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "markdown";
+  typingDiv.id = "typingArea";
+  lastBotMsg.innerHTML = "";
+  lastBotMsg.appendChild(typingDiv);
+
+  // Ajoute bouton "Copier" en haut à droite si c'est le premier message
+  if (isFirstBotMessage) {
+    const copyBtn = document.createElement("div");
+    copyBtn.className = "copy-button";
+    copyBtn.innerHTML = `<i class="fa-regular fa-copy"></i>`;
+    copyBtn.onclick = () => navigator.clipboard.writeText(plainText);
+    lastBotMsg.appendChild(copyBtn);
+  }
 
   let index = 0;
-  const plainText = text.trim();
 
   function typeNextChar() {
     if (index < plainText.length) {
-      typingArea.textContent += plainText.charAt(index);
+      typingDiv.textContent += plainText.charAt(index);
       index++;
       setTimeout(typeNextChar, 12);
     } else {
-      // Une fois le texte entièrement écrit, convertit en markdown
-      typingArea.innerHTML = marked.parse(plainText);
+      typingDiv.innerHTML = marked.parse(plainText);
 
-      // 👉 Créer un bouton "Copier" en dehors du message
-      const actions = document.createElement("div");
-      actions.className = "chat-actions";
-      actions.innerHTML = `
-        <a href="#" onclick="copyFromText(this)">
-          <i class="fa-regular fa-copy"></i> Copier
-        </a>
-      `;
-
-      // ⬇️ Ajouter après le message bot
-      const chatContainer = document.getElementById("chatContainer");
-      chatContainer.appendChild(actions);
-
-      scrollToBottom();
+      // Après écriture, on ajoute bouton "Envoyer à l'IA" si premier message
+      if (isFirstBotMessage) {
+        const chatContainer = document.getElementById("chatContainer");
+        const actionRow = document.createElement("div");
+        actionRow.className = "chat-actions";
+        actionRow.innerHTML = `<a href="#" onclick="sendToChat(this)">Envoyer à l'IA</a>`;
+        chatContainer.appendChild(actionRow);
+        scrollToBottom();
+      }
     }
   }
 
@@ -336,10 +344,6 @@ function sendToChat(linkElement) {
   .then(res => res.json())
   .then(data => {
     updateLastBotMessage(data.response || "Erreur IA.");
-    const copy = document.createElement("div");
-    copy.className = "chat-actions";
-    copy.innerHTML = `<a href="#" onclick="copyFromText(this)">Copier la réponse</a>`;
-    document.getElementById("chatContainer").appendChild(copy);
     scrollToBottom();
   })
   .catch(() => updateLastBotMessage("Erreur réseau."));
