@@ -153,6 +153,9 @@ h1 {
   margin: 0 auto;                   /* ❌ pas de marge */
 }
 
+.chat-container .chat-actions {
+  margin-bottom: 0.5rem;      /* facultatif, petit espace bas global */
+}
 
 .chat-message {
   margin: 0.5rem auto;              /* Centrage horizontal */
@@ -168,8 +171,7 @@ h1 {
 .chat-message.user {
   background: #3b82f6;
   color: white;
-  align-self: flex-end;        /* ✅ aligné à droite */
-  margin-left: auto;
+  text-align: right;
   margin-right: 0;             /* ✅ bord droit */
 }
 
@@ -186,6 +188,8 @@ h1 {
   white-space: pre-wrap;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 0;           /* ✅ colle le message à ce qui suit */
+  padding-bottom: 0.6rem; 
   box-shadow: none;
   border: none;
 }
@@ -237,6 +241,8 @@ h1 {
   color: #94a3b8;
   margin: 0;                /* 🔧 Supprime espace vertical */
   padding: 0 1rem;          /* 🔧 Garde un peu de padding horizontal */
+  margin-top: 0;
+  padding-top: 0.3rem;        /* colle au message précédent */
   text-align: left;
 }
 
