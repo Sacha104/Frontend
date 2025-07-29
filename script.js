@@ -209,26 +209,36 @@ function updateLastBotMessage(text) {
   const lastBotMsg = messages[messages.length - 1];
   lastBotMsg.innerHTML = `
     <div class="markdown" id="typingArea"></div>
-    <div class="chat-actions" style="margin-top: 0;">
-      <a href="#" onclick="copyMessage(this)">
-        <i class="fa-regular fa-copy"></i> Copier
-      </a>
-    </div>
   `;
 
   const typingArea = lastBotMsg.querySelector("#typingArea");
 
   let index = 0;
   const plainText = text.trim();
-  
+
   function typeNextChar() {
     if (index < plainText.length) {
       typingArea.textContent += plainText.charAt(index);
       index++;
-      setTimeout(typeNextChar, 12); // ⏱️ Vitesse (ms) entre chaque caractère
+      setTimeout(typeNextChar, 12);
     } else {
-      // Une fois fini : convertir tout en Markdown (optionnel)
+      // Une fois le texte entièrement écrit, convertit en markdown
       typingArea.innerHTML = marked.parse(plainText);
+
+      // 👉 Créer un bouton "Copier" en dehors du message
+      const actions = document.createElement("div");
+      actions.className = "chat-actions";
+      actions.innerHTML = `
+        <a href="#" onclick="copyFromText(this)">
+          <i class="fa-regular fa-copy"></i> Copier
+        </a>
+      `;
+
+      // ⬇️ Ajouter après le message bot
+      const chatContainer = document.getElementById("chatContainer");
+      chatContainer.appendChild(actions);
+
+      scrollToBottom();
     }
   }
 
