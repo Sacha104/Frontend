@@ -636,32 +636,47 @@ function toggleLang() {
     }
   });
 }
-
 window.addEventListener("DOMContentLoaded", () => {
-  const icon = document.getElementById("accountIcon");
-  const menu = document.getElementById("accountMenu");
-  const logout = document.getElementById("logoutBtn");
+  // Dropdown des 3 points
+  document.querySelectorAll(".dropdown-container").forEach(container => {
+    const icon = container.querySelector(".options-icon");
+    const menu = container.querySelector(".dropdown-menu");
 
-  // ✅ Gérer clic sur icône compte
-  if (icon && menu) {
-    icon.addEventListener("click", () => {
-      menu.style.display = menu.style.display === "none" ? "block" : "none";
+    let timeoutId;
+
+    icon.addEventListener("click", (e) => {
+      e.stopPropagation(); // empêche la fermeture globale
+      clearTimeout(timeoutId);
+      const wasVisible = menu.style.display === "block";
+      document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
+      menu.style.display = wasVisible ? "none" : "block";
     });
 
-    document.addEventListener("click", (e) => {
-      if (!menu.contains(e.target) && e.target !== icon) {
+    container.addEventListener("mouseleave", () => {
+      timeoutId = setTimeout(() => {
         menu.style.display = "none";
+      }, 1500);
+    });
+
+    container.addEventListener("mouseenter", () => {
+      clearTimeout(timeoutId);
+    });
+  });
+
+  // Fermer les menus si on clique ailleurs
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown-menu").forEach(menu => {
+      menu.style.display = "none";
+      
+      if (logout) {
+        logout.addEventListener("click", () => {
+           signOut();
+        });
       }
     });
-  }
-
-  // ✅ Gérer déconnexion
-  if (logout) {
-    logout.addEventListener("click", () => {
-      signOut();
-    });
-  }
+  });
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const menus = document.querySelectorAll(".dropdown-container");
