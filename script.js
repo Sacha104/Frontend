@@ -662,3 +662,36 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const menus = document.querySelectorAll(".dropdown-container");
+
+  menus.forEach(menu => {
+    let timeout;
+
+    const dropdown = menu.querySelector(".dropdown-menu");
+
+    menu.addEventListener("mouseenter", () => {
+      clearTimeout(timeout);
+      dropdown.style.display = "block";
+    });
+
+    menu.addEventListener("mouseleave", () => {
+      timeout = setTimeout(() => {
+        if (!dropdown.matches(':hover')) {
+          dropdown.style.display = "none";
+        }
+      }, 1500);
+    });
+
+    dropdown.addEventListener("mouseenter", () => {
+      clearTimeout(timeout);
+    });
+
+    dropdown.addEventListener("mouseleave", () => {
+      timeout = setTimeout(() => {
+        dropdown.style.display = "none";
+      }, 1500);
+    });
+  });
+});
