@@ -266,20 +266,6 @@ function copyMessage(button) {
 
   console.log("DEBUG copyText:", msgText);
 
-  if (msgText) {
-    navigator.clipboard.writeText(msgText)
-      .then(() => {
-        button.textContent = "✅ Copié !";
-        setTimeout(() => {
-          button.textContent = "📋 Copier";
-        }, 1500);
-      })
-      .catch(err => {
-        console.error("Erreur writeText:", err);
-        alert("❌ Erreur lors de la copie");
-      });
-  }
-}
 
 
 function copyFromText(link) {
