@@ -221,7 +221,10 @@ function updateLastBotMessage(text) {
     copyBtn.className = "copy-button";
     copyBtn.innerHTML = `<i class="fa-regular fa-copy"></i>`;
     copyBtn.onclick = () => navigator.clipboard.writeText(plainText);
-    lastBotMsg.appendChild(copyBtn);
+    const copyRow = document.createElement("div");
+    copyRow.className = "copy-button";
+    copyRow.appendChild(copyBtn);
+    lastBotMsg.appendChild(copyRow);
   }
 
   let index = 0;
