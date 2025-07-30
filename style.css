@@ -272,16 +272,18 @@ h1 {
 }
 
 .chat-message.bot .copy-button {
-  position: absolute;
-  top: 6px;
-  right: 10px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #94a3b8;
   cursor: pointer;
 }
+
 .chat-message.bot .copy-button:hover {
   color: #60a5fa;
 }
+
 .chat-actions a {
   display: inline-flex;
   align-items: center;
