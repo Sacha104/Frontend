@@ -197,7 +197,7 @@ h1 {
   background: #1f2937; /* gris sombre */
   color: #f8fafc;
   align-self: flex-start;
-  margin: 0.2rem 0;
+  margin: 0.2rem auto;
   padding: 0;
   border-radius: 0;
   max-width: 700px;
@@ -209,7 +209,7 @@ h1 {
   margin-bottom: 0;           /* ✅ colle le message à ce qui suit */
   padding-bottom: 0.6rem; 
   box-shadow: none;
-  border: none;
+  border-radius: 10px;
   position: relative;
 }
 
@@ -630,9 +630,7 @@ h1 {
   background-color: #334155;
 }
 
-.dropdown-container:hover .dropdown-menu {
-  display: block;
-}
+
 /* Chat input position centrale quand vide */
 .chat-wrapper-empty {
   display: flex;
