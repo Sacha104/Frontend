@@ -268,7 +268,7 @@ function copyMessage(button) {
   const msgText = markdown?.innerText;
 
   console.log("DEBUG copyText:", msgText);
-
+}
 
 
 function copyFromText(link) {
