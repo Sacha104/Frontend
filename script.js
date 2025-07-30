@@ -156,10 +156,6 @@ async function handleUserMessage() {
 
     const actions = document.createElement("div");
     actions.className = "chat-actions";
-    actions.innerHTML = `
-      <a href="#" onclick="sendToChat(this)">Envoyer à l'IA</a> 
-    `;
-    document.getElementById("chatContainer").appendChild(actions);
     scrollToBottom();
   } catch (error) {
     console.error("Erreur réseau :", error);
