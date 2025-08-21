@@ -131,11 +131,8 @@ async function handleUserMessage() {
 
   appendMessage(message, "user");
   input.value = "";
-  const mode = document.getElementById("outputType").value;
   let endpoint = "/generate"; // par défaut OpenAI texte
-  if (mode === "image") endpoint = "/generate_image";
-  if (mode === "video") endpoint = "/generate_video";
-
+  
   appendMessage("Optimisation du prompt en cours…", "bot");
 
   const controller = new AbortController();
