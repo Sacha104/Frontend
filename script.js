@@ -277,6 +277,7 @@ function updateLastBotMessage(text, mode = "text") {
 }
 
 async function sendOptimizedPrompt() {
+  const token = await firebase.auth().currentUser?.getIdToken();
   const choiceEl = document.getElementById("outputChoice");
   const choice = choiceEl ? choiceEl.value : "text";
 
@@ -318,7 +319,7 @@ async function sendOptimizedPrompt() {
   if (choice === "video") endpoint = "/generate_video";
 
   // Récupérer le token Firebase si nécessaire (seulement si tu utilises l'authentification Firebase)
-  const token = await firebase.auth().currentUser?.getIdToken();
+ 
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
