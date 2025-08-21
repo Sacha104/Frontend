@@ -277,13 +277,12 @@ function updateLastBotMessage(text, mode = "text") {
 }
 
 async function sendOptimizedPrompt() {
-  // Récupère le choix "text" | "image" | "video" sous le dernier message bot
   const choiceEl = document.getElementById("outputChoice");
   const choice = choiceEl ? choiceEl.value : "text";
 
-  // Récupère le prompt optimisé (contenu markdown du dernier message bot)
   const botMessages = document.querySelectorAll(".chat-message.bot");
   if (!botMessages.length) return;
+
   const lastBotMessage = botMessages[botMessages.length - 1];
   const markdownDiv = lastBotMessage.querySelector(".markdown");
   if (!markdownDiv) return;
@@ -294,7 +293,6 @@ async function sendOptimizedPrompt() {
     return;
   }
 
-  // Vérifie uniquement UID + conversation pour le mode texte
   if (choice === "text" && (!currentUID || !currentConversationId)) {
     console.error("Erreur : UID ou conversation manquants pour le texte", { prompt, currentUID, currentConversationId });
     return;
@@ -302,35 +300,46 @@ async function sendOptimizedPrompt() {
 
   appendMessage("Génération en cours…", "bot");
 
-  // 🔁 Routage selon le choix
-  let endpoint = "/respond"; // texte par défaut
-  if (choice === "image") endpoint = "/generate_image";
-  if (choice === "video") endpoint = "/generate_video";
-
-  // 📦 Construction du payload
+  // Construire le payload
   let payload = { prompt };
   if (choice === "text") {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
+  } else if (choice === "image" || choice === "video") {
+    payload = {
+      prompt,
+      uid: currentUID,
+      conversationId: currentConversationId,
+    };
   }
+
+  let endpoint = "/respond"; // texte par défaut
+  if (choice === "image") endpoint = "/generate_image";
+  if (choice === "video") endpoint = "/generate_video";
+
+  // Récupérer le token Firebase si nécessaire (seulement si tu utilises l'authentification Firebase)
+  const token = await firebase.auth().currentUser?.getIdToken();
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { "Authorization": `Bearer ${token}` }), // Ajouter l'Authorization si token existe
+      },
+      body: JSON.stringify(payload),
     });
 
     const data = await res.json();
     const response = data.response || "Erreur IA.";
 
-    // ✅ Sécurité : vérifier si c’est bien une URL pour image/vidéo
+    // Vérification si c'est bien une URL pour image/vidéo
     if ((choice === "image" || choice === "video") && !/^https?:\/\//.test(response)) {
       updateLastBotMessage("Erreur IA. (réponse invalide)");
       return;
     }
 
-    // Affichage selon le mode choisi
+    // Afficher selon le choix
     if (choice === "image") {
       updateLastBotMessage(response, "image");
     } else if (choice === "video") {
