@@ -113,12 +113,17 @@
    <!-- 🟦 Contenu principal existant -->
    <div class="main-content">
 
-    <div id="chatContainer" class="chat-container"></div>
-
     <div class="chat-input-wrapper">
-      <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
+     <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
+     <select id="outputType">
+       <option value="text">Texte</option>
+       <option value="image">Photo</option>
+       <option value="video">Vidéo</option>
+      </select>
+
       <button onclick="handleUserMessage()">Envoyer</button>
-    </div>
+     </div>
+
 
     </div> <!-- fin de .main-content -->
   </div> <!-- ✅ fermeture manquante de #appSection -->
