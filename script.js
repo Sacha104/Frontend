@@ -131,6 +131,10 @@ async function handleUserMessage() {
 
   appendMessage(message, "user");
   input.value = "";
+  const mode = document.getElementById("outputType").value;
+  let endpoint = "/generate"; // par défaut OpenAI texte
+  if (mode === "image") endpoint = "/generate_image";
+  if (mode === "video") endpoint = "/generate_video";
 
   appendMessage("Optimisation du prompt en cours…", "bot");
 
@@ -138,13 +142,15 @@ async function handleUserMessage() {
   const timeout = setTimeout(() => controller.abort(), 70000); // ⏱️ 30 sec timeout
 
   try {
-    const res = await fetch(`${backendURL}/generate`, {
+    const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      signal: controller.signal,
-      body: JSON.stringify({ prompt: message, uid: currentUID, conversationId: currentConversationId })
+      body: JSON.stringify({ 
+        prompt: message, 
+        uid: currentUID, 
+        conversationId: currentConversationId 
+      })
     });
-
     clearTimeout(timeout);
 
     const data = await res.json();
@@ -198,37 +204,51 @@ function appendMessage(text, type) {
 
 
 
-function updateLastBotMessage(text) {
+function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
   if (messages.length === 0) return;
 
   const lastBotMsg = messages[messages.length - 1];
-  const isFirstBotMessage = messages.length === 1;
+  lastBotMsg.innerHTML = ""; // on vide
 
-  // Texte brut qui va être typé
+  // === Cas IMAGE ===
+  if (mode === "image") {
+    lastBotMsg.innerHTML = `
+      <img src="${text}" alt="Image générée" style="max-width:100%; border-radius:10px;">
+      <div class="chat-actions">
+        <a href="${text}" download="image.png">
+          <i class="fa-solid fa-download"></i> Télécharger
+        </a>
+      </div>
+    `;
+    return; // on sort, pas d’animation texte
+  }
+
+  // === Cas VIDEO ===
+  if (mode === "video") {
+    lastBotMsg.innerHTML = `
+      <video controls style="max-width:100%; border-radius:10px;">
+        <source src="${text}" type="video/mp4">
+        Ton navigateur ne supporte pas la vidéo.
+      </video>
+      <div class="chat-actions">
+        <a href="${text}" download="video.mp4">
+          <i class="fa-solid fa-download"></i> Télécharger
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  // === Cas TEXTE (déjà existant, avec animation progressive) ===
   const plainText = text.trim();
-
-  // Affichage progressif
   const typingDiv = document.createElement("div");
   typingDiv.className = "markdown";
   typingDiv.id = "typingArea";
-  lastBotMsg.innerHTML = "";
   lastBotMsg.appendChild(typingDiv);
 
-  // Ajoute bouton "Copier" en haut à droite si c'est le premier message
-  if (isFirstBotMessage) {
-    const copyBtn = document.createElement("div");
-    copyBtn.className = "copy-button";
-    copyBtn.innerHTML = `<i class="fa-regular fa-copy"></i>`;
-    copyBtn.onclick = () => navigator.clipboard.writeText(plainText);
-    const copyRow = document.createElement("div");
-    copyRow.className = "copy-button";
-    copyRow.appendChild(copyBtn);
-    lastBotMsg.appendChild(copyRow);
-  }
-
   let index = 0;
-
+ 
   function typeNextChar() {
     if (index < plainText.length) {
       typingDiv.textContent += plainText.charAt(index);
@@ -438,7 +458,7 @@ async function loadConversation(conversationId) {
            <div class="chat-actions">
               <a href="#" onclick="copyMessage(this)">
                  <i class="fa-regular fa-copy"></i> Copier
-              </a>;
+              </a>
            </div>
   `      ;
        }
@@ -636,47 +656,6 @@ function toggleLang() {
     }
   });
 }
-window.addEventListener("DOMContentLoaded", () => {
-  // Dropdown des 3 points
-  document.querySelectorAll(".dropdown-container").forEach(container => {
-    const icon = container.querySelector(".options-icon");
-    const menu = container.querySelector(".dropdown-menu");
-
-    let timeoutId;
-
-    icon.addEventListener("click", (e) => {
-      e.stopPropagation(); // empêche la fermeture globale
-      clearTimeout(timeoutId);
-      const wasVisible = menu.style.display === "block";
-      document.querySelectorAll(".dropdown-menu").forEach(m => m.style.display = "none");
-      menu.style.display = wasVisible ? "none" : "block";
-    });
-
-    container.addEventListener("mouseleave", () => {
-      timeoutId = setTimeout(() => {
-        menu.style.display = "none";
-      }, 1500);
-    });
-
-    container.addEventListener("mouseenter", () => {
-      clearTimeout(timeoutId);
-    });
-  });
-
-  // Fermer les menus si on clique ailleurs
-  document.addEventListener("click", () => {
-    document.querySelectorAll(".dropdown-menu").forEach(menu => {
-      menu.style.display = "none";
-      
-      if (logout) {
-        logout.addEventListener("click", () => {
-           signOut();
-        });
-      }
-    });
-  });
-});
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const menus = document.querySelectorAll(".dropdown-container");
