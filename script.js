@@ -277,7 +277,13 @@ function updateLastBotMessage(text, mode = "text") {
 }
 
 async function sendOptimizedPrompt() {
-  const token = await firebase.auth().currentUser?.getIdToken();
+  const token = await firebase.auth().currentUser?.getIdToken();  // Récupère le token Firebase de l'utilisateur
+  if (!token) {
+    console.error("Erreur : token Firebase introuvable");
+    updateLastBotMessage("Erreur : utilisateur non authentifié.");
+    return;
+  }
+
   const choiceEl = document.getElementById("outputChoice");
   const choice = choiceEl ? choiceEl.value : "text";
 
@@ -318,24 +324,28 @@ async function sendOptimizedPrompt() {
   if (choice === "image") endpoint = "/generate_image";
   if (choice === "video") endpoint = "/generate_video";
 
-  // Récupérer le token Firebase si nécessaire (seulement si tu utilises l'authentification Firebase)
- 
-
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { "Authorization": `Bearer ${token}` }), // Ajouter l'Authorization si token existe
+        "Authorization": `Bearer ${token}`, // Utilise toujours le token Firebase ici
       },
       body: JSON.stringify(payload),
     });
+
+    if (!res.ok) {  // Vérifie si la requête a réussi
+      console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`);
+      updateLastBotMessage("Erreur réseau ou serveur.");
+      return;
+    }
 
     const data = await res.json();
     const response = data.response || "Erreur IA.";
 
     // Vérification si c'est bien une URL pour image/vidéo
     if ((choice === "image" || choice === "video") && !/^https?:\/\//.test(response)) {
+      console.error("Erreur : réponse invalide pour image/vidéo");
       updateLastBotMessage("Erreur IA. (réponse invalide)");
       return;
     }
