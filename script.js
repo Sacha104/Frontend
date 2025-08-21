@@ -277,18 +277,22 @@ function updateLastBotMessage(text, mode = "text") {
 }
 
 async function sendOptimizedPrompt() {
-  const choice = document.getElementById("outputChoice").value;
+  // Récupère le choix "text" | "image" | "video" sous le dernier message bot
+  const choiceEl = document.getElementById("outputChoice");
+  const choice = choiceEl ? choiceEl.value : "text";
+
+  // Récupère le prompt optimisé (contenu markdown du dernier message bot)
   const botMessages = document.querySelectorAll(".chat-message.bot");
   if (!botMessages.length) return;
-
   const lastBotMessage = botMessages[botMessages.length - 1];
   const markdownDiv = lastBotMessage.querySelector(".markdown");
   if (!markdownDiv) return;
-
   const prompt = markdownDiv.textContent.trim();
+
   appendMessage("Génération en cours…", "bot");
 
-  let endpoint = "/generate"; // texte par défaut
+  // 🔁 ROUTAGE CORRIGÉ
+  let endpoint = "/respond";               // texte = réponse IA
   if (choice === "image") endpoint = "/generate_image";
   if (choice === "video") endpoint = "/generate_video";
 
@@ -302,11 +306,10 @@ async function sendOptimizedPrompt() {
         conversationId: currentConversationId
       })
     });
-
     const data = await res.json();
     const response = data.response || "Erreur IA.";
 
-    // on affiche selon le choix
+    // Affichage selon le mode choisi
     if (choice === "image") {
       updateLastBotMessage(response, "image");
     } else if (choice === "video") {
@@ -314,8 +317,7 @@ async function sendOptimizedPrompt() {
     } else {
       updateLastBotMessage(response, "text");
     }
-
-  } catch (err) {
+  } catch (e) {
     updateLastBotMessage("Erreur réseau.");
   }
 }
