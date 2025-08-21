@@ -288,6 +288,11 @@ async function sendOptimizedPrompt() {
   const markdownDiv = lastBotMessage.querySelector(".markdown");
   if (!markdownDiv) return;
   const prompt = markdownDiv.textContent.trim();
+     if (!prompt || !currentUID || !currentConversationId) {
+  console.error('Erreur : Paramètres manquants', { prompt, currentUID, currentConversationId });
+  return;
+}
+
 
   appendMessage("Génération en cours…", "bot");
 
