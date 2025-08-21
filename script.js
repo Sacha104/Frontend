@@ -288,31 +288,47 @@ async function sendOptimizedPrompt() {
   const markdownDiv = lastBotMessage.querySelector(".markdown");
   if (!markdownDiv) return;
   const prompt = markdownDiv.textContent.trim();
-     if (!prompt || !currentUID || !currentConversationId) {
-  console.error('Erreur : Paramètres manquants', { prompt, currentUID, currentConversationId });
-  return;
-}
 
+  if (!prompt) {
+    console.error("Erreur : prompt vide");
+    return;
+  }
+
+  // Vérifie uniquement UID + conversation pour le mode texte
+  if (choice === "text" && (!currentUID || !currentConversationId)) {
+    console.error("Erreur : UID ou conversation manquants pour le texte", { prompt, currentUID, currentConversationId });
+    return;
+  }
 
   appendMessage("Génération en cours…", "bot");
 
-  // 🔁 ROUTAGE CORRIGÉ
-  let endpoint = "/respond";               // texte = réponse IA
+  // 🔁 Routage selon le choix
+  let endpoint = "/respond"; // texte par défaut
   if (choice === "image") endpoint = "/generate_image";
   if (choice === "video") endpoint = "/generate_video";
+
+  // 📦 Construction du payload
+  let payload = { prompt };
+  if (choice === "text") {
+    payload.uid = currentUID;
+    payload.conversationId = currentConversationId;
+  }
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt,
-        uid: currentUID,
-        conversationId: currentConversationId
-      })
+      body: JSON.stringify(payload)
     });
+
     const data = await res.json();
     const response = data.response || "Erreur IA.";
+
+    // ✅ Sécurité : vérifier si c’est bien une URL pour image/vidéo
+    if ((choice === "image" || choice === "video") && !/^https?:\/\//.test(response)) {
+      updateLastBotMessage("Erreur IA. (réponse invalide)");
+      return;
+    }
 
     // Affichage selon le mode choisi
     if (choice === "image") {
@@ -323,9 +339,11 @@ async function sendOptimizedPrompt() {
       updateLastBotMessage(response, "text");
     }
   } catch (e) {
+    console.error("Erreur réseau :", e);
     updateLastBotMessage("Erreur réseau.");
   }
 }
+
 
 
 
