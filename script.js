@@ -305,11 +305,21 @@ async function sendOptimizedPrompt() {
 
     const data = await res.json();
     const response = data.response || "Erreur IA.";
-    updateLastBotMessage(response, choice);
+
+    // on affiche selon le choix
+    if (choice === "image") {
+      updateLastBotMessage(response, "image");
+    } else if (choice === "video") {
+      updateLastBotMessage(response, "video");
+    } else {
+      updateLastBotMessage(response, "text");
+    }
+
   } catch (err) {
     updateLastBotMessage("Erreur réseau.");
   }
 }
+
 
 
 
