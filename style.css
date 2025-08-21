@@ -197,16 +197,14 @@ h1 {
   background: #1f2937; /* gris sombre */
   color: #f8fafc;
   align-self: flex-start;
-  margin: 0.2rem auto;
-  padding: 0;
-  border-radius: 0;
+  width: 100%; 
   max-width: 700px;
   word-wrap: break-word;
   white-space: pre-wrap;
   text-align: left;
   margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 0;           /* ✅ colle le message à ce qui suit */
+  margin-right: 0;
+  margin-bottom: auto;           /* ✅ colle le message à ce qui suit */
   padding-bottom: 0.6rem; 
   box-shadow: none;
   border-radius: 10px;
