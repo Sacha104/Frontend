@@ -257,20 +257,63 @@ function updateLastBotMessage(text, mode = "text") {
     } else {
       typingDiv.innerHTML = marked.parse(plainText);
 
-      // Après écriture, on ajoute bouton "Envoyer à l'IA" si premier message
-      if (isFirstBotMessage) {
-        const chatContainer = document.getElementById("chatContainer");
-        const actionRow = document.createElement("div");
-        actionRow.className = "chat-actions";
-        actionRow.innerHTML = `<a href="#" onclick="sendToChat(this)">Envoyer à l'IA</a>`;
-        chatContainer.appendChild(actionRow);
-        scrollToBottom();
-      }
+// Après écriture, on ajoute menu déroulant + bouton
+      const chatContainer = document.getElementById("chatContainer");
+      const actionRow = document.createElement("div");
+      actionRow.className = "chat-actions";
+      actionRow.innerHTML = `
+       <label for="outputChoice">Choisir le format :</label>
+       <select id="outputChoice">
+          <option value="text">Texte</option>
+          <option value="image">Image</option>
+          <option value="video">Vidéo</option>
+        </select>
+        <button onclick="sendOptimizedPrompt()">Envoyer à l'IA</button>
+      `;
+       chatContainer.appendChild(actionRow);
+       scrollToBottom();
+
     }
   }
 
   typeNextChar();
 }
+
+async function sendOptimizedPrompt() {
+  const choice = document.getElementById("outputChoice").value;
+  const botMessages = document.querySelectorAll(".chat-message.bot");
+  if (!botMessages.length) return;
+
+  const lastBotMessage = botMessages[botMessages.length - 1];
+  const markdownDiv = lastBotMessage.querySelector(".markdown");
+  if (!markdownDiv) return;
+
+  const prompt = markdownDiv.textContent.trim();
+  appendMessage("Génération en cours…", "bot");
+
+  let endpoint = "/generate"; // texte par défaut
+  if (choice === "image") endpoint = "/generate_image";
+  if (choice === "video") endpoint = "/generate_video";
+
+  try {
+    const res = await fetch(`${backendURL}${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt,
+        uid: currentUID,
+        conversationId: currentConversationId
+      })
+    });
+
+    const data = await res.json();
+    const response = data.response || "Erreur IA.";
+    updateLastBotMessage(response, choice);
+  } catch (err) {
+    updateLastBotMessage("Erreur réseau.");
+  }
+}
+
 
 
 function copyMessage(button) {
