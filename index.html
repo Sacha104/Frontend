@@ -90,19 +90,17 @@
   <ul id="conversationList"></ul>
 </div>
 
-    <div id="accountWrapper">
-      <div id="accountIcon" title="Mon compte"></div>
-    </div>
+<div id="accountWrapper">
+  <div id="accountIcon" title="Mon compte">A</div>
+</div>
 
+<div id="accountMenu" class="account-menu" style="display: none;">
+  <ul>
+    <li>Paramètres</li>
+    <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
+  </ul>
+</div>
 
-    <div id="accountMenu" class="account-menu" style="display: none;">
-      <ul>
-       <li>Confidentialité</li>
-       <li>Sécurité</li>
-       <hr>
-       <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
-      </ul>
-    </div>
     
     <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
      <i class="fa-solid fa-bars"></i>
@@ -124,5 +122,6 @@
 
     </div> <!-- fin de .main-content -->
   </div> <!-- ✅ fermeture manquante de #appSection -->
+
 </body>
 </html>
