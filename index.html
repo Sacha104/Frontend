@@ -10,128 +10,115 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="script.js" defer></script>
 </head>
- <body>
+
+<body>
   <div style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
     <button onclick="toggleLang()">FR / EN</button>
   </div>
 
-    <!-- Section d'authentification intégrée -->
-    <div id="authSection" class="auth-section">
+  <!-- Section d'authentification intégrée -->
+  <div id="authSection" class="auth-section">
     <div class="auth-box">
-    <h1 class="logo">Pr@mpt</h1>
+      <h1 class="logo">Pr@mpt</h1>
 
-    <!-- Formulaire d'authentification -->
-    <form id="authForm" class="auth-form">
-      <!-- Connexion -->
-      <div id="loginSection">
-        <h2>Se connecter</h2>
-        <input type="email" id="loginEmail" placeholder="Email" required />
-        <div class="password-wrapper">
-          <input type="password" id="loginPassword" placeholder="Mot de passe" required />
-          <span class="toggle-password" onclick="togglePassword('loginPassword', 'eyeIconLogin')">
-            <i class="fa-solid fa-eye" id="eyeIconLogin"></i>
-          </span>
+      <!-- Formulaire d'authentification -->
+      <form id="authForm" class="auth-form">
+        <!-- Connexion -->
+        <div id="loginSection">
+          <h2>Se connecter</h2>
+          <input type="email" id="loginEmail" placeholder="Email" required />
+          <div class="password-wrapper">
+            <input type="password" id="loginPassword" placeholder="Mot de passe" required />
+            <span class="toggle-password" onclick="togglePassword('loginPassword', 'eyeIconLogin')">
+              <i class="fa-solid fa-eye" id="eyeIconLogin"></i>
+            </span>
+          </div>
+          <button type="button" onclick="signIn()" class="btn-primary">Se connecter</button>
+          <a href="#" class="forgot-password" onclick="showReset()">Mot de passe oublié ?</a>
+          <div class="social-login">
+            <button type="button" onclick="googleSignIn()" class="btn-social google">
+              Se connecter avec Google
+            </button>
+            <button type="button" onclick="appleSignIn()" class="btn-social apple">
+              Se connecter avec Apple
+            </button>
+          </div>
         </div>
-        <button type="button" onclick="signIn()" class="btn-primary">Se connecter</button>
-        <a href="#" class="forgot-password" onclick="showReset()">Mot de passe oublié ?</a>
-        <div class="social-login">
-          <button type="button" onclick="googleSignIn()" class="btn-social google">
-            Se connecter avec Google
-          </button>
-          <button type="button" onclick="appleSignIn()" class="btn-social apple">
-            Se connecter avec Apple
-          </button>
-        </div>
-      </div>
 
-      <!-- Inscription -->
-      <div id="signupSection" style="display: none;">
-        <h2>S’inscrire</h2>
-        <input type="email" id="signupEmail" placeholder="Email" required />
-        <div class="password-wrapper">
-          <input type="password" id="signupPassword" placeholder="Mot de passe" required />
-          <span class="toggle-password" onclick="togglePassword('signupPassword', 'eyeIconSignup')">
-            <i class="fa-solid fa-eye" id="eyeIconSignup"></i>
-          </span>
+        <!-- Inscription -->
+        <div id="signupSection" style="display: none;">
+          <h2>S’inscrire</h2>
+          <input type="email" id="signupEmail" placeholder="Email" required />
+          <div class="password-wrapper">
+            <input type="password" id="signupPassword" placeholder="Mot de passe" required />
+            <span class="toggle-password" onclick="togglePassword('signupPassword', 'eyeIconSignup')">
+              <i class="fa-solid fa-eye" id="eyeIconSignup"></i>
+            </span>
+          </div>
+          <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" required />
+          <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
+          <div class="social-login">
+            <button type="button" onclick="googleSignIn()" class="btn-social google">
+              S’inscrire avec Google
+            </button>
+            <button type="button" onclick="appleSignIn()" class="btn-social apple">
+              S’inscrire avec Apple
+            </button>
+          </div>
         </div>
-        <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" required />
-        <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
-        <div class="social-login">
-          <button type="button" onclick="googleSignIn()" class="btn-social google">
-            S’inscrire avec Google
-          </button>
-          <button type="button" onclick="appleSignIn()" class="btn-social apple">
-            S’inscrire avec Apple
-          </button>
-        </div>
-      </div>
 
-      <div class="signup-footer">
-        <span>Vous n’avez pas de compte ?</span>
-        <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
-        <span>Vous avez déjà un compte ?</span>
-        <a href="#" onclick="showLogin()">Se connecter</a>
-      </div>
-    </form>
+        <div class="signup-footer">
+          <span>Vous n’avez pas de compte ?</span>
+          <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
+          <span>Vous avez déjà un compte ?</span>
+          <a href="#" onclick="showLogin()">Se connecter</a>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+
   <div id="appSection" style="display: none;">
+    <!-- Sidebar et autres sections de l'application -->
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-top-row">
+        <button onclick="handleNewConversation()" class="new-chat-button">
+          <i class="fa-regular fa-pen-to-square"></i>
+          Nouveau prompt
+        </button>
+        <div class="sidebar-icons">
+          <i id="historyToggleIcon" class="fa-solid fa-bars" onclick="toggleHistory()" title="Cacher l'historique"></i>
+        </div>
+      </div>
+      <button onclick="showArchived()">Discussions archivées</button>
+      <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
+      <ul id="conversationList"></ul>
+    </div>
 
-   <div id="sidebar" class="sidebar">
-  <!-- Ligne du haut : bouton + icônes -->
-  <div class="sidebar-top-row">
-    <button onclick="handleNewConversation()" class="new-chat-button">
-      <i class="fa-regular fa-pen-to-square"></i>
-      Nouveau prompt
-    </button>
+    <div id="accountWrapper">
+      <div id="accountIcon" title="Mon compte">A</div>
+    </div>
 
-    <div class="sidebar-icons">
-      <i id="historyToggleIcon" class="fa-solid fa-bars" onclick="toggleHistory()" title="Cacher l'historique"></i>
+    <div id="accountMenu" class="account-menu" style="display: none;">
+      <ul>
+        <li>Paramètres</li>
+        <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
+      </ul>
+    </div>
+
+    <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="main-content">
+      <div id="chatContainer" class="chat-container"></div>
+      <div class="chat-input-wrapper">
+        <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
+        <button onclick="handleUserMessage()">Envoyer</button>
+      </div>
     </div>
   </div>
 
-  <!-- Boutons secondaires -->
-  <button onclick="showArchived()">Discussions archivées</button>
-  <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
-
-  <!-- Liste des conversations -->
-  <ul id="conversationList"></ul>
-</div>
-
-<div id="accountWrapper">
-  <div id="accountIcon" title="Mon compte">A</div>
-</div>
-
-<div id="accountMenu" class="account-menu" style="display: none;">
-  <ul>
-    <li>Paramètres</li>
-    <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
-  </ul>
-</div>
-
-    
-    <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
-     <i class="fa-solid fa-bars"></i>
-    </div>
-
-    
-
-   <!-- 🟦 Contenu principal existant -->
-   <div class="main-content">
-    <div id="chatContainer" class="chat-container"></div>
-
-    <div class="chat-input-wrapper">
-     <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
- 
-
-      <button onclick="handleUserMessage()">Envoyer</button>
-     </div>
-
-
-    </div> <!-- fin de .main-content -->
-  </div> <!-- ✅ fermeture manquante de #appSection -->
-
+  <script src="script.js"></script>
 </body>
 </html>
