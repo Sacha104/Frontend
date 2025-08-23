@@ -17,7 +17,28 @@
     <button onclick="toggleLang()">FR / EN</button>
   </div>
 
-  <div class="wrapper">
+    <div class="wrapper">
+    <!-- Section d'authentification intégrée -->
+    <div id="authSection">
+      <h2>Se connecter</h2>
+      <button id="googleSignInBtn" onclick="googleSignIn()">Se connecter avec Google</button>
+      <button id="appleSignInBtn" onclick="appleSignIn()">Se connecter avec Apple</button>
+      <p>Pas de compte ? <a href="#" onclick="showSignUp()">Inscrivez-vous</a></p>
+    </div>
+
+    <!-- Section de l'application (visible après la connexion) -->
+    <div id="appSection" style="display: none;">
+      <h2>Bienvenue dans l'application !</h2>
+      <div id="accountMenu" style="display: none;">
+        <p>Bienvenue, <span id="userName">Utilisateur</span></p>
+        <button onclick="signOut()">Se déconnecter</button>
+      </div>
+    </div>
+
+    <!-- Compte utilisateur (initiale de l'email) -->
+    <div id="accountIcon" style="display: none;"></div>
+
+    <!-- Authentification via formulaire (réserve pour l'inscription et la connexion manuelle) -->
     <div id="authSection" class="auth-section">
       <div class="auth-box">
         <h1 class="logo">Pr@mpt</h1>
@@ -65,8 +86,6 @@
         </div>
       </div>
     </div>
-  </div>
-
   <div id="appSection" style="display: none;">
 
    <div id="sidebar" class="sidebar">
