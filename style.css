@@ -750,3 +750,86 @@ h1 {
 .sidebar button:hover {
   background: #475569;
 }
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+  float: right;
+  margin-left: 1rem;
+}
+
+.options-icon {
+  cursor: pointer;
+  color: #f8fafc;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.3rem 0;
+  min-width: 120px;
+  z-index: 100;
+}
+
+.dropdown-menu div {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: #f8fafc;
+}
+
+.dropdown-menu div:hover {
+  background-color: #334155;
+}
+#accountIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.account-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 180px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.account-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-menu li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: #f1f5f9;
+  border-radius: 5px;
+}
+
+.account-menu li:hover {
+  background-color: #334155;
+}
+
+.account-menu hr {
+  border: 0;
+  border-top: 1px solid #475569;
+  margin: 0.5rem 0;
+}
+
