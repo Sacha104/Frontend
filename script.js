@@ -72,16 +72,32 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Fonction pour basculer entre les sections de connexion et d'inscription
 function showSignUp() {
-  document.getElementById("loginSection").style.display = "none";
-  document.getElementById("signupSection").style.display = "block";
+  const loginSection = document.getElementById("loginSection");
+  const signupSection = document.getElementById("signupSection");
+
+  if (loginSection) {
+    loginSection.style.display = "none";
+  }
+
+  if (signupSection) {
+    signupSection.style.display = "block";
+  }
 }
 
 function showLogin() {
-  document.getElementById("loginSection").style.display = "block";
-  document.getElementById("signupSection").style.display = "none";
+  const loginSection = document.getElementById("loginSection");
+  const signupSection = document.getElementById("signupSection");
+
+  if (loginSection) {
+    loginSection.style.display = "block";
+  }
+
+  if (signupSection) {
+    signupSection.style.display = "none";
+  }
 }
+
 
 // Fonction de connexion
 function signIn() {
