@@ -73,6 +73,33 @@ auth.onAuthStateChanged(user => {
 });
 
 
+// Fonction pour afficher l'inscription
+function showSignUp() {
+  const loginSection = document.getElementById("loginSection");
+  const signupSection = document.getElementById("signupSection");
+
+  if (loginSection && signupSection) {
+    // Si les éléments existent, on change leur affichage
+    loginSection.style.display = "none";
+    signupSection.style.display = "block";
+  } else {
+    console.error("Éléments de section non trouvés.");
+  }
+}
+
+// Fonction pour afficher la connexion
+function showLogin() {
+  const loginSection = document.getElementById("loginSection");
+  const signupSection = document.getElementById("signupSection");
+
+  if (loginSection && signupSection) {
+    // Si les éléments existent, on change leur affichage
+    loginSection.style.display = "block";
+    signupSection.style.display = "none";
+  } else {
+    console.error("Éléments de section non trouvés.");
+  }
+}
 
 // Fonction de connexion
 function signIn() {
@@ -498,46 +525,6 @@ function forceScrollToTop() {
   window.scrollTo(0, 0);
 }
 
-function showSignUp() {
-  document.getElementById("loginForm").style.display = "none";
-  document.getElementById("signupForm").style.display = "block";
-  document.getElementById("resetSection").style.display = "none";
-}
-
-function showLogin() {
-  document.getElementById("loginForm").style.display = "block";
-  document.getElementById("signupForm").style.display = "none";
-  document.getElementById("resetSection").style.display = "none";
-  document.getElementById("authStatus").textContent = "";
-}
-
-function showReset() {
-  document.getElementById("loginForm").style.display = "none";
-  document.getElementById("signupForm").style.display = "none";
-  document.getElementById("resetSection").style.display = "block";
-  document.getElementById("resetStatus").textContent = "";
-}
-document.getElementById('accountIcon').addEventListener('click', function() {
-  const menu = document.getElementById('accountMenu');
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-});
-
-document.addEventListener('click', function(e) {
-  const menu = document.getElementById('accountMenu');
-  if (!document.getElementById('accountIcon').contains(e.target) && !menu.contains(e.target)) {
-    menu.style.display = 'none';
-  }
-});
-
-function signOut() {
-  auth.signOut().then(() => {
-    currentUID = null;
-    currentConversationId = null;
-    document.getElementById("authSection").style.display = "block";
-    document.getElementById("appSection").style.display = "none";
-    forceScrollToTop();
-  });
-}
 
 async function loadConversationHistory() {
   const res = await fetch(`${backendURL}/conversations`, {
