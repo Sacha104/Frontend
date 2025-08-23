@@ -14,7 +14,44 @@ const backendURL = "https://prompt-ai-naa1.onrender.com";
 
 let currentUID = null;
 let currentConversationId = null;
+const providerGoogle = new firebase.auth.GoogleAuthProvider();
+const providerApple = new firebase.auth.OAuthProvider('apple.com');
 
+// Connexion via Google
+function googleSignIn() {
+  auth.signInWithPopup(providerGoogle)
+    .then(result => {
+      const user = result.user;
+      console.log("Utilisateur connecté avec Google:", user);
+      // Gérer l'utilisateur ici (ex. : afficher l'interface de l'application)
+      loadUserData(user);
+    })
+    .catch(error => {
+      console.error("Erreur lors de la connexion Google:", error);
+    });
+}
+
+// Connexion via Apple
+function appleSignIn() {
+  auth.signInWithPopup(providerApple)
+    .then(result => {
+      const user = result.user;
+      console.log("Utilisateur connecté avec Apple:", user);
+      // Gérer l'utilisateur ici (ex. : afficher l'interface de l'application)
+      loadUserData(user);
+    })
+    .catch(error => {
+      console.error("Erreur lors de la connexion Apple:", error);
+    });
+}
+
+// Fonction pour charger les données de l'utilisateur une fois connecté
+function loadUserData(user) {
+  console.log("Données utilisateur:", user);
+  // Vous pouvez maintenant effectuer des actions comme charger des conversations, etc.
+  document.getElementById("authSection").style.display = "none";
+  document.getElementById("appSection").style.display = "flex";
+}
 async function loadLastConversation() {
   try {
     const res = await fetch(`${backendURL}/conversations`, {
