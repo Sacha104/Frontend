@@ -72,31 +72,31 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Afficher l'inscription
+// Fonction pour afficher l'inscription
 function showSignUp() {
   const loginSection = document.getElementById("loginSection");
   const signupSection = document.getElementById("signupSection");
 
-  if (loginSection) {
+  if (loginSection && signupSection) {
+    // Si les éléments existent, on change leur affichage
     loginSection.style.display = "none";
-  }
-
-  if (signupSection) {
     signupSection.style.display = "block";
+  } else {
+    console.error("Éléments de section non trouvés.");
   }
 }
 
-// Afficher la connexion
+// Fonction pour afficher la connexion
 function showLogin() {
   const loginSection = document.getElementById("loginSection");
   const signupSection = document.getElementById("signupSection");
 
-  if (loginSection) {
+  if (loginSection && signupSection) {
+    // Si les éléments existent, on change leur affichage
     loginSection.style.display = "block";
-  }
-
-  if (signupSection) {
     signupSection.style.display = "none";
+  } else {
+    console.error("Éléments de section non trouvés.");
   }
 }
 
