@@ -17,33 +17,6 @@ let currentConversationId = null;
 const providerGoogle = new firebase.auth.GoogleAuthProvider();
 const providerApple = new firebase.auth.OAuthProvider('apple.com');
 
-// Connexion via Google
-function googleSignIn() {
-  auth.signInWithPopup(providerGoogle)
-    .then(result => {
-      const user = result.user;
-      console.log("Utilisateur connecté avec Google:", user);
-      // Gérer l'utilisateur ici (ex. : afficher l'interface de l'application)
-      loadUserData(user);
-    })
-    .catch(error => {
-      console.error("Erreur lors de la connexion Google:", error);
-    });
-}
-
-// Connexion via Apple
-function appleSignIn() {
-  auth.signInWithPopup(providerApple)
-    .then(result => {
-      const user = result.user;
-      console.log("Utilisateur connecté avec Apple:", user);
-      // Gérer l'utilisateur ici (ex. : afficher l'interface de l'application)
-      loadUserData(user);
-    })
-    .catch(error => {
-      console.error("Erreur lors de la connexion Apple:", error);
-    });
-}
 
 // Fonction pour charger les données de l'utilisateur une fois connecté
 function loadUserData(user) {
@@ -99,6 +72,18 @@ auth.onAuthStateChanged(user => {
   }
 });
 
+// Fonction pour basculer entre les sections de connexion et d'inscription
+function showSignUp() {
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("signupSection").style.display = "block";
+}
+
+function showLogin() {
+  document.getElementById("loginSection").style.display = "block";
+  document.getElementById("signupSection").style.display = "none";
+}
+
+// Fonction de connexion
 function signIn() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
@@ -106,28 +91,64 @@ function signIn() {
     .then(() => {
       document.getElementById("authSection").style.display = "none";
       document.getElementById("appSection").style.display = "flex";
-      const wrapper = document.querySelector(".wrapper");
-      if (wrapper) wrapper.style.display = "none"; // ✅ Masquer .wrapper
-      forceScrollToTop();
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
 }
 
-
+// Fonction d'inscription
 function signUp() {
   const email = document.getElementById("signupEmail").value;
   const password = document.getElementById("signupPassword").value;
-  const confirm = document.getElementById("confirmPassword").value;
-  if (password !== confirm) {
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (password !== confirmPassword) {
     document.getElementById("authStatus").textContent = "Mots de passe différents.";
     return;
   }
+
   auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
       document.getElementById("authStatus").textContent = "Inscription réussie.";
       showLogin();
     })
     .catch(e => document.getElementById("authStatus").textContent = e.message);
+}
+
+// Fonction de réinitialisation du mot de passe
+function showReset() {
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("signupSection").style.display = "none";
+  document.getElementById("resetSection").style.display = "block";
+}
+
+// Fonction pour la connexion avec Google
+function googleSignIn() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+      console.log(result.user);
+      // Actions après connexion réussie
+      document.getElementById("authSection").style.display = "none";
+      document.getElementById("appSection").style.display = "flex";
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+// Fonction pour la connexion avec Apple
+function appleSignIn() {
+  // Implémenter la connexion avec Apple ici via Firebase Auth
+  console.log("Connexion Apple (fonction à implémenter)");
+}
+
+// Fonction pour afficher ou masquer les mots de passe
+function togglePassword(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  input.type = input.type === "password" ? "text" : "password";
+  icon.classList.toggle("fa-eye");
+  icon.classList.toggle("fa-eye-slash");
 }
 
 function sendPasswordReset() {
