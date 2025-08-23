@@ -1,10 +1,11 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyAiBioPsbDZT3nrMgeHdntS0QIXjQTIzIk",
-  authDomain: "prompt-app-d4692.firebaseapp.com",
-  projectId: "prompt-app-d4692",
-  storageBucket: "prompt-app-d4692.appspot.com",
-  messagingSenderId: "1090823184353",
-  appId: "1:1090823184353:web:86a03e89a3e632e402bca0"
+const firebaseConfig = { 
+  apiKey: "AIzaSyBgAH1F9Pl6BsWgXblPU1m1kjnvDiCHGX0",
+  authDomain: "prompt-app-36051.firebaseapp.com",
+  projectId: "prompt-app-36051",
+  storageBucket: "prompt-app-36051.firebasestorage.app",
+  messagingSenderId: "941533435551",
+  appId: "1:941533435551:web:4712d066912cbeb2b774aa",
+  measurementId: "G-GDDT6YXN5J"
 };
  
 firebase.initializeApp(firebaseConfig);
