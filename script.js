@@ -158,13 +158,6 @@ function appleSignIn() {
 }
 
 // Fonction pour afficher ou masquer les mots de passe
-function togglePassword(inputId, iconId) {
-  const input = document.getElementById(inputId);
-  const icon = document.getElementById(iconId);
-  input.type = input.type === "password" ? "text" : "password";
-  icon.classList.toggle("fa-eye");
-  icon.classList.toggle("fa-eye-slash");
-}
 
 function sendPasswordReset() {
   const email = document.getElementById("resetEmail").value;
