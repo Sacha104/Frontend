@@ -136,7 +136,6 @@ function googleSignIn() {
     });
 }
 
-// Fonction pour la connexion avec Apple
 function appleSignIn() {
   // Implémenter la connexion avec Apple ici via Firebase Auth
   console.log("Connexion Apple (fonction à implémenter)");
