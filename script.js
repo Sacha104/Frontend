@@ -322,7 +322,7 @@ async function sendOptimizedPrompt() {
 
   let endpoint = "/respond"; // texte par défaut
   if (choice === "image") endpoint = "/generate_image";
-  if (choice === "video") endpoint = "/generate_video";
+  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour appeler l'API vidéo
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -354,7 +354,7 @@ async function sendOptimizedPrompt() {
     if (choice === "image") {
       updateLastBotMessage(response, "image");
     } else if (choice === "video") {
-      updateLastBotMessage(response, "video");
+      updateLastBotMessage(response, "video");  // Afficher la vidéo
     } else {
       updateLastBotMessage(response, "text");
     }
