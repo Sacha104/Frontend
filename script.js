@@ -17,7 +17,6 @@ let currentConversationId = null;
 const providerGoogle = new firebase.auth.GoogleAuthProvider();
 const providerApple = new firebase.auth.OAuthProvider('apple.com');
 
-
 // Fonction pour charger les données de l'utilisateur une fois connecté
 function loadUserData(user) {
   console.log("Données utilisateur:", user);
@@ -25,6 +24,8 @@ function loadUserData(user) {
   document.getElementById("authSection").style.display = "none";
   document.getElementById("appSection").style.display = "flex";
 }
+
+// Fonction pour charger la dernière conversation
 async function loadLastConversation() {
   try {
     const res = await fetch(`${backendURL}/conversations`, {
@@ -43,7 +44,6 @@ async function loadLastConversation() {
   }
 }
 
-
 auth.onAuthStateChanged(user => {
   console.log(user ? "Utilisateur connecté" : "Aucun utilisateur connecté");
 
@@ -60,7 +60,7 @@ auth.onAuthStateChanged(user => {
       icon.style.display = "flex";
     }
 
-    // ✅ Charger l’historique ET la dernière conversation automatiquement
+    // Charger l'historique et la dernière conversation automatiquement
     loadConversationHistory();
     loadLastConversation();
 
@@ -72,6 +72,7 @@ auth.onAuthStateChanged(user => {
   }
 });
 
+// Afficher l'inscription
 function showSignUp() {
   const loginSection = document.getElementById("loginSection");
   const signupSection = document.getElementById("signupSection");
@@ -85,6 +86,7 @@ function showSignUp() {
   }
 }
 
+// Afficher la connexion
 function showLogin() {
   const loginSection = document.getElementById("loginSection");
   const signupSection = document.getElementById("signupSection");
@@ -97,7 +99,6 @@ function showLogin() {
     signupSection.style.display = "none";
   }
 }
-
 
 // Fonction de connexion
 function signIn() {
@@ -139,8 +140,7 @@ function showReset() {
 
 // Fonction pour la connexion avec Google
 function googleSignIn() {
-  var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
+  firebase.auth().signInWithPopup(providerGoogle)
     .then((result) => {
       console.log(result.user);
       // Actions après connexion réussie
@@ -152,13 +152,21 @@ function googleSignIn() {
     });
 }
 
+// Fonction pour la connexion avec Apple (à implémenter)
 function appleSignIn() {
-  // Implémenter la connexion avec Apple ici via Firebase Auth
   console.log("Connexion Apple (fonction à implémenter)");
 }
 
 // Fonction pour afficher ou masquer les mots de passe
+function togglePassword(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  input.type = input.type === "password" ? "text" : "password";
+  icon.classList.toggle("fa-eye");
+  icon.classList.toggle("fa-eye-slash");
+}
 
+// Fonction pour envoyer un email de réinitialisation du mot de passe
 function sendPasswordReset() {
   const email = document.getElementById("resetEmail").value;
   auth.sendPasswordResetEmail(email)
@@ -166,6 +174,7 @@ function sendPasswordReset() {
     .catch(e => document.getElementById("resetStatus").textContent = e.message);
 }
 
+// Fonction pour se déconnecter
 function signOut() {
   auth.signOut().then(() => {
     currentUID = null;
@@ -176,13 +185,6 @@ function signOut() {
   });
 }
 
-function togglePassword(inputId, iconId) {
-  const input = document.getElementById(inputId);
-  const icon = document.getElementById(iconId);
-  input.type = input.type === "password" ? "text" : "password";
-  icon.classList.toggle("fa-eye");
-  icon.classList.toggle("fa-eye-slash");
-}
 
 function handleChatEnter(e) {
   if (e.key === "Enter") {
