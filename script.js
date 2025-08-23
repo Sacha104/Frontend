@@ -505,6 +505,7 @@ async function loadConversationHistory() {
   });
 }
 
+
 async function loadConversation(conversationId) {
   try {
     console.log("📥 Chargement conversation ID :", conversationId);
