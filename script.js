@@ -474,6 +474,27 @@ function showReset() {
   document.getElementById("resetSection").style.display = "block";
   document.getElementById("resetStatus").textContent = "";
 }
+document.getElementById('accountIcon').addEventListener('click', function() {
+  const menu = document.getElementById('accountMenu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+});
+
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('accountMenu');
+  if (!document.getElementById('accountIcon').contains(e.target) && !menu.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
+function signOut() {
+  auth.signOut().then(() => {
+    currentUID = null;
+    currentConversationId = null;
+    document.getElementById("authSection").style.display = "block";
+    document.getElementById("appSection").style.display = "none";
+    forceScrollToTop();
+  });
+}
 
 async function loadConversationHistory() {
   const res = await fetch(`${backendURL}/conversations`, {
@@ -689,6 +710,20 @@ function showArchived() {
       list.appendChild(li);
     });
   });
+}
+function confirmDelete(e, id) {
+  e.stopPropagation();
+  if (confirm("Es-tu sûr de vouloir supprimer cette conversation ?")) {
+    fetch(`${backendURL}/conversation/delete`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) loadConversationHistory();
+      });
+  }
 }
 
 function toggleLang() {
