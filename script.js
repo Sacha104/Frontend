@@ -571,13 +571,11 @@ async function loadConversation(conversationId) {
       console.error("⛔ Élément #chatContainer introuvable dans le DOM !");
       return;
     }
-    container.innerHTML = "";
+    container.innerHTML = ""; // Clear previous messages
 
     if (!data.messages || data.messages.length === 0) {
       container.innerHTML = "<p style='color: #94a3b8; font-style: italic;'>Aucun message dans cette conversation.</p>";
       return;
-
-
     }
 
     // Exclure les messages système temporaires
@@ -590,17 +588,29 @@ async function loadConversation(conversationId) {
 
     data.messages.forEach(m => {
       if (tempMessages.includes(m.text)) return;
-      appendMessage(m.text, m.role);
+
+      appendMessage(m.text, m.role); // Affiche chaque message
+
       if (m.role === "bot") {
         const last = document.querySelectorAll(".chat-message.bot");
         const lastMsg = last[last.length - 1];
 
-        lastMsg.innerHTML = `
-           <div class="markdown">${marked.parse(m.text)}</div>
-           
-  `      ;
-       }
-
+        // Vérifier si le message contient une image
+        if (m.text.startsWith("http") && (m.text.endsWith(".jpg") || m.text.endsWith(".jpeg") || m.text.endsWith(".png"))) {
+          lastMsg.innerHTML = `
+            <img src="${m.text}" alt="Image générée" style="max-width:100%; border-radius:10px;">
+            <div class="chat-actions">
+              <a href="${m.text}" download="image.png">
+                <i class="fa-solid fa-download"></i> Télécharger
+              </a>
+            </div>
+          `;
+        } else {
+          lastMsg.innerHTML = `
+            <div class="markdown">${marked.parse(m.text)}</div>
+          `;
+        }
+      }
     });
 
     scrollToBottom();
