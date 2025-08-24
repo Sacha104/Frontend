@@ -77,27 +77,28 @@ auth.onAuthStateChanged(user => {
 function showSignUp() {
   const loginSection = document.getElementById("loginSection");
   const signupSection = document.getElementById("signupSection");
+  const loginFooter = document.getElementById("loginFooter");
+  const signupFooter = document.getElementById("signupFooter");
 
   if (loginSection && signupSection) {
-    // Si les éléments existent, on change leur affichage
     loginSection.style.display = "none";
     signupSection.style.display = "block";
-  } else {
-    console.error("Éléments de section non trouvés.");
+    loginFooter.style.display = "none";
+    signupFooter.style.display = "block";
   }
 }
 
-// Fonction pour afficher la connexion
 function showLogin() {
   const loginSection = document.getElementById("loginSection");
   const signupSection = document.getElementById("signupSection");
+  const loginFooter = document.getElementById("loginFooter");
+  const signupFooter = document.getElementById("signupFooter");
 
   if (loginSection && signupSection) {
-    // Si les éléments existent, on change leur affichage
     loginSection.style.display = "block";
     signupSection.style.display = "none";
-  } else {
-    console.error("Éléments de section non trouvés.");
+    loginFooter.style.display = "block";
+    signupFooter.style.display = "none";
   }
 }
 
