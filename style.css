@@ -646,21 +646,23 @@ h1 {
 }
 
 
-/* Copier intégré à chaque message bot */
 .copy-btn {
-  display: inline-block;
-  margin-top: 0.3rem;
-  font-size: 0.8rem;
-  background: transparent;
-  color: #60a5fa;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #38bdf8;
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
   cursor: pointer;
-  border: none;
-  padding: 0;
+  font-size: 0.8rem;
 }
 
 .copy-btn:hover {
-  text-decoration: underline;
+  background: #2563eb;
 }
+
 .sidebar-header-row {
   display: flex;
   justify-content: space-between;
