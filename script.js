@@ -268,6 +268,7 @@ function appendMessage(text, type) {
 
 
 
+// (Modifications dans la fonction qui ajoute le message du bot)
 function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
   if (messages.length === 0) return;
@@ -312,7 +313,7 @@ function updateLastBotMessage(text, mode = "text") {
   lastBotMsg.appendChild(typingDiv);
 
   let index = 0;
- 
+
   function typeNextChar() {
     if (index < plainText.length) {
       typingDiv.textContent += plainText.charAt(index);
@@ -320,8 +321,6 @@ function updateLastBotMessage(text, mode = "text") {
       setTimeout(typeNextChar, 12);
     } else {
       typingDiv.innerHTML = marked.parse(plainText);
-
-// Après écriture, on ajoute menu déroulant + bouton
       const chatContainer = document.getElementById("chatContainer");
       const actionRow = document.createElement("div");
       actionRow.className = "chat-actions";
@@ -334,9 +333,8 @@ function updateLastBotMessage(text, mode = "text") {
         </select>
         <button onclick="sendOptimizedPrompt()">Envoyer à l'IA</button>
       `;
-       chatContainer.appendChild(actionRow);
-       scrollToBottom();
-
+      chatContainer.appendChild(actionRow);
+      scrollToBottom();
     }
   }
 
@@ -599,11 +597,7 @@ async function loadConversation(conversationId) {
 
         lastMsg.innerHTML = `
            <div class="markdown">${marked.parse(m.text)}</div>
-           <div class="chat-actions">
-              <a href="#" onclick="copyMessage(this)">
-                 <i class="fa-regular fa-copy"></i> Copier
-              </a>
-           </div>
+           
   `      ;
        }
 
@@ -678,20 +672,6 @@ function handleNewConversation() {
   startNewConversation(true);
 }
 
-function confirmDelete(e, id) {
-  e.stopPropagation();
-  if (confirm("Es-tu sûr de vouloir supprimer cette conversation ?")) {
-    fetch(`${backendURL}/conversation/delete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) loadConversationHistory();
-      });
-  }
-}
 
 function toggleArchive(e, id, archive) {
   e.stopPropagation();
