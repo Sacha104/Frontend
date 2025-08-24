@@ -385,6 +385,9 @@ async function sendOptimizedPrompt() {
     };
   }
 
+  // Afficher le payload envoyé avant d'envoyer la requête
+  console.log("Payload envoyé à l'API : ", payload);
+
   let endpoint = "/respond"; // texte par défaut
   if (choice === "image") endpoint = "/generate_image";
   if (choice === "video") endpoint = "/generate_video"; // Changer ici pour appeler l'API vidéo
@@ -400,8 +403,9 @@ async function sendOptimizedPrompt() {
     });
 
     if (!res.ok) {  // Vérifie si la requête a réussi
-      console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`);
-      updateLastBotMessage("Erreur réseau ou serveur.");
+      const errorData = await res.json(); // récupère le message d'erreur détaillé
+      console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`, errorData);
+      updateLastBotMessage(`Erreur : ${errorData.error || 'Problème avec l\'API'}`);
       return;
     }
 
@@ -428,8 +432,6 @@ async function sendOptimizedPrompt() {
     updateLastBotMessage("Erreur réseau.");
   }
 }
-
-
 
 
 
