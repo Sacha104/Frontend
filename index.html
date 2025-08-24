@@ -79,12 +79,16 @@
         </div>
 
 
-        <div class="signup-footer">
-          <span>Vous n’avez pas de compte ?</span>
-          <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
-          <span>Vous avez déjà un compte ?</span>
-          <a href="#" onclick="showLogin()">Se connecter</a>
+        <div id="loginFooter" class="signup-footer">
+            <span>Vous n’avez pas de compte ?</span>
+            <a href="#" onclick="showSignUp()">Inscrivez-vous</a>
         </div>
+
+        <div id="signupFooter" class="signup-footer" style="display: none;">
+             <span>Vous avez déjà un compte ?</span>
+             <a href="#" onclick="showLogin()">Se connecter</a>
+        </div>
+
       </form>
     </div>
   </div>
