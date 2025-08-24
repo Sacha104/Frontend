@@ -649,6 +649,33 @@ async function startNewConversation(force = false) {
   }
 }
 
+// Fonction pour basculer l'affichage de la sidebar sur mobile
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  if (window.innerWidth <= 600) {
+    // Affiche ou cache la sidebar selon son état actuel
+    sidebar.style.display = (sidebar.style.display === 'none' || sidebar.style.display === '') ? 'block' : 'none';
+  }
+}
+
+// Ajoutez cet écouteur d'événements pour gérer la redimension de l'écran
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 600) {
+    // Affiche la sidebar par défaut sur les grands écrans
+    document.getElementById("sidebar").style.display = 'block';
+  } else {
+    // Cache la sidebar sur mobile
+    document.getElementById("sidebar").style.display = 'none';
+  }
+});
+
+// Assurez-vous de basculer la sidebar si l'écran est redimensionné
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialisez l'affichage de la sidebar
+  if (window.innerWidth <= 600) {
+    document.getElementById("sidebar").style.display = 'none';
+  }
+});
 
 function toggleHistory() {
   const sidebar = document.getElementById("sidebar");
