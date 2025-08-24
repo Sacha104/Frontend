@@ -372,7 +372,7 @@ async function sendOptimizedPrompt() {
 
   appendMessage("Génération en cours…", "bot");
 
-  // Construire le payload
+  // Construire le payload pour chaque type de requête
   let payload = { prompt };
   if (choice === "text") {
     payload.uid = currentUID;
@@ -388,9 +388,10 @@ async function sendOptimizedPrompt() {
   // Afficher le payload envoyé avant d'envoyer la requête
   console.log("Payload envoyé à l'API : ", payload);
 
-  let endpoint = "/respond"; // texte par défaut
-  if (choice === "image") endpoint = "/generate_image";
-  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour appeler l'API vidéo
+  // Déterminer l'endpoint en fonction du choix (texte, image ou vidéo)
+  let endpoint = "/respond"; // Texte par défaut
+  if (choice === "image") endpoint = "/generate_image"; // Changer pour génération d'image
+  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour génération de vidéo
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -432,7 +433,6 @@ async function sendOptimizedPrompt() {
     updateLastBotMessage("Erreur réseau.");
   }
 }
-
 
 
 function copyMessage(button) {
