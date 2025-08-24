@@ -372,7 +372,7 @@ async function sendOptimizedPrompt() {
 
   appendMessage("Génération en cours…", "bot");
 
-  // Construire le payload pour chaque type de requête
+  // Construire le payload
   let payload = { prompt };
   if (choice === "text") {
     payload.uid = currentUID;
@@ -385,13 +385,9 @@ async function sendOptimizedPrompt() {
     };
   }
 
-  // Afficher le payload envoyé avant d'envoyer la requête
-  console.log("Payload envoyé à l'API : ", payload);
-
-  // Déterminer l'endpoint en fonction du choix (texte, image ou vidéo)
-  let endpoint = "/respond"; // Texte par défaut
-  if (choice === "image") endpoint = "/generate_image"; // Changer pour génération d'image
-  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour génération de vidéo
+  let endpoint = "/respond"; // texte par défaut
+  if (choice === "image") endpoint = "/generate_image";
+  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour appeler l'API vidéo
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -404,9 +400,8 @@ async function sendOptimizedPrompt() {
     });
 
     if (!res.ok) {  // Vérifie si la requête a réussi
-      const errorData = await res.json(); // récupère le message d'erreur détaillé
-      console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`, errorData);
-      updateLastBotMessage(`Erreur : ${errorData.error || 'Problème avec l\'API'}`);
+      console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`);
+      updateLastBotMessage("Erreur réseau ou serveur.");
       return;
     }
 
@@ -433,6 +428,7 @@ async function sendOptimizedPrompt() {
     updateLastBotMessage("Erreur réseau.");
   }
 }
+
 
 
 function copyMessage(button) {
