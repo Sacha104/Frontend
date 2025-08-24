@@ -198,8 +198,10 @@ async function handleUserMessage() {
 
   appendMessage(message, "user");
   input.value = "";
+
   let endpoint = "/generate"; // par défaut OpenAI texte
-  
+
+  // Afficher "Optimisation du prompt en cours…" uniquement pendant la génération
   appendMessage("Optimisation du prompt en cours…", "bot");
 
   const controller = new AbortController();
@@ -223,10 +225,6 @@ async function handleUserMessage() {
 
     const optimized = data.response || "Erreur IA.";
     updateLastBotMessage(optimized);
-
-    const actions = document.createElement("div");
-    actions.className = "chat-actions";
-    scrollToBottom();
   } catch (error) {
     console.error("Erreur réseau :", error);
     updateLastBotMessage("Erreur réseau ou délai dépassé.");
@@ -234,35 +232,29 @@ async function handleUserMessage() {
 }
 
 function appendMessage(text, type) {
-  if (!text || !text.trim()) return; // ⛔ ignore les messages vides
+  if (!text || !text.trim()) return;  // On ignore les messages vides
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${type}`;
   if (type === "bot") msg.classList.add("markdown");
   msg.textContent = text;
+
+  // Ajout du bouton Copier uniquement pour les messages du bot
+  if (type === "bot") {
+    const copyButton = document.createElement("button");
+    copyButton.className = "copy-btn";  // Applique le style de deux carrés
+    copyButton.onclick = function() {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Copié dans le presse-papiers");
+      }).catch(() => {
+        alert("❌ Erreur lors de la copie");
+      });
+    };
+    msg.appendChild(copyButton);
+  }
+
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
-
-  // ✅ Enregistre uniquement si conversation existe
-  if (currentUID && currentConversationId && text.trim().length > 0) {
-    fetch(`${backendURL}/message/save`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: currentUID,
-        conversationId: currentConversationId,
-        role: type,
-        text: text.trim()
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (!data.success) {
-        console.warn("Erreur sauvegarde message :", data);
-      }
-    })
-    .catch(err => console.error("Sauvegarde échouée :", err));
-  }
 }
 
 
@@ -365,41 +357,30 @@ async function sendOptimizedPrompt() {
     return;
   }
 
-  if (choice === "text" && (!currentUID || !currentConversationId)) {
-    console.error("Erreur : UID ou conversation manquants pour le texte", { prompt, currentUID, currentConversationId });
-    return;
-  }
+  appendMessage("Réponse en cours…", "bot");
 
-  appendMessage("Génération en cours…", "bot");
-
-  // Construire le payload
+  // Réenvoyer le prompt pour générer la réponse
   let payload = { prompt };
   if (choice === "text") {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
-  } else if (choice === "image" || choice === "video") {
-    payload = {
-      prompt,
-      uid: currentUID,
-      conversationId: currentConversationId,
-    };
   }
 
-  let endpoint = "/respond"; // texte par défaut
+  let endpoint = "/respond"; // Texte par défaut
   if (choice === "image") endpoint = "/generate_image";
-  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour appeler l'API vidéo
+  if (choice === "video") endpoint = "/generate_video";
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, // Utilise toujours le token Firebase ici
+        "Authorization": `Bearer ${token}`,  // Utilisation du token pour l'authentification
       },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {  // Vérifie si la requête a réussi
+    if (!res.ok) {
       console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`);
       updateLastBotMessage("Erreur réseau ou serveur.");
       return;
@@ -408,18 +389,10 @@ async function sendOptimizedPrompt() {
     const data = await res.json();
     const response = data.response || "Erreur IA.";
 
-    // Vérification si c'est bien une URL pour image/vidéo
-    if ((choice === "image" || choice === "video") && !/^https?:\/\//.test(response)) {
-      console.error("Erreur : réponse invalide pour image/vidéo");
-      updateLastBotMessage("Erreur IA. (réponse invalide)");
-      return;
-    }
-
-    // Afficher selon le choix
     if (choice === "image") {
       updateLastBotMessage(response, "image");
     } else if (choice === "video") {
-      updateLastBotMessage(response, "video");  // Afficher la vidéo
+      updateLastBotMessage(response, "video");
     } else {
       updateLastBotMessage(response, "text");
     }
@@ -578,7 +551,7 @@ async function loadConversation(conversationId) {
       return;
     }
 
-    // Exclure les messages système temporaires
+    // Exclure les messages système temporaires (messages d'attente)
     const tempMessages = [
       "Optimisation du prompt en cours…",
       "Réponse en cours…",
@@ -587,7 +560,7 @@ async function loadConversation(conversationId) {
     ];
 
     data.messages.forEach(m => {
-      if (tempMessages.includes(m.text)) return;
+      if (tempMessages.includes(m.text)) return;  // Ignore les messages d'attente
 
       // Afficher chaque message
       appendMessage(m.text, m.role); // Affiche chaque message
