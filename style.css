@@ -835,3 +835,93 @@ h1 {
   margin: 0.5rem 0;
 }
 
+/* Responsive Styles */
+
+/* For small devices (Phones) */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    height: 100vh;
+    display: none; /* Initially hidden */
+  }
+
+  .main-content {
+    margin-left: 0; /* No left margin when sidebar is hidden */
+    padding: 1rem;
+  }
+
+  #chatContainer {
+    padding: 0.5rem; /* Smaller padding for better use of space */
+  }
+
+  .chat-input-wrapper {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .chat-input-wrapper button {
+    width: 100%; /* Full width button */
+  }
+
+  .sidebar-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  #accountWrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  /* Adjust button sizes for mobile */
+  #historyToggleIcon, .new-chat-button {
+    font-size: 1.2rem;
+  }
+
+  /* Adjust form fields */
+  #authSection input, #authSection button {
+    width: 100%;
+  }
+
+  /* Mobile specific styling for bottom bar */
+  .chat-wrapper-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .chat-wrapper-active {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+}
+
+/* For medium devices (Tablets) */
+@media screen and (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px; /* Provide space for sidebar */
+  }
+
+  .chat-input-wrapper {
+    flex-direction: row;
+    width: 100%;
+    gap: 0;
+  }
+
+  .chat-input-wrapper button {
+    padding: 0.5rem;
+  }
+}
