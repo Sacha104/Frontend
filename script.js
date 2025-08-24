@@ -154,19 +154,6 @@ function googleSignIn() {
     });
 }
 
-// Fonction pour la connexion avec Apple (à implémenter)
-function appleSignIn() {
-  firebase.auth().signInWithPopup(providerApple)
-    .then((result) => {
-      console.log("Utilisateur Apple :", result.user);
-      document.getElementById("authSection").style.display = "none";
-      document.getElementById("appSection").style.display = "flex";
-    })
-    .catch((error) => {
-      console.error("Erreur Apple Sign-In :", error);
-      alert("Erreur lors de la connexion avec Apple : " + error.message);
-    });
-}
 
 // Fonction pour afficher ou masquer les mots de passe
 function togglePassword(inputId, iconId) {
