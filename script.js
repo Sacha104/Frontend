@@ -589,27 +589,28 @@ async function loadConversation(conversationId) {
     data.messages.forEach(m => {
       if (tempMessages.includes(m.text)) return;
 
+      // Afficher chaque message
       appendMessage(m.text, m.role); // Affiche chaque message
 
-      if (m.role === "bot") {
+      // Si le message contient une image (image_url est défini)
+      if (m.image_url) {
+        const last = document.querySelectorAll(".chat-message.bot");
+        const lastMsg = last[last.length - 1];
+        lastMsg.innerHTML = `
+          <img src="${m.image_url}" alt="Image générée" style="max-width:100%; border-radius:10px;">
+          <div class="chat-actions">
+            <a href="${m.image_url}" download="image.png">
+              <i class="fa-solid fa-download"></i> Télécharger
+            </a>
+          </div>
+        `;
+      } else if (m.role === "bot") {
         const last = document.querySelectorAll(".chat-message.bot");
         const lastMsg = last[last.length - 1];
 
-        // Vérifier si le message contient une image
-        if (m.text.startsWith("http") && (m.text.endsWith(".jpg") || m.text.endsWith(".jpeg") || m.text.endsWith(".png"))) {
-          lastMsg.innerHTML = `
-            <img src="${m.text}" alt="Image générée" style="max-width:100%; border-radius:10px;">
-            <div class="chat-actions">
-              <a href="${m.text}" download="image.png">
-                <i class="fa-solid fa-download"></i> Télécharger
-              </a>
-            </div>
-          `;
-        } else {
-          lastMsg.innerHTML = `
-            <div class="markdown">${marked.parse(m.text)}</div>
-          `;
-        }
+        lastMsg.innerHTML = `
+           <div class="markdown">${marked.parse(m.text)}</div>
+        `;
       }
     });
 
