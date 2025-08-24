@@ -67,6 +67,17 @@
             </button>
           </div>
         </div>
+        <!-- Réinitialisation du mot de passe -->
+        <div id="resetSection" style="display: none;">
+          <h2>Réinitialiser le mot de passe</h2>
+          <input type="email" id="resetEmail" placeholder="Votre email" required />
+          <button type="button" onclick="sendPasswordReset()" class="btn-primary">
+           Envoyer le lien de réinitialisation
+          </button>
+          <p id="resetStatus"></p>
+          <a href="#" onclick="showLogin()">🔙 Retour</a>
+        </div>
+
 
         <div class="signup-footer">
           <span>Vous n’avez pas de compte ?</span>
