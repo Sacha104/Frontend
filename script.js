@@ -7,7 +7,7 @@ const firebaseConfig = {
   appId: "1:941533435551:web:4712d066912cbeb2b774aa",
   measurementId: "G-GDDT6YXN5J"
 };
- 
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const backendURL = "https://prompt-ai-naa1.onrender.com";
