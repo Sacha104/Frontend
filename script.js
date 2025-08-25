@@ -327,9 +327,8 @@ function updateLastBotMessage(text, mode = "text") {
 }
 
 async function sendOptimizedPrompt() {
-  const token = await firebase.auth().currentUser?.getIdToken();  // Récupère le token Firebase de l'utilisateur
+  const token = await firebase.auth().currentUser?.getIdToken();
   if (!token) {
-    console.error("Erreur : token Firebase introuvable");
     updateLastBotMessage("Erreur : utilisateur non authentifié.");
     return;
   }
@@ -339,79 +338,89 @@ async function sendOptimizedPrompt() {
 
   const botMessages = document.querySelectorAll(".chat-message.bot");
   if (!botMessages.length) return;
-
   const lastBotMessage = botMessages[botMessages.length - 1];
   const markdownDiv = lastBotMessage.querySelector(".markdown");
   if (!markdownDiv) return;
+
   const prompt = markdownDiv.textContent.trim();
-
-  if (!prompt) {
-    console.error("Erreur : prompt vide");
-    return;
-  }
-
-  if (choice === "text" && (!currentUID || !currentConversationId)) {
-    console.error("Erreur : UID ou conversation manquants pour le texte", { prompt, currentUID, currentConversationId });
-    return;
-  }
+  if (!prompt) return;
 
   appendMessage("Génération en cours…", "bot");
 
-  // Construire le payload
+  let endpoint = "/respond";
   let payload = { prompt };
+
   if (choice === "text") {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
   } else if (choice === "image") {
-    payload = {
-      prompt,
-      uid: currentUID,
-      conversationId: currentConversationId,
-    };
+    endpoint = "/generate_image";
+    payload.uid = currentUID;
+    payload.conversationId = currentConversationId;
+  } else if (choice === "video") {
+    endpoint = "/generate_and_animate";
+    payload.uid = currentUID;
+    payload.conversationId = currentConversationId;
   }
 
-  let endpoint = "/respond"; // texte par défaut
-  if (choice === "image") endpoint = "/generate_image";
-  
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, // Utilise toujours le token Firebase ici
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {  // Vérifie si la requête a réussi
-      console.error(`Erreur HTTP : ${res.status} - ${res.statusText}`);
-      updateLastBotMessage("Erreur réseau ou serveur.");
-      return;
-    }
-
     const data = await res.json();
-    const response = data.response || "Erreur IA.";
-
-    // Vérification si c'est bien une URL pour image/vidéo
-    if ((choice === "image" || choice === "video") && !/^https?:\/\//.test(response)) {
-      console.error("Erreur : réponse invalide pour image/vidéo");
-      updateLastBotMessage("Erreur IA. (réponse invalide)");
-      return;
-    }
-
-    // Afficher selon le choix
-    if (choice === "image") {
-      updateLastBotMessage(response, "image");
-    } else if (choice === "video") {
-      updateLastBotMessage(response, "video");  // Afficher la vidéo
+    if (choice === "video") {
+      updateLastBotMessage(
+        JSON.stringify({ image: data.image_url, video: data.video_url }),
+        "video"
+      );
+    } else if (choice === "image") {
+      updateLastBotMessage(data.response, "image");
     } else {
-      updateLastBotMessage(response, "text");
+      updateLastBotMessage(data.response, "text");
     }
   } catch (e) {
-    console.error("Erreur réseau :", e);
     updateLastBotMessage("Erreur réseau.");
   }
 }
+
+function updateLastBotMessage(text, mode = "text") {
+  const messages = document.querySelectorAll(".chat-message.bot");
+  if (!messages.length) return;
+
+  const lastBotMsg = messages[messages.length - 1];
+  lastBotMsg.innerHTML = "";
+
+  if (mode === "image") {
+    lastBotMsg.innerHTML = `<img src="${text}" style="max-width:100%; border-radius:10px;">`;
+    return;
+  }
+
+  if (mode === "video") {
+    const obj = JSON.parse(text);
+    lastBotMsg.innerHTML = `
+      <p>Image générée :</p>
+      <img src="${obj.image}" style="max-width:100%; border-radius:10px;">
+      <p>Vidéo animée :</p>
+      <video controls style="max-width:100%; border-radius:10px;">
+        <source src="${obj.video}" type="video/mp4">
+      </video>
+      <div class="chat-actions">
+        <a href="${obj.video}" download="video.mp4">Télécharger</a>
+      </div>
+    `;
+    return;
+  }
+
+  // texte (inchangé)
+  lastBotMsg.innerHTML = `<div class="markdown">${marked.parse(text)}</div>`;
+}
+
 
 
 
