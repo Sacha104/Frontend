@@ -271,26 +271,33 @@ function appendMessage(text, type) {
 // (Modifications dans la fonction qui ajoute le message du bot)
 function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
-  if (messages.length === 0) return;
+  if (!messages.length) return;
 
   const lastBotMsg = messages[messages.length - 1];
-  lastBotMsg.innerHTML = ""; // on vide
+  lastBotMsg.innerHTML = "";
 
-  // === Cas IMAGE ===
   if (mode === "image") {
-    lastBotMsg.innerHTML = `
-      <img src="${text}" alt="Image générée" style="max-width:100%; border-radius:10px;">
-      <div class="chat-actions">
-        <a href="${text}" download="image.png">
-          <i class="fa-solid fa-download"></i> Télécharger
-        </a>
-      </div>
-    `;
-    return; // on sort, pas d’animation texte
+    lastBotMsg.innerHTML = `<img src="${text}" style="max-width:100%; border-radius:10px;">`;
+    return;
   }
 
+  if (mode === "video") {
+    const obj = JSON.parse(text);
+    lastBotMsg.innerHTML = `
+      <p>Image générée :</p>
+      <img src="${obj.image}" style="max-width:100%; border-radius:10px;">
+      <p>Vidéo animée :</p>
+      <video controls style="max-width:100%; border-radius:10px;">
+        <source src="${obj.video}" type="video/mp4">
+      </video>
+      <div class="chat-actions">
+        <a href="${obj.video}" download="video.mp4">Télécharger</a>
+      </div>
+    `;
+    return;
+  }
 
-  // === Cas TEXTE (déjà existant, avec animation progressive) ===
+  // === Cas TEXTE (prompt optimisé) ===
   const plainText = text.trim();
   const typingDiv = document.createElement("div");
   typingDiv.className = "markdown";
@@ -298,7 +305,6 @@ function updateLastBotMessage(text, mode = "text") {
   lastBotMsg.appendChild(typingDiv);
 
   let index = 0;
-
   function typeNextChar() {
     if (index < plainText.length) {
       typingDiv.textContent += plainText.charAt(index);
@@ -306,12 +312,14 @@ function updateLastBotMessage(text, mode = "text") {
       setTimeout(typeNextChar, 12);
     } else {
       typingDiv.innerHTML = marked.parse(plainText);
+
+      // ✅ Ajout du menu choix sortie
       const chatContainer = document.getElementById("chatContainer");
       const actionRow = document.createElement("div");
       actionRow.className = "chat-actions";
       actionRow.innerHTML = `
-       <label for="outputChoice">Choisir le format :</label>
-       <select id="outputChoice">
+        <label for="outputChoice">Choisir le format :</label>
+        <select id="outputChoice">
           <option value="text">Texte</option>
           <option value="image">Image</option>
           <option value="video">Vidéo</option>
@@ -322,7 +330,6 @@ function updateLastBotMessage(text, mode = "text") {
       scrollToBottom();
     }
   }
-
   typeNextChar();
 }
 
