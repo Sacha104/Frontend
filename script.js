@@ -289,21 +289,6 @@ function updateLastBotMessage(text, mode = "text") {
     return; // on sort, pas d’animation texte
   }
 
-  // === Cas VIDEO ===
-  if (mode === "video") {
-    lastBotMsg.innerHTML = `
-      <video controls style="max-width:100%; border-radius:10px;">
-        <source src="${text}" type="video/mp4">
-        Ton navigateur ne supporte pas la vidéo.
-      </video>
-      <div class="chat-actions">
-        <a href="${text}" download="video.mp4">
-          <i class="fa-solid fa-download"></i> Télécharger
-        </a>
-      </div>
-    `;
-    return;
-  }
 
   // === Cas TEXTE (déjà existant, avec animation progressive) ===
   const plainText = text.trim();
