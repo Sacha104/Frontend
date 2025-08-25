@@ -377,7 +377,7 @@ async function sendOptimizedPrompt() {
   if (choice === "text") {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
-  } else if (choice === "image" || choice === "video") {
+  } else if (choice === "image") {
     payload = {
       prompt,
       uid: currentUID,
@@ -387,8 +387,7 @@ async function sendOptimizedPrompt() {
 
   let endpoint = "/respond"; // texte par défaut
   if (choice === "image") endpoint = "/generate_image";
-  if (choice === "video") endpoint = "/generate_video"; // Changer ici pour appeler l'API vidéo
-
+  
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
