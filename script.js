@@ -403,32 +403,80 @@ function updateLastBotMessage(text, mode = "text") {
   const lastBotMsg = messages[messages.length - 1];
   lastBotMsg.innerHTML = "";
 
+  // === Cas IMAGE ===
   if (mode === "image") {
-    lastBotMsg.innerHTML = `<img src="${text}" style="max-width:100%; border-radius:10px;">`;
-    return;
-  }
-
-  if (mode === "video") {
-    const obj = JSON.parse(text);
     lastBotMsg.innerHTML = `
-      <p>Image générée :</p>
-      <img src="${obj.image}" style="max-width:100%; border-radius:10px;">
-      <p>Vidéo animée :</p>
-      <video controls style="max-width:100%; border-radius:10px;">
-        <source src="${obj.video}" type="video/mp4">
-      </video>
+      <img src="${text}" alt="Image générée" style="max-width:100%; border-radius:10px;">
       <div class="chat-actions">
-        <a href="${obj.video}" download="video.mp4">Télécharger</a>
+        <a href="${text}" download="image.png">
+          <i class="fa-solid fa-download"></i> Télécharger
+        </a>
       </div>
     `;
     return;
   }
 
-  // texte (inchangé)
-  lastBotMsg.innerHTML = `<div class="markdown">${marked.parse(text)}</div>`;
+  // === Cas VIDEO ===
+  if (mode === "video") {
+    let obj;
+    try {
+      obj = typeof text === "string" ? JSON.parse(text) : text;
+    } catch {
+      console.error("Réponse vidéo invalide :", text);
+      return;
+    }
+
+    lastBotMsg.innerHTML = `
+      <p>Image générée :</p>
+      <img src="${obj.image}" alt="Image DeepAI" style="max-width:100%; border-radius:10px;">
+      <p>Vidéo animée :</p>
+      <video controls style="max-width:100%; border-radius:10px;">
+        <source src="${obj.video}" type="video/mp4">
+      </video>
+      <div class="chat-actions">
+        <a href="${obj.video}" download="video.mp4">
+          <i class="fa-solid fa-download"></i> Télécharger
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  // === Cas TEXTE (prompt optimisé) ===
+  const plainText = text.trim();
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "markdown";
+  typingDiv.id = "typingArea";
+  lastBotMsg.appendChild(typingDiv);
+
+  let index = 0;
+  function typeNextChar() {
+    if (index < plainText.length) {
+      typingDiv.textContent += plainText.charAt(index);
+      index++;
+      setTimeout(typeNextChar, 12);
+    } else {
+      typingDiv.innerHTML = marked.parse(plainText);
+
+      // ✅ Ici on rajoute le menu ENVOYER À L’IA
+      const chatContainer = document.getElementById("chatContainer");
+      const actionRow = document.createElement("div");
+      actionRow.className = "chat-actions";
+      actionRow.innerHTML = `
+        <label for="outputChoice">Choisir le format :</label>
+        <select id="outputChoice">
+          <option value="text">Texte</option>
+          <option value="image">Image</option>
+          <option value="video">Vidéo</option>
+        </select>
+        <button onclick="sendOptimizedPrompt()">Envoyer à l'IA</button>
+      `;
+      chatContainer.appendChild(actionRow);
+      scrollToBottom();
+    }
+  }
+  typeNextChar();
 }
-
-
 
 
 function copyMessage(button) {
