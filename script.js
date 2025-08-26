@@ -816,6 +816,14 @@ function confirmDelete(e, id) {
       });
   }
 }
+function showBuyCredits() {
+  document.getElementById("buyCreditsModal").style.display = "flex";
+}
+
+function closeBuyCredits() {
+  document.getElementById("buyCreditsModal").style.display = "none";
+}
+
 async function startCheckout() {
   const amount = parseInt(document.getElementById("amountSelect").value);
   if (!amount) return alert("Choisis un montant");
@@ -828,7 +836,7 @@ async function startCheckout() {
 
   const data = await res.json();
   if (data.url) {
-    window.location.href = data.url; // redirige vers Stripe Checkout
+    window.location.href = data.url; // redirection vers Stripe Checkout
   } else {
     alert("Erreur paiement: " + (data.error || "inconnue"));
   }
