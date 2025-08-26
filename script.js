@@ -816,6 +816,23 @@ function confirmDelete(e, id) {
       });
   }
 }
+async function startCheckout() {
+  const amount = parseInt(document.getElementById("amountSelect").value);
+  if (!amount) return alert("Choisis un montant");
+
+  const res = await fetch(`${backendURL}/create-checkout-session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid: currentUID, amount })
+  });
+
+  const data = await res.json();
+  if (data.url) {
+    window.location.href = data.url; // redirige vers Stripe Checkout
+  } else {
+    alert("Erreur paiement: " + (data.error || "inconnue"));
+  }
+}
 
 function toggleLang() {
   const translations = {  
