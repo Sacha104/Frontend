@@ -936,3 +936,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const accountIcon = document.getElementById("accountIcon");
+  const accountMenu = document.getElementById("accountMenu");
+
+  if (accountIcon && accountMenu) {
+    accountIcon.addEventListener("click", () => {
+      // alterne entre visible et caché
+      if (accountMenu.style.display === "none" || accountMenu.style.display === "") {
+        accountMenu.style.display = "block";
+      } else {
+        accountMenu.style.display = "none";
+      }
+    });
+  }
+
+  // ferme le menu si on clique ailleurs
+  document.addEventListener("click", (e) => {
+    if (!accountIcon.contains(e.target) && !accountMenu.contains(e.target)) {
+      accountMenu.style.display = "none";
+    }
+  });
+});
