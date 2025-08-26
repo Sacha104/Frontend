@@ -100,6 +100,7 @@
 
     <div id="accountMenu" class="account-menu" style="display: none;">
       <ul>
+        <li onclick="showBuyCredits()">💳 Acheter des crédits</li>
         <li>Paramètres</li>
         <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
       </ul>
@@ -119,5 +120,29 @@
   </div>
 
   <script src="script.js"></script>
+  <!-- Modal Achat Crédits -->
+  <div id="buyCreditsModal" class="modal" style="display:none;">
+    <div class="modal-content">
+       <span class="close" onclick="closeBuyCredits()">&times;</span>
+       <h2>Acheter des crédits</h2>
+       <p>Choisis ton montant (10$ = 5000 crédits) :</p>
+
+       <select id="amountSelect">
+          <option value="10">10$ (5000 crédits)</option>
+          <option value="20">20$ (10000 crédits)</option>
+          <option value="30">30$ (15000 crédits)</option>
+          <option value="40">40$ (20000 crédits)</option>
+          <option value="50">50$ (25000 crédits)</option>
+          <option value="60">60$ (30000 crédits)</option>
+          <option value="70">70$ (35000 crédits)</option>
+          <option value="80">80$ (40000 crédits)</option>
+          <option value="90">90$ (45000 crédits)</option>
+          <option value="100">100$ (50000 crédits)</option>
+       </select>
+       <br><br>
+       <button onclick="startCheckout()" class="btn-primary">Payer</button>
+    </div>
+  </div>
+
 </body>
 </html>
