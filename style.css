@@ -958,3 +958,29 @@ h1 {
   font-size: 28px;
   cursor: pointer;
 }
+.mode-selector {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0.5rem auto;
+  font-size: 1rem;
+  font-weight: normal;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.mode-selector span {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.mode-selector span:hover {
+  color: #38bdf8;
+}
+
+.mode-selector .active {
+  font-weight: bold;
+  color: #38bdf8;
+  text-decoration: underline;
+}
