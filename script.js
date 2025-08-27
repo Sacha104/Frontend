@@ -213,7 +213,8 @@ async function handleUserMessage() {
       body: JSON.stringify({ 
         prompt: message, 
         uid: currentUID, 
-        conversationId: currentConversationId 
+        conversationId: currentConversationId, 
+        mode: currentMode 
       })
     });
     clearTimeout(timeout);
