@@ -112,6 +112,12 @@
 
     <div class="main-content">
       <div id="chatContainer" class="chat-container"></div>
+      <div id="modeSelector" class="mode-selector">
+         <span id="mode-text" onclick="setMode('text')" class="active">Texte</span>
+         <span id="mode-image" onclick="setMode('image')">Image</span>
+         <span id="mode-video" onclick="setMode('video')">Vidéo</span>
+      </div>
+
       <div class="chat-input-wrapper">
         <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
         <button onclick="handleUserMessage()">Envoyer</button>
