@@ -460,6 +460,12 @@ function updateLastBotMessage(text, mode = "text") {
 
       // ✅ Ici on rajoute le menu ENVOYER À L’IA
       const chatContainer = document.getElementById("chatContainer");
+      const actionRow = document.createElement("div");
+          actionRow.className = "chat-actions";
+          actionRow.innerHTML = ` 
+            <button onclick="sendOptimizedPrompt()">Envoyer à l'IA</button>
+          `;
+      chatContainer.appendChild(actionRow);
       scrollToBottom();
     }
   }
