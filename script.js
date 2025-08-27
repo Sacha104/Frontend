@@ -14,6 +14,7 @@ const backendURL = "https://prompt-ai-naa1.onrender.com";
 
 let currentUID = null;
 let currentConversationId = null;
+let currentMode = "text"; 
 const providerGoogle = new firebase.auth.GoogleAuthProvider();
 const providerApple = new firebase.auth.OAuthProvider('apple.com');
 
@@ -340,8 +341,7 @@ async function sendOptimizedPrompt() {
     return;
   }
 
-  const choiceEl = document.getElementById("outputChoice");
-  const choice = choiceEl ? choiceEl.value : "text";
+  const choice = currentMode; 
 
   const botMessages = document.querySelectorAll(".chat-message.bot");
   if (!botMessages.length) return;
@@ -460,18 +460,6 @@ function updateLastBotMessage(text, mode = "text") {
 
       // ✅ Ici on rajoute le menu ENVOYER À L’IA
       const chatContainer = document.getElementById("chatContainer");
-      const actionRow = document.createElement("div");
-      actionRow.className = "chat-actions";
-      actionRow.innerHTML = `
-        <label for="outputChoice">Choisir le format :</label>
-        <select id="outputChoice">
-          <option value="text">Texte</option>
-          <option value="image">Image</option>
-          <option value="video">Vidéo</option>
-        </select>
-        <button onclick="sendOptimizedPrompt()">Envoyer à l'IA</button>
-      `;
-      chatContainer.appendChild(actionRow);
       scrollToBottom();
     }
   }
@@ -840,6 +828,17 @@ async function startCheckout() {
   } else {
     alert("Erreur paiement: " + (data.error || "inconnue"));
   }
+}
+function setMode(mode) {
+  currentMode = mode;
+
+  // Retire la classe active de tous
+  document.querySelectorAll(".mode-selector span").forEach(el => {
+    el.classList.remove("active");
+  });
+
+  // Ajoute la classe active au bouton choisi
+  document.getElementById("mode-" + mode).classList.add("active");
 }
 
 function toggleLang() {
