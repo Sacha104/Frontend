@@ -319,12 +319,6 @@ function updateLastBotMessage(text, mode = "text") {
       const actionRow = document.createElement("div");
       actionRow.className = "chat-actions";
       actionRow.innerHTML = `
-        <label for="outputChoice">Choisir le format :</label>
-        <select id="outputChoice">
-          <option value="text">Texte</option>
-          <option value="image">Image</option>
-          <option value="video">Vidéo</option>
-        </select>
         <button onclick="sendOptimizedPrompt()">Envoyer à l'IA</button>
       `;
       chatContainer.appendChild(actionRow);
