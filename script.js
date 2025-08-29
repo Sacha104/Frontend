@@ -364,7 +364,6 @@ async function sendOptimizedPrompt() {
     const size = document.getElementById("imageSize").value.split("x");
     payload.width = parseInt(size[0]);
     payload.height = parseInt(size[1]);
-  }
   } else if (choice === "video") {
     endpoint = "/generate_and_animate";
     payload.uid = currentUID;
