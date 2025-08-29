@@ -424,6 +424,8 @@ async function sendOptimizedPrompt() {
       updateLastBotMessage(data.response, "text");
     }
 
+  }
+
 }
 
 function updateLastBotMessage(text, mode = "text") {
