@@ -357,13 +357,24 @@ async function sendOptimizedPrompt() {
     payload.conversationId = currentConversationId;
   } else if (choice === "image") {
     endpoint = "/generate_image";
-    payload.uid = currentUID;
-    payload.conversationId = currentConversationId;
+    payload = {
+      uid: currentUID,
+      conversationId: currentConversationId,
+      prompt,
+      size: document.getElementById("sizeSelect").value,
+      imageMode: document.getElementById("imageMode").value
+    };
   } else if (choice === "video") {
     endpoint = "/generate_and_animate";
-    payload.uid = currentUID;
-    payload.conversationId = currentConversationId;
+    payload = {
+      uid: currentUID,
+      conversationId: currentConversationId,
+      prompt,
+      size: document.getElementById("sizeSelect").value,
+      duration: parseInt(document.getElementById("videoDuration").value)
+    };
   }
+
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -833,14 +844,20 @@ async function startCheckout() {
 function setMode(mode) {
   currentMode = mode;
 
-  // Retire la classe active de tous
+  // Retire la classe active
   document.querySelectorAll(".mode-selector span").forEach(el => {
     el.classList.remove("active");
   });
-
-  // Ajoute la classe active au bouton choisi
   document.getElementById("mode-" + mode).classList.add("active");
+
+  // Affiche le panneau d’options
+  document.getElementById("optionsPanel").style.display = "block";
+
+  // Spécifique image/vidéo
+  document.getElementById("imageOptions").style.display = (mode === "image") ? "block" : "none";
+  document.getElementById("videoOptions").style.display = (mode === "video") ? "block" : "none";
 }
+
 
 function toggleLang() {
   const translations = {  
