@@ -116,6 +116,16 @@
          <span id="mode-image" onclick="setMode('image')">Image</span>
          <span id="mode-video" onclick="setMode('video')">Vidéo</span>
       </div>
+      <!-- Options de taille pour la génération d'image -->
+      <div id="imageOptions" style="display:none; margin:10px 0;">
+       <label for="imageSize">📐 Taille :</label>
+       <select id="imageSize">
+          <option value="512x512">512×512 (carré)</option>
+          <option value="768x512">768×512 (paysage)</option>
+          <option value="512x768">512×768 (portrait)</option>
+       </select>
+      </div>
+
       <div id="chatContainer" class="chat-container"></div>
       <div class="chat-input-wrapper">
         <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
