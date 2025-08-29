@@ -117,6 +117,35 @@
          <span id="mode-video" onclick="setMode('video')">Vidéo</span>
       </div>
       <div id="chatContainer" class="chat-container"></div>
+      <!-- Options dynamiques pour image / vidéo -->
+      <div id="optionsPanel" class="options-panel" style="display:none; margin: 10px 0;">
+            <!-- Choix taille -->
+            <label for="sizeSelect">Taille :</label>
+            <select id="sizeSelect">
+                 <option value="portrait">Portrait (1080x1920)</option>
+                 <option value="landscape">Paysage (1920x1080)</option>
+                 <option value="square">Carré (1024x1024)</option>
+            </select>
+
+            <!-- Options spécifiques Image -->
+        <div id="imageOptions" style="display:none; margin-top: 8px;">
+            <label for="imageMode">Mode :</label>
+            <select id="imageMode">
+                  <option value="normal">Normal</option>
+                  <option value="genius">Genius</option>
+            </select>
+        </div>
+
+            <!-- Options spécifiques Vidéo -->
+        <div id="videoOptions" style="display:none; margin-top: 8px;">
+            <label for="videoDuration">Durée :</label>
+            <select id="videoDuration">
+                  <option value="5">5s</option>
+                  <option value="10">10s</option>
+            </select>
+        </div>
+      </div>
+
       <div class="chat-input-wrapper">
         <input type="text" id="chatInput" placeholder="Écris ta demande ici…" onkeydown="handleChatEnter(event)">
         <button onclick="handleUserMessage()">Envoyer</button>
