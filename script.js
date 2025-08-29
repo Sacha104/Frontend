@@ -71,6 +71,18 @@ auth.onAuthStateChanged(user => {
     if (wrapper) wrapper.style.display = "flex";
     if (icon) icon.style.display = "none";
   }
+    if (user) {
+    currentUID = user.uid;
+    document.getElementById("authSection").style.display = "none";
+    document.getElementById("appSection").style.display = "flex";
+  
+    // ✅ afficher crédits au login
+    fetchCredits();
+
+    loadConversationHistory();
+    loadLastConversation();
+   }
+
 });
 
 
@@ -233,6 +245,41 @@ async function handleUserMessage() {
     console.error("Erreur réseau :", error);
     updateLastBotMessage("Erreur réseau ou délai dépassé.");
   }
+  try {
+  const res = await fetch(`${backendURL}${endpoint}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.status === 402) {
+    alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
+    return;
+  }
+
+  const data = await res.json();
+
+  if (choice === "video") {
+    updateLastBotMessage(
+      JSON.stringify({ image: data.image_url, video: data.video_url }),
+      "video"
+    );
+  } else if (choice === "image") {
+    updateLastBotMessage(data.response, "image");
+  } else {
+    updateLastBotMessage(data.response, "text");
+  }
+
+  // ✅ mise à jour solde après génération
+  fetchCredits();
+
+} catch (e) {
+  updateLastBotMessage("Erreur réseau.");
+}
+
 }
 
 function appendMessage(text, type) {
@@ -399,6 +446,41 @@ async function sendOptimizedPrompt() {
   } catch (e) {
     updateLastBotMessage("Erreur réseau.");
   }
+  try {
+  const res = await fetch(`${backendURL}${endpoint}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.status === 402) {
+    alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
+    return;
+  }
+
+  const data = await res.json();
+
+  if (choice === "video") {
+    updateLastBotMessage(
+      JSON.stringify({ image: data.image_url, video: data.video_url }),
+      "video"
+    );
+  } else if (choice === "image") {
+    updateLastBotMessage(data.response, "image");
+  } else {
+    updateLastBotMessage(data.response, "text");
+  }
+
+  // ✅ mise à jour solde après génération
+  fetchCredits();
+
+} catch (e) {
+  updateLastBotMessage("Erreur réseau.");
+}
+
 }
 
 function updateLastBotMessage(text, mode = "text") {
@@ -557,6 +639,41 @@ function sendToChat(linkElement) {
     scrollToBottom();
   })
   .catch(() => updateLastBotMessage("Erreur réseau."));
+  try {
+  const res = await fetch(`${backendURL}${endpoint}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.status === 402) {
+    alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
+    return;
+  }
+
+  const data = await res.json();
+
+  if (choice === "video") {
+    updateLastBotMessage(
+      JSON.stringify({ image: data.image_url, video: data.video_url }),
+      "video"
+    );
+  } else if (choice === "image") {
+    updateLastBotMessage(data.response, "image");
+  } else {
+    updateLastBotMessage(data.response, "text");
+  }
+
+  // ✅ mise à jour solde après génération
+  fetchCredits();
+
+} catch (e) {
+  updateLastBotMessage("Erreur réseau.");
+}
+
 }
 
 
