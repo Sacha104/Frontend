@@ -237,6 +237,12 @@ async function handleUserMessage() {
 
     const optimized = data.response || "Erreur IA.";
     updateLastBotMessage(optimized);
+    if (res.status === 402) {
+       alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
+       updateLastBotMessage("Crédits insuffisants.", "text");
+       return;
+    }
+
 
     const actions = document.createElement("div");
     actions.className = "chat-actions";
@@ -245,40 +251,6 @@ async function handleUserMessage() {
     console.error("Erreur réseau :", error);
     updateLastBotMessage("Erreur réseau ou délai dépassé.");
   }
-  try {
-  const res = await fetch(`${backendURL}${endpoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (res.status === 402) {
-    alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
-    return;
-  }
-
-  const data = await res.json();
-
-  if (choice === "video") {
-    updateLastBotMessage(
-      JSON.stringify({ image: data.image_url, video: data.video_url }),
-      "video"
-    );
-  } else if (choice === "image") {
-    updateLastBotMessage(data.response, "image");
-  } else {
-    updateLastBotMessage(data.response, "text");
-  }
-
-  // ✅ mise à jour solde après génération
-  fetchCredits();
-
-} catch (e) {
-  updateLastBotMessage("Erreur réseau.");
-}
 
 }
 
@@ -398,6 +370,8 @@ async function sendOptimizedPrompt() {
 
   let endpoint = "/respond";
   let payload = { prompt };
+  appendMessage(prompt, "user"); // ✅ l’utilisateur “renvoie” le prompt
+
 
   if (choice === "text") {
     payload.uid = currentUID;
@@ -426,60 +400,29 @@ async function sendOptimizedPrompt() {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
+    if (res.status === 402) {
+      alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
+      updateLastBotMessage("Crédits insuffisants.", "text");
+      return;
+    }
+
     const data = await res.json();
     if (choice === "video") {
-      updateLastBotMessage(
-        JSON.stringify({ image: data.image_url, video: data.video_url }),
-        "video"
-      );
+       updateLastBotMessage(
+          JSON.stringify({ image: data.image_url, video: data.video_url }),
+          "video"
+       );
     } else if (choice === "image") {
       updateLastBotMessage(data.response, "image");
     } else {
       updateLastBotMessage(data.response, "text");
     }
-  } catch (e) {
-    updateLastBotMessage("Erreur réseau.");
-  }
-  try {
-  const res = await fetch(`${backendURL}${endpoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (res.status === 402) {
-    alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
-    return;
-  }
-
-  const data = await res.json();
-
-  if (choice === "video") {
-    updateLastBotMessage(
-      JSON.stringify({ image: data.image_url, video: data.video_url }),
-      "video"
-    );
-  } else if (choice === "image") {
-    updateLastBotMessage(data.response, "image");
-  } else {
-    updateLastBotMessage(data.response, "text");
-  }
-
-  // ✅ mise à jour solde après génération
-  fetchCredits();
-
-} catch (e) {
-  updateLastBotMessage("Erreur réseau.");
-}
 
 }
 
@@ -514,8 +457,6 @@ function updateLastBotMessage(text, mode = "text") {
     }
 
     lastBotMsg.innerHTML = `
-      <p>Image générée :</p>
-      <img src="${obj.image}" alt="Image DeepAI" style="max-width:100%; border-radius:10px;">
       <p>Vidéo animée :</p>
       <video controls style="max-width:100%; border-radius:10px;">
         <source src="${obj.video}" type="video/mp4">
@@ -639,40 +580,6 @@ function sendToChat(linkElement) {
     scrollToBottom();
   })
   .catch(() => updateLastBotMessage("Erreur réseau."));
-  try {
-  const res = await fetch(`${backendURL}${endpoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (res.status === 402) {
-    alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
-    return;
-  }
-
-  const data = await res.json();
-
-  if (choice === "video") {
-    updateLastBotMessage(
-      JSON.stringify({ image: data.image_url, video: data.video_url }),
-      "video"
-    );
-  } else if (choice === "image") {
-    updateLastBotMessage(data.response, "image");
-  } else {
-    updateLastBotMessage(data.response, "text");
-  }
-
-  // ✅ mise à jour solde après génération
-  fetchCredits();
-
-} catch (e) {
-  updateLastBotMessage("Erreur réseau.");
-}
 
 }
 
@@ -746,6 +653,8 @@ async function loadConversation(conversationId) {
       "Réponse en cours…",
       "Erreur réseau ou délai dépassé.",
       "Erreur IA."
+      "Génération en cours…",
+
     ];
 
     data.messages.forEach(m => {
@@ -773,6 +682,22 @@ async function loadConversation(conversationId) {
         lastMsg.innerHTML = `
            <div class="markdown">${marked.parse(m.text)}</div>
         `;
+        if (m.video_url) {
+            const last = document.querySelectorAll(".chat-message.bot");
+            const lastMsg = last[last.length - 1];
+            lastMsg.innerHTML = `
+                <p>Vidéo animée :</p>
+                <video controls style="max-width:100%; border-radius:10px;">
+                   <source src="${m.video_url}" type="video/mp4">
+                </video>
+                <div class="chat-actions">
+                   <a href="${m.video_url}" download="video.mp4">
+                       <i class="fa-solid fa-download"></i> Télécharger
+                   </a>
+                </div>
+             `;
+        }
+
       }
     });
 
