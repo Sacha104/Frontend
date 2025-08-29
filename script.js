@@ -359,6 +359,12 @@ async function sendOptimizedPrompt() {
     endpoint = "/generate_image";
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
+
+    // 👉 Récupérer la taille choisie dans le select
+    const size = document.getElementById("imageSize").value.split("x");
+    payload.width = parseInt(size[0]);
+    payload.height = parseInt(size[1]);
+  }
   } else if (choice === "video") {
     endpoint = "/generate_and_animate";
     payload.uid = currentUID;
@@ -840,6 +846,10 @@ function setMode(mode) {
 
   // Ajoute la classe active au bouton choisi
   document.getElementById("mode-" + mode).classList.add("active");
+
+  // 👉 Affiche le menu de tailles uniquement pour le mode image
+  document.getElementById("imageOptions").style.display =
+    (mode === "image") ? "block" : "none";
 }
 
 function toggleLang() {
