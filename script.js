@@ -368,7 +368,12 @@ async function sendOptimizedPrompt() {
     endpoint = "/generate_and_animate";
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
+
+    // 👉 Récupère la durée choisie
+    const duration = document.getElementById("videoDuration").value;
+    payload.duration = parseInt(duration);
   }
+
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -838,18 +843,16 @@ async function startCheckout() {
 function setMode(mode) {
   currentMode = mode;
 
-  // Retire la classe active de tous
   document.querySelectorAll(".mode-selector span").forEach(el => {
     el.classList.remove("active");
   });
-
-  // Ajoute la classe active au bouton choisi
   document.getElementById("mode-" + mode).classList.add("active");
 
-  // 👉 Affiche le menu de tailles uniquement pour le mode image
-  document.getElementById("imageOptions").style.display =
-    (mode === "image") ? "block" : "none";
+  // 👉 Affiche seulement les options nécessaires
+  document.getElementById("imageOptions").style.display = (mode === "image") ? "block" : "none";
+  document.getElementById("videoOptions").style.display = (mode === "video") ? "block" : "none";
 }
+
 
 function toggleLang() {
   const translations = {  
