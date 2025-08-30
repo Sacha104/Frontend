@@ -424,7 +424,9 @@ async function sendOptimizedPrompt() {
       updateLastBotMessage(data.response, "text");
     }
 
-  }
+  } catch (err) {
+    console.error("Erreur lors de l’appel backend :", err);
+    updateLastBotMessage("❌ Une erreur est survenue.", "text");
 
 }
 
