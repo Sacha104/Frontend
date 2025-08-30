@@ -372,7 +372,6 @@ async function sendOptimizedPrompt() {
   let payload = { prompt };
   appendMessage(prompt, "user"); // ✅ l’utilisateur “renvoie” le prompt
 
-
   if (choice === "text") {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
@@ -381,7 +380,6 @@ async function sendOptimizedPrompt() {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
 
-    // 👉 Récupérer la taille choisie dans le select
     const size = document.getElementById("imageSize").value.split("x");
     payload.width = parseInt(size[0]);
     payload.height = parseInt(size[1]);
@@ -390,11 +388,9 @@ async function sendOptimizedPrompt() {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
 
-    // 👉 Récupère la durée choisie
     const duration = document.getElementById("videoDuration").value;
     payload.duration = parseInt(duration);
   }
-
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -427,9 +423,9 @@ async function sendOptimizedPrompt() {
   } catch (err) {
     console.error("Erreur lors de l’appel backend :", err);
     updateLastBotMessage("❌ Une erreur est survenue.", "text");
-
   }
 }
+
 
 function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
