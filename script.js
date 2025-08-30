@@ -653,8 +653,8 @@ async function loadConversation(conversationId) {
       "Optimisation du prompt en cours…",
       "Réponse en cours…",
       "Erreur réseau ou délai dépassé.",
-      "Erreur IA."
-      "Génération en cours…",
+      "Erreur IA.",
+      "Génération en cours…"
 
     ];
 
