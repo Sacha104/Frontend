@@ -71,18 +71,6 @@ auth.onAuthStateChanged(user => {
     if (wrapper) wrapper.style.display = "flex";
     if (icon) icon.style.display = "none";
   }
-    if (user) {
-    currentUID = user.uid;
-    document.getElementById("authSection").style.display = "none";
-    document.getElementById("appSection").style.display = "flex";
-  
-    // ✅ afficher crédits au login
-    fetchCredits();
-
-    loadConversationHistory();
-    loadLastConversation();
-   }
-
 });
 
 
@@ -237,12 +225,6 @@ async function handleUserMessage() {
 
     const optimized = data.response || "Erreur IA.";
     updateLastBotMessage(optimized);
-    if (res.status === 402) {
-       alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
-       updateLastBotMessage("Crédits insuffisants.", "text");
-       return;
-    }
-
 
     const actions = document.createElement("div");
     actions.className = "chat-actions";
@@ -251,7 +233,6 @@ async function handleUserMessage() {
     console.error("Erreur réseau :", error);
     updateLastBotMessage("Erreur réseau ou délai dépassé.");
   }
-
 }
 
 function appendMessage(text, type) {
@@ -370,7 +351,6 @@ async function sendOptimizedPrompt() {
 
   let endpoint = "/respond";
   let payload = { prompt };
-  appendMessage(prompt, "user"); // ✅ l’utilisateur “renvoie” le prompt
 
   if (choice === "text") {
     payload.uid = currentUID;
@@ -380,6 +360,7 @@ async function sendOptimizedPrompt() {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
 
+    // 👉 Récupérer la taille choisie dans le select
     const size = document.getElementById("imageSize").value.split("x");
     payload.width = parseInt(size[0]);
     payload.height = parseInt(size[1]);
@@ -388,44 +369,37 @@ async function sendOptimizedPrompt() {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
 
+    // 👉 Récupère la durée choisie
     const duration = document.getElementById("videoDuration").value;
     payload.duration = parseInt(duration);
   }
+
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
       method: "POST",
       headers: {
-         "Content-Type": "application/json",
-         "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
-    if (res.status === 402) {
-      alert("❌ Crédits insuffisants. Recharge ta cagnotte !");
-      updateLastBotMessage("Crédits insuffisants.", "text");
-      return;
-    }
-
     const data = await res.json();
     if (choice === "video") {
-       updateLastBotMessage(
-          JSON.stringify({ image: data.image_url, video: data.video_url }),
-          "video"
-       );
+      updateLastBotMessage(
+        JSON.stringify({ image: data.image_url, video: data.video_url }),
+        "video"
+      );
     } else if (choice === "image") {
       updateLastBotMessage(data.response, "image");
     } else {
       updateLastBotMessage(data.response, "text");
     }
-
-  } catch (err) {
-    console.error("Erreur lors de l’appel backend :", err);
-    updateLastBotMessage("❌ Une erreur est survenue.", "text");
+  } catch (e) {
+    updateLastBotMessage("Erreur réseau.");
   }
 }
-
 
 function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
@@ -458,6 +432,8 @@ function updateLastBotMessage(text, mode = "text") {
     }
 
     lastBotMsg.innerHTML = `
+      <p>Image générée :</p>
+      <img src="${obj.image}" alt="Image DeepAI" style="max-width:100%; border-radius:10px;">
       <p>Vidéo animée :</p>
       <video controls style="max-width:100%; border-radius:10px;">
         <source src="${obj.video}" type="video/mp4">
@@ -581,7 +557,6 @@ function sendToChat(linkElement) {
     scrollToBottom();
   })
   .catch(() => updateLastBotMessage("Erreur réseau."));
-
 }
 
 
@@ -653,9 +628,7 @@ async function loadConversation(conversationId) {
       "Optimisation du prompt en cours…",
       "Réponse en cours…",
       "Erreur réseau ou délai dépassé.",
-      "Erreur IA.",
-      "Génération en cours…"
-
+      "Erreur IA."
     ];
 
     data.messages.forEach(m => {
@@ -683,22 +656,6 @@ async function loadConversation(conversationId) {
         lastMsg.innerHTML = `
            <div class="markdown">${marked.parse(m.text)}</div>
         `;
-        if (m.video_url) {
-            const last = document.querySelectorAll(".chat-message.bot");
-            const lastMsg = last[last.length - 1];
-            lastMsg.innerHTML = `
-                <p>Vidéo animée :</p>
-                <video controls style="max-width:100%; border-radius:10px;">
-                   <source src="${m.video_url}" type="video/mp4">
-                </video>
-                <div class="chat-actions">
-                   <a href="${m.video_url}" download="video.mp4">
-                       <i class="fa-solid fa-download"></i> Télécharger
-                   </a>
-                </div>
-             `;
-        }
-
       }
     });
 
