@@ -49,6 +49,16 @@
             </span>
           </div>
           <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" required />
+            <div class="checkbox-terms">
+                <input type="checkbox" id="acceptTerms" required>
+                <label for="acceptTerms">
+                   J’accepte les 
+                   <a href="#" onclick="openModal('termsModal'); return false;">Conditions d’utilisation</a> 
+                   et la 
+                   <a href="#" onclick="openModal('privacyModal'); return false;">Politique de confidentialité</a>.
+                </label>
+            </div>
+
           <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
         </div>
         <!-- Réinitialisation du mot de passe -->
@@ -103,6 +113,8 @@
         <li id="creditBalance">💰 Crédits : ...</li> <!-- ✅ affichage solde -->
         <li onclick="showBuyCredits()">💳 Acheter des crédits</li>
         <li>Paramètres</li>
+        <li><a href="terms.html" target="_blank">📜 Conditions d’utilisation</a></li>
+        <li><a href="privacy.html" target="_blank">🔒 Politique de confidentialité</a></li>
         <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
       </ul>
     </div>
@@ -154,6 +166,148 @@
           </div>
        </div>
 
+  </div>
+<!-- Modal Conditions -->
+  <div id="termsModal" class="modal fullscreen" style="display:none;">
+      <div class="modal-content">
+          <span class="close" onclick="closeModal('termsModal')">&times;</span>
+          <h1>📜 Conditions d’utilisation</h1>
+          <div class="legal-content">
+          Conditions d'utilisation
+Dernière mise à jour : 13/09/2025
+Bienvenue sur Pr@mpt (https://prompt-me-up). En utilisant notre site et nos services, vous acceptez les présentes Conditions d'utilisation. Si vous n'acceptez pas ces conditions, n'utilisez pas nos services.
+1. Définitions
+•	Service : la plateforme en ligne fournie par Pr@mpt, incluant la génération de prompts, d'images et tout contenu associé.
+•	Utilisateur : toute personne qui accède ou utilise le Service.
+•	Contenu généré : textes, prompts, images, médias ou autres éléments créés par le Service via des API tierces ou nos outils internes.
+•	Données utilisateur : informations que vous fournissez lors de l'inscription ou par l'utilisation du Service (par exemple : adresse e mail, images téléchargées, paramètres).
+2. Acceptation des conditions
+En créant un compte ou en utilisant le Service, vous acceptez d'être lié par ces Conditions d'utilisation ainsi que par notre Politique de confidentialité. Nous pouvons modifier ces conditions ; les modifications prennent effet dès leur publication sur le site. Nous vous informerons, lorsque possible, des changements importants.
+3. Description du service
+Pr@mpt propose des outils de génération de prompts et de contenu reposant sur des API tierces. Le Service permet de générer des images et du texte à partir de vos instructions, de stocker et d'accéder aux éléments générés, et d'administrer votre compte.
+4. Compte utilisateur
+•	Vous devez fournir une adresse e mail valide pour créer un compte. Vous êtes responsable de la confidentialité de vos identifiants et de toute activité effectuée via votre compte.
+•	Nous nous réservons le droit de suspendre ou fermer des comptes en cas de violation des présentes conditions.
+5. Accès aux images générées et aux données
+•	En utilisant le Service, vous reconnaissez et acceptez que Pr@mpt et ses prestataires techniques (notamment les fournisseurs d'API) puissent stocker et accéder aux images et aux autres contenus générés pour les besoins du fonctionnement, de la maintenance, de l'amélioration du Service et de la conformité légale.
+•	Les images générées sont conservées pour une durée maximale de deux semaines, après quoi elles sont automatiquement supprimées de nos systèmes.
+•	Nous pouvons également accéder aux adresses e mail utilisées pour l'inscription afin de gérer les comptes, envoyer des notifications et assurer la sécurité et la conformité.
+•	Si vous téléversez des images ou fournissez des données personnelles en relation avec la génération de contenu, vous garantissez posséder les droits nécessaires ou avoir obtenu le consentement des personnes concernées.
+6. Propriété intellectuelle
+•	Vous conservez la propriété des textes et fichiers que vous téléversez.
+•	Concernant le contenu généré : sauf disposition contraire indiquée lors de l'utilisation du Service, nous vous accordons une licence non exclusive, mondiale et transférable pour utiliser le contenu généré. Toutefois, notez que certaines images ou sorties peuvent être soumises aux conditions d'utilisation des API tierces (dont les licences peuvent varier). Vous acceptez de respecter ces conditions tierces.
+•	Vous garantissez que le contenu que vous soumettez n'enfreint pas les droits d'un tiers (copyright, marque, droit à l'image, etc.).
+7. Utilisation autorisée et interdite
+Vous acceptez de n'utiliser le Service que conformément à la loi et aux présentes conditions. Sont notamment interdits :
+•	la création, la diffusion ou la facilitation de contenus illégaux, diffamatoires, pornographiques impliquant des mineurs, ou violents incitant au crime ;
+•	l'utilisation du Service pour harceler, menacer, ou violer la vie privée d'autrui ;
+•	le contournement de mesures techniques de protection ;
+•	l'utilisation du Service pour distribuer des logiciels malveillants ou exécuter des activités frauduleuses ;
+•	l'utilisation à des fins de revente non autorisée si votre abonnement ne le permet pas.
+8. Sécurité et confidentialité
+•	Nous mettons en œuvre des mesures techniques et organisationnelles raisonnables pour protéger vos données. Néanmoins, aucune méthode de transmission ou de stockage n'est totalement sécurisée. Nous ne pouvons garantir la sécurité absolue des données.
+•	Pour toutes questions relatives à la gestion des données personnelles, consultez notre Politique de confidentialité. Cette dernière décrit comment nous collectons, utilisons, conservons et supprimons vos données, y compris les adresses e mail et les images générées.
+•	Vous pouvez demander la suppression de votre compte et des données associées conformément aux options disponibles dans votre espace utilisateur et à la Politique de confidentialité.
+9. API tierces et limitations
+•	Le Service repose en tout ou partie sur des API tierces. Ces fournisseurs peuvent imposer des limites, des délais, des politiques de contenu et des licences indépendantes des présentes Conditions. Nous ne sommes pas responsables des changements, interruptions ou limitations imposées par ces tiers.
+10. Garantie et limitation de responsabilité
+•	LE SERVICE EST FOURNI "EN L'ÉTAT" SANS GARANTIE D'AUCUNE SORTE, EXPLICITE OU IMPLICITE. DANS LES LIMITES PERMISES PAR LA LOI, Pr@mpt DÉCLINE TOUTE RESPONSABILITÉ RELATIVE AUX ERREURS, INTERRUPTIONS, PERTE DE DONNÉES, OU RÉSULTATS INEXACTS.
+•	Nous ne serons pas responsables des dommages indirects, spéciaux, accessoires ou immatériels, sauf disposition impérative légale.
+•	La responsabilité totale de Pr@mpt pour tout dommage direct résultant de l'utilisation du Service est limitée au montant payé par l'Utilisateur au titre des 12 derniers mois, ou à un montant forfaitaire déterminé si vous êtes un utilisateur gratuit, selon la loi applicable.
+11. Indemnisation
+Vous acceptez d'indemniser et de dégager Pr@mpt et ses dirigeants, employés et partenaires de toute réclamation, dommage, perte ou dépense résultant de votre violation des présentes conditions ou de votre utilisation illégale du Service.
+12. Signalement des abus
+Si vous constatez un contenu enfreignant la loi ou ces Conditions, veuillez le signaler via [adresse e mail de contact] ou le formulaire de contact disponible sur le site. Nous enquêterons et prendrons les mesures appropriées.
+13. Tarifs et remboursements
+Les informations tarifaires et les fonctionnalités des offres payantes sont indiquées sur le site. Les conditions de remboursement (s'il y en a) y sont également précisées. Nous nous réservons le droit de modifier les prix à tout moment, sous réserve d'un préavis raisonnable pour les abonnés payants.
+14. Résiliation
+Nous pouvons suspendre, restreindre ou résilier votre accès en cas de violation de ces Conditions. Vous pouvez résilier votre compte à tout moment via votre espace utilisateur ; certaines obligations (par ex. paiements dus) survivent à la résiliation.
+15. Modifications du Service
+Nous pouvons modifier, interrompre temporairement ou définitivement le Service (ou une partie de celui ci) à tout moment. Nous ne serons pas responsables envers vous si le Service est modifié ou interrompu.
+16. Droit applicable et juridiction
+Ces Conditions sont régies par le droit [indiquer le pays, ex. français]. Tout litige relatif à leur interprétation ou exécution sera soumis aux tribunaux compétents du ressort de [ville ou tribunal], sauf disposition légale impérative contraire.
+17. Dispositions diverses
+•	Si une disposition des présentes est jugée invalide, les autres dispositions demeurent en vigueur.
+•	Aucune renonciation à une disposition n'est effective sans un écrit signé par Pr@mpt.
+18. Contact
+Pour toute question sur ces Conditions d'utilisation, contactez nous :
+•	Email : [adresse e mail de contact]
+•	Adresse : [adresse physique, optionnel]
+
+          </div>
+      </div>
+  </div>
+
+<!-- Modal Confidentialité -->
+  <div id="privacyModal" class="modal fullscreen" style="display:none;">
+     <div class="modal-content">
+         <span class="close" onclick="closeModal('privacyModal')">&times;</span>
+         <h1>🔒 Politique de confidentialité</h1>
+         <div class="legal-content">
+         
+Politique de confidentialité
+Dernière mise à jour : [DATE]
+Chez Pr@mpt (https://prompt-me-up), nous accordons une grande importance à la confidentialité et à la protection de vos données personnelles. La présente Politique de confidentialité décrit la manière dont nous collectons, utilisons, stockons et protégeons vos informations lorsque vous utilisez notre site et nos services.
+________________________________________
+1. Données collectées
+Nous collectons différentes catégories de données personnelles lorsque vous utilisez notre Service :
+•	Informations d'inscription : adresse e mail, identifiants de connexion, préférences de compte.
+•	Données d'utilisation : informations techniques (adresse IP, type de navigateur, système d'exploitation, logs de connexion, cookies).
+•	Contenu généré : prompts, images et autres fichiers créés via le Service.
+•	Communications : échanges par e mail ou via nos formulaires de contact.
+________________________________________
+2. Finalités du traitement
+Vos données sont utilisées pour :
+•	Fournir et améliorer nos services (y compris la génération de prompts et d'images).
+•	Gérer votre compte utilisateur et assurer son bon fonctionnement.
+•	Vous envoyer des notifications importantes (par exemple : mises à jour des Conditions d'utilisation, alertes de sécurité).
+•	Garantir la sécurité et prévenir les fraudes.
+•	Respecter nos obligations légales et réglementaires.
+________________________________________
+3. Accès aux données
+•	Seul le personnel autorisé de Pr@mpt a accès à vos données personnelles.
+•	Nous pouvons partager certaines données avec des prestataires techniques (par exemple, les fournisseurs d'API de génération de contenu, d'hébergement ou d'analytique) uniquement dans la mesure nécessaire au fonctionnement du Service.
+•	Nous ne vendons jamais vos données personnelles à des tiers.
+________________________________________
+4. Conservation des données
+•	Vos adresses e mail et informations de compte sont conservées tant que vous maintenez un compte actif.
+•	Les images et contenus générés sont conservés pour une durée maximale de deux semaines, après quoi ils sont automatiquement supprimés de nos systèmes.
+•	Vous pouvez demander la suppression de vos données personnelles en nous contactant ou en utilisant les outils disponibles dans votre espace utilisateur.
+________________________________________
+5. Vos droits
+Conformément au Règlement Général sur la Protection des Données (RGPD) et aux lois applicables, vous disposez des droits suivants :
+•	Droit d'accès : obtenir une copie des données personnelles que nous détenons sur vous.
+•	Droit de rectification : corriger des informations inexactes ou incomplètes.
+•	Droit à l'effacement : demander la suppression de vos données (sous réserve de nos obligations légales).
+•	Droit à la limitation du traitement : restreindre temporairement l'utilisation de vos données.
+•	Droit d'opposition : vous opposer à certains traitements de vos données, notamment à des fins de prospection.
+•	Droit à la portabilité : recevoir vos données dans un format structuré, couramment utilisé et lisible par machine.
+Pour exercer vos droits, contactez nous à l'adresse indiquée dans la section Contact.
+________________________________________
+6. Sécurité
+Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données personnelles contre tout accès non autorisé, perte, divulgation ou altération. Toutefois, aucune méthode de transmission ou de stockage électronique n'est totalement sécurisée.
+________________________________________
+7. Cookies et technologies similaires
+Notre site utilise des cookies et outils de suivi pour :
+•	Faciliter la navigation et mémoriser vos préférences.
+•	Analyser l'utilisation du Service et améliorer ses performances.
+•	Dans certains cas, afficher du contenu ou des offres personnalisées.
+Vous pouvez gérer vos préférences en matière de cookies via les paramètres de votre navigateur.
+________________________________________
+8. Transfert de données hors UE
+Si vos données sont transférées en dehors de l’Union européenne (notamment par l’utilisation d’API ou services tiers), nous nous assurons que des garanties adéquates sont mises en place (clauses contractuelles types, certifications, etc.).
+________________________________________
+9. Modifications de la Politique de confidentialité
+Nous pouvons mettre à jour la présente Politique de confidentialité de temps à autre. Nous vous informerons des changements importants par e mail ou via le site. La version en vigueur est toujours accessible sur cette page.
+________________________________________
+10. Contact
+Pour toute question relative à la confidentialité de vos données, ou pour exercer vos droits, vous pouvez nous contacter :
+•	Email : [adresse e mail de contact]
+•	Adresse : [adresse physique, optionnel]
+
+
+         </div>
+     </div>
   </div>
 
 <script src="script.js"></script>
