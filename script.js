@@ -368,10 +368,7 @@ async function sendOptimizedPrompt() {
     endpoint = "/generate_and_animate";
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
-
-    // 👉 Récupère la durée choisie
-    const duration = document.getElementById("videoDuration").value;
-    payload.duration = parseInt(duration);
+    payload.duration = 5;
   }
 
 
