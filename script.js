@@ -272,6 +272,8 @@ function appendMessage(text, type) {
     })
     .catch(err => console.error("Sauvegarde échouée :", err));
   }
+
+  return msg; // ✅ retourne le div créé
 }
 
 
