@@ -848,10 +848,13 @@ function setMode(mode) {
   });
   document.getElementById("mode-" + mode).classList.add("active");
 
-  // 👉 Affiche seulement les options nécessaires
-  document.getElementById("imageOptions").style.display = (mode === "image") ? "block" : "none";
-  document.getElementById("videoOptions").style.display = (mode === "video") ? "block" : "none";
+  const imageOptions = document.getElementById("imageOptions");
+  const videoOptions = document.getElementById("videoOptions");
+
+  if (imageOptions) imageOptions.style.display = (mode === "image") ? "block" : "none";
+  if (videoOptions) videoOptions.style.display = (mode === "video") ? "block" : "none";
 }
+
 
 
 function toggleLang() {
