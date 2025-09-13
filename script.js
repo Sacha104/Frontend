@@ -120,6 +120,13 @@ function signUp() {
   const email = document.getElementById("signupEmail").value;
   const password = document.getElementById("signupPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
+  const acceptTerms = document.getElementById("acceptTerms").checked;
+
+  if (!acceptTerms) {
+    document.getElementById("authStatus").textContent =
+      "Vous devez accepter les Conditions d’utilisation et la Politique de confidentialité.";
+    return;
+  }
 
   if (password !== confirmPassword) {
     document.getElementById("authStatus").textContent = "Mots de passe différents.";
