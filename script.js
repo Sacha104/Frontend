@@ -344,9 +344,9 @@ async function sendOptimizedPrompt() {
   }
 
   const choice = currentMode; 
-
   const botMessages = document.querySelectorAll(".chat-message.bot");
   if (!botMessages.length) return;
+
   const lastBotMessage = botMessages[botMessages.length - 1];
   const markdownDiv = lastBotMessage.querySelector(".markdown");
   if (!markdownDiv) return;
@@ -354,6 +354,10 @@ async function sendOptimizedPrompt() {
   const prompt = markdownDiv.textContent.trim();
   if (!prompt) return;
 
+  // ✅ On affiche d’abord comme un message utilisateur
+  appendMessage(prompt, "user");
+
+  // ✅ Message d’attente
   appendMessage("Génération en cours…", "bot");
 
   let endpoint = "/respond";
@@ -366,8 +370,6 @@ async function sendOptimizedPrompt() {
     endpoint = "/generate_image";
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
-
-    // 👉 Récupérer la taille choisie dans le select
     const size = document.getElementById("imageSize").value.split("x");
     payload.width = parseInt(size[0]);
     payload.height = parseInt(size[1]);
@@ -376,8 +378,10 @@ async function sendOptimizedPrompt() {
     payload.uid = currentUID;
     payload.conversationId = currentConversationId;
     payload.duration = 5;
-  }
 
+    // ⚡️ Ajout d’un prompt supplémentaire pour DeepAI
+    payload.videoPrompt = "Description de l’image de départ pour l’animation";
+  }
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -390,9 +394,11 @@ async function sendOptimizedPrompt() {
     });
 
     const data = await res.json();
+
     if (choice === "video") {
+      // ⚡️ Réponse = uniquement la vidéo
       updateLastBotMessage(
-        JSON.stringify({ image: data.image_url, video: data.video_url }),
+        JSON.stringify({ video: data.video_url }),
         "video"
       );
     } else if (choice === "image") {
@@ -404,6 +410,97 @@ async function sendOptimizedPrompt() {
     updateLastBotMessage("Erreur réseau.");
   }
 }
+// ----------------- helper download -----------------
+async function downloadResource(url, filename = 'download') {
+  try {
+    // essaie de récupérer la ressource en tant que blob
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // nettoyage
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
+  } catch (err) {
+    console.error('Téléchargement échoué:', err);
+    alert("Échec du téléchargement côté client. Vérifie la console (CORS?). Si le problème persiste, utilise le proxy serveur (voir instructions).");
+  }
+}
+
+// Rend l'image + bouton téléchargement de façon sûre (évite l'innerHTML direct)
+function renderImageWithDownload(container, imageUrl, filename = 'image.png') {
+  container.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = imageUrl;
+  img.alt = 'Image générée';
+  img.style.maxWidth = '100%';
+  img.style.borderRadius = '10px';
+  container.appendChild(img);
+
+  const actions = document.createElement('div');
+  actions.className = 'chat-actions';
+
+  const dl = document.createElement('a');
+  dl.href = '#';
+  dl.innerHTML = '<i class="fa-solid fa-download"></i> Télécharger';
+  dl.addEventListener('click', e => {
+    e.preventDefault();
+    downloadResource(imageUrl, filename);
+  });
+
+  actions.appendChild(dl);
+  container.appendChild(actions);
+}
+
+function renderVideoWithDownload(container, videoUrl, imageUrl = null, filename = 'video.mp4') {
+  container.innerHTML = '';
+
+  if (imageUrl) {
+    const p = document.createElement('p');
+    p.textContent = 'Image générée :';
+    container.appendChild(p);
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Image DeepAI';
+    img.style.maxWidth = '100%';
+    img.style.borderRadius = '10px';
+    container.appendChild(img);
+  }
+
+  const p2 = document.createElement('p');
+  p2.textContent = 'Vidéo animée :';
+  container.appendChild(p2);
+
+  const video = document.createElement('video');
+  video.controls = true;
+  video.style.maxWidth = '100%';
+  video.style.borderRadius = '10px';
+  const src = document.createElement('source');
+  src.src = videoUrl;
+  src.type = 'video/mp4';
+  video.appendChild(src);
+  container.appendChild(video);
+
+  const actions = document.createElement('div');
+  actions.className = 'chat-actions';
+  const dl = document.createElement('a');
+  dl.href = '#';
+  dl.innerHTML = '<i class="fa-solid fa-download"></i> Télécharger';
+  dl.addEventListener('click', e => {
+    e.preventDefault();
+    downloadResource(videoUrl, filename);
+  });
+
+  actions.appendChild(dl);
+  container.appendChild(actions);
+}
 
 function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
@@ -414,41 +511,21 @@ function updateLastBotMessage(text, mode = "text") {
 
   // === Cas IMAGE ===
   if (mode === "image") {
-    lastBotMsg.innerHTML = `
-      <img src="${text}" alt="Image générée" style="max-width:100%; border-radius:10px;">
-      <div class="chat-actions">
-        <a href="${text}" download="image.png">
-          <i class="fa-solid fa-download"></i> Télécharger
-        </a>
-      </div>
-    `;
-    return;
+      renderImageWithDownload(lastBotMsg, text, 'image.png');
+      return;
   }
 
   // === Cas VIDEO ===
   if (mode === "video") {
-    let obj;
-    try {
-      obj = typeof text === "string" ? JSON.parse(text) : text;
-    } catch {
-      console.error("Réponse vidéo invalide :", text);
+     let obj;
+     try {
+        obj = typeof text === "string" ? JSON.parse(text) : text;
+      } catch {
+        console.error("Réponse vidéo invalide :", text);
+        return;
+      }
+      renderVideoWithDownload(lastBotMsg, obj.video, obj.image, 'video.mp4');
       return;
-    }
-
-    lastBotMsg.innerHTML = `
-      <p>Image générée :</p>
-      <img src="${obj.image}" alt="Image DeepAI" style="max-width:100%; border-radius:10px;">
-      <p>Vidéo animée :</p>
-      <video controls style="max-width:100%; border-radius:10px;">
-        <source src="${obj.video}" type="video/mp4">
-      </video>
-      <div class="chat-actions">
-        <a href="${obj.video}" download="video.mp4">
-          <i class="fa-solid fa-download"></i> Télécharger
-        </a>
-      </div>
-    `;
-    return;
   }
 
   // === Cas TEXTE (prompt optimisé) ===
@@ -632,44 +709,32 @@ async function loadConversation(conversationId) {
       "Optimisation du prompt en cours…",
       "Réponse en cours…",
       "Erreur réseau ou délai dépassé.",
-      "Erreur IA."
+      "Erreur IA.",
+      "Génération en cours"
     ];
 
     data.messages.forEach(m => {
       if (tempMessages.includes(m.text)) return;
 
-      // Afficher chaque message
-      appendMessage(m.text, m.role); // Affiche chaque message
 
-      // Si le message contient une image (image_url est défini)
+      appendMessage(m.text, m.role); 
+
       if (m.image_url) {
-        const last = document.querySelectorAll(".chat-message.bot");
-        const lastMsg = last[last.length - 1];
-        lastMsg.innerHTML = `
-          <img src="${m.image_url}" alt="Image générée" style="max-width:100%; border-radius:10px;">
-          <div class="chat-actions">
-            <a href="${m.image_url}" download="image.png">
-              <i class="fa-solid fa-download"></i> Télécharger
-            </a>
-          </div>
-        `;
-      } else if (m.role === "bot") {
-        const last = document.querySelectorAll(".chat-message.bot");
-        const lastMsg = last[last.length - 1];
+        renderImageWithDownload(lastMsg, m.image_url, "image.png");
+      }
 
+      
+      else if (m.video_url) {
+        renderVideoWithDownload(lastMsg, m.video_url, m.image_url || null, "video.mp4");
+      }
+
+      // === Cas TEXTE BOT ===
+      else if (m.role === "bot") {
         lastMsg.innerHTML = `
-           <div class="markdown">${marked.parse(m.text)}</div>
+          <div class="markdown">${marked.parse(m.text)}</div>
         `;
       }
     });
-
-    scrollToBottom();
-    updateChatLayout();
-  } catch (err) {
-    console.error("Erreur chargement conversation :", err);
-  }
-}
-
 
 async function startNewConversation(force = false) {
   if (!force && isCurrentConversationEmpty()) {
