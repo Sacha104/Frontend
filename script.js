@@ -721,7 +721,7 @@ async function loadConversation(conversationId) {
       "Réponse en cours…",
       "Erreur réseau ou délai dépassé.",
       "Erreur IA.",
-      "Génération en cours"
+      "Génération en cours…"
     ];
 
     data.messages.forEach(m => {
