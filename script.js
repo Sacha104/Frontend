@@ -735,8 +735,8 @@ async function loadConversation(conversationId) {
         `;
       }
     });
+  }
 }
-
 
 async function startNewConversation(force = false) {
   if (!force && isCurrentConversationEmpty()) {
