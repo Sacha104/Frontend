@@ -984,3 +984,23 @@ h1 {
   color: #38bdf8;
   text-decoration: underline;
 }
+.checkbox-terms {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  text-align: left;
+  color: #cbd5e1;
+}
+
+.checkbox-terms a {
+  color: #38bdf8;
+  text-decoration: underline;
+}
+
+.legal-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  text-align: left;
+  padding: 1rem;
+  color: #0f172a;
+}
+
