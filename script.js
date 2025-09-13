@@ -716,27 +716,24 @@ async function loadConversation(conversationId) {
     data.messages.forEach(m => {
       if (tempMessages.includes(m.text)) return;
 
-
-      appendMessage(m.text, m.role); 
+      appendMessage(m.text, m.role);
 
       if (m.image_url) {
         renderImageWithDownload(lastMsg, m.image_url, "image.png");
-      }
-
-      
-      else if (m.video_url) {
+      } else if (m.video_url) {
         renderVideoWithDownload(lastMsg, m.video_url, m.image_url || null, "video.mp4");
-      }
-
-      // === Cas TEXTE BOT ===
-      else if (m.role === "bot") {
+      } else if (m.role === "bot") {
+        // === Cas TEXTE BOT ===
         lastMsg.innerHTML = `
           <div class="markdown">${marked.parse(m.text)}</div>
         `;
       }
     });
+  } catch (error) {
+    console.error("❌ Erreur lors du chargement de la conversation :", error);
   }
 }
+
 
 async function startNewConversation(force = false) {
   if (!force && isCurrentConversationEmpty()) {
