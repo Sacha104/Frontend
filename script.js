@@ -688,8 +688,11 @@ async function loadConversation(conversationId) {
       body: JSON.stringify({ id: conversationId })
     });
 
-    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(`Échec du chargement (status: ${res.status})`);
+    }
 
+    const data = await res.json();
     console.log("📦 Messages reçus :", data.messages);
 
     const container = document.getElementById("chatContainer");
@@ -697,10 +700,16 @@ async function loadConversation(conversationId) {
       console.error("⛔ Élément #chatContainer introuvable dans le DOM !");
       return;
     }
-    container.innerHTML = ""; // Clear previous messages
 
+    // Vider le conteneur
+    container.innerHTML = "";
+
+    // Cas : aucune donnée
     if (!data.messages || data.messages.length === 0) {
-      container.innerHTML = "<p style='color: #94a3b8; font-style: italic;'>Aucun message dans cette conversation.</p>";
+      container.innerHTML = `
+        <p style="color: #94a3b8; font-style: italic;">
+          Aucun message dans cette conversation.
+        </p>`;
       return;
     }
 
@@ -716,7 +725,8 @@ async function loadConversation(conversationId) {
     data.messages.forEach(m => {
       if (tempMessages.includes(m.text)) return;
 
-      appendMessage(m.text, m.role);
+      // On crée un message et on garde une référence vers le DOM
+      const lastMsg = appendMessage(m.text, m.role);
 
       if (m.image_url) {
         renderImageWithDownload(lastMsg, m.image_url, "image.png");
@@ -729,11 +739,11 @@ async function loadConversation(conversationId) {
         `;
       }
     });
+
   } catch (error) {
     console.error("❌ Erreur lors du chargement de la conversation :", error);
   }
 }
-
 
 async function startNewConversation(force = false) {
   if (!force && isCurrentConversationEmpty()) {
