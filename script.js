@@ -73,7 +73,6 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-
 // Fonction pour afficher l'inscription
 function showSignUp() {
   const loginSection = document.getElementById("loginSection");
