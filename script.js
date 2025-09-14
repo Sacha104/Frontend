@@ -64,7 +64,19 @@ auth.onAuthStateChanged(user => {
     // Charger l'historique et la dernière conversation automatiquement
     loadConversationHistory();
     loadLastConversation();
-    loadCredits();
+    // Initialisation utilisateur avec crédits offerts
+    fetch(`${backendURL}/user/init`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: currentUID })
+    })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Init user:", data);
+          loadCredits(); // recharge le solde après init
+        })
+        .catch(err => console.error("Erreur init utilisateur:", err));
+
 
 
   } else {
