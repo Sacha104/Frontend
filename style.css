@@ -752,38 +752,10 @@ h1 {
 .sidebar button:hover {
   background: #475569;
 }
-.dropdown-container {
-  position: relative;
-  display: inline-block;
-  float: right;
-  margin-left: 1rem;
-}
 
 .options-icon {
   cursor: pointer;
   color: #f8fafc;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 0.3rem 0;
-  min-width: 120px;
-  z-index: 100;
-}
-
-.dropdown-menu div {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  color: #f8fafc;
-}
-
-.dropdown-menu div:hover {
-  background-color: #334155;
 }
 #accountIcon {
   width: 36px;
