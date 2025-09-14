@@ -64,6 +64,8 @@ auth.onAuthStateChanged(user => {
     // Charger l'historique et la dernière conversation automatiquement
     loadConversationHistory();
     loadLastConversation();
+    loadCredits();
+
 
   } else {
     document.getElementById("authSection").style.display = "block";
@@ -506,15 +508,21 @@ function renderVideoWithDownload(container, videoUrl, filename = 'video.mp4') {
 }
 
 async function loadCredits() {
-  const res = await fetch(`${backendURL}/user/credits`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid: currentUID })
-  });
-  const data = await res.json();
-  document.getElementById("creditBalance").textContent = 
-    "💰 Crédits : " + (data.credits || 0);
+  try {
+    const res = await fetch(`${backendURL}/user/credits`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: currentUID })
+    });
+
+    const data = await res.json();
+    document.getElementById("creditBalance").textContent =
+      "💰 Crédits : " + (data.credits || 0);
+  } catch (err) {
+    console.error("Erreur chargement crédits:", err);
+  }
 }
+
 
 function updateLastBotMessage(text, mode = "text") {
   const messages = document.querySelectorAll(".chat-message.bot");
