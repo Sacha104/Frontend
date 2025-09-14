@@ -1009,5 +1009,40 @@ h1 {
 .checkbox-terms label {
   display: inline;
 }
+.size-group { display:flex; gap:0.5rem; }
+.size-btn {
+  background:#334155; color:#f8fafc; padding:0.5rem 0.75rem; border-radius:8px; border:none; cursor:pointer;
+}
+.size-btn.active { background:#38bdf8; color:#082032; font-weight:bold; }
+:root { --sidebar-width: 240px; } /* adapte si besoin */
+.mode-cards {
+  display:flex;
+  gap:1rem;
+  width: calc(100% - var(--sidebar-width));
+  margin: 1rem auto;
+}
+.mode-card {
+  flex:1;
+  min-width:0;
+  padding:1rem;
+  background:#0f172a;
+  color:#e6eef8;
+  border-radius:10px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow: 0 4px 14px rgba(2,6,23,0.5);
+}
+.mode-card.active { outline:3px solid #38bdf8; transform: translateY(-3px); }
+/* bouton envoyer à l'IA (reprend style nouveau prompt) */
+.send-ia-btn, .new-chat-button { background:#334155; color:#f8fafc; border-radius:10px; padding:0.45rem 0.8rem; border:none; cursor:pointer; }
+.send-ia-btn:hover { background:#2563eb; }
+
+/* mode cards & sizes (déjà donné ci-dessous) */
+.mode-cards{display:flex; gap:1rem; width:calc(100% - var(--sidebar-width));}
+.mode-card{flex:1; padding:1rem; border-radius:10px; cursor:pointer;}
+.mode-card.active{outline:3px solid #38bdf8;}
+
+/* dropdown */
+.dropdown-menu{display:none; position:absolute; right:0; background:#1e293b; border-radius:6px; }
 
 
