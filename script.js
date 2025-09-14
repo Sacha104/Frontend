@@ -381,9 +381,11 @@ async function sendOptimizedPrompt() {
     payload.conversationId = currentConversationId;
     payload.duration = 5;
 
-    // ⚡️ Ajout d’un prompt supplémentaire pour DeepAI
-    payload.videoPrompt = "Description de l’image de départ pour l’animation";
+     // ⚡️ Le prompt visible sert à Runway
+     // ⚡️ On génère un prompt caché pour DeepAI (image de départ)
+    payload.videoPrompt = prompt + " (image de départ, non visible)";
   }
+
 
   try {
     const res = await fetch(`${backendURL}${endpoint}`, {
@@ -461,7 +463,7 @@ function renderImageWithDownload(container, imageUrl, filename = 'image.png') {
   container.appendChild(actions);
 }
 
-function renderVideoWithDownload(container, videoUrl, imageUrl = null, filename = 'video.mp4') {
+function renderVideoWithDownload(container, videoUrl, filename = 'video.mp4') {
   container.innerHTML = '';
 
   if (imageUrl) {
@@ -502,6 +504,17 @@ function renderVideoWithDownload(container, videoUrl, imageUrl = null, filename 
 
   actions.appendChild(dl);
   container.appendChild(actions);
+}
+
+async function loadCredits() {
+  const res = await fetch(`${backendURL}/user/credits`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid: currentUID })
+  });
+  const data = await res.json();
+  document.getElementById("creditBalance").textContent = 
+    "💰 Crédits : " + (data.credits || 0);
 }
 
 function updateLastBotMessage(text, mode = "text") {
