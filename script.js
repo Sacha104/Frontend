@@ -186,31 +186,11 @@ function togglePassword(inputId, iconId) {
 }
 
 // Fonction pour envoyer un email de réinitialisation du mot de passe
-// script.js — remplacer sendPasswordReset existant
 function sendPasswordReset() {
-  const emailEl = document.getElementById("resetEmail");
-  const statusEl = document.getElementById("resetStatus");
-  const email = emailEl?.value?.trim();
-
-  if (!email) {
-    if (statusEl) statusEl.textContent = "Merci d'indiquer une adresse e-mail.";
-    return;
-  }
-
-  // Assure que 'auth' est initialisé (const auth = firebase.auth();)
-  if (typeof auth === 'undefined') {
-    if (statusEl) statusEl.textContent = "Erreur interne : authentification non initialisée.";
-    return;
-  }
-
+  const email = document.getElementById("resetEmail").value;
   auth.sendPasswordResetEmail(email)
-    .then(() => {
-      if (statusEl) statusEl.textContent = "E-mail envoyé — vérifie ta boîte de réception.";
-    })
-    .catch(e => {
-      if (statusEl) statusEl.textContent = "Erreur : " + (e?.message || e);
-      console.error("sendPasswordReset error:", e);
-    });
+    .then(() => document.getElementById("resetStatus").textContent = "Email envoyé.")
+    .catch(e => document.getElementById("resetStatus").textContent = e.message);
 }
 
 // Fonction pour se déconnecter
@@ -372,9 +352,6 @@ function updateLastBotMessage(text, mode = "text") {
 }
 
 async function sendOptimizedPrompt() {
-  const btn = document.querySelector(".chat-actions button");
-  if (btn) btn.remove();
-  
   const token = await firebase.auth().currentUser?.getIdToken();
   if (!token) {
     updateLastBotMessage("Erreur : utilisateur non authentifié.");
@@ -650,33 +627,6 @@ function copyFromText(link) {
   }
 }
 
-function toggleDropdown(e, el) {
-  e.stopPropagation();
-  // close other menus
-  document.querySelectorAll('.dropdown-menu').forEach(m => { if (m !== el.nextElementSibling) m.style.display = 'none'; });
-  const menu = el.nextElementSibling;
-  if (menu) menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-}
-
-// fermer quand clic dehors
-document.addEventListener('click', ()=> {
-  document.querySelectorAll('.dropdown-menu').forEach(m=>m.style.display = 'none');
-});
-
-function archiveConversation(id) {
-  fetch(`${backendURL}/conversation/archive`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid: currentUID, conversationId: id }) })
-    .then(r=>r.json()).then(j=>{
-      if (j.success) { /* maj UI : p.ex. masquer l'item */ document.querySelector(`[data-id="${id}"]`)?.remove(); }
-    }).catch(()=>alert("Erreur réseau"));
-}
-
-function deleteConversation(id) {
-  if (!confirm("Supprimer cette discussion ?")) return;
-  fetch(`${backendURL}/conversation/delete`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid: currentUID, conversationId: id }) })
-    .then(r=>r.json()).then(j=>{
-      if (j.success) { document.querySelector(`[data-id="${id}"]`)?.remove(); }
-    }).catch(()=>alert("Erreur réseau"));
-}
 
 function scrollToBottom() {
   const container = document.getElementById("chatContainer");
@@ -1010,7 +960,7 @@ async function startCheckout() {
 function setMode(mode) {
   currentMode = mode;
 
-  document.querySelectorAll(".mode-card").forEach(el => {
+  document.querySelectorAll(".mode-selector span").forEach(el => {
     el.classList.remove("active");
   });
   document.getElementById("mode-" + mode).classList.add("active");
@@ -1029,54 +979,6 @@ function openModal(id) {
 function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
-function openModal(id) { const m = document.getElementById(id); if (m) m.style.display = 'flex'; }
-function closeModal(id) { const m = document.getElementById(id); if (m) m.style.display = 'none'; }
-
-function showSettingsPane(name) {
-  const content = document.getElementById('settingsContent');
-  if (!content) return;
-  if (name === 'account') {
-    content.innerHTML = `
-      <h2>Mon compte</h2>
-      <p>Crédits : <strong id="userCredits">–</strong></p>
-      <p>Email : <strong id="userEmail">${firebase.auth().currentUser?.email || ''}</strong></p>
-      <button onclick="deleteAllConversations()" class="btn-destructive">Supprimer toutes les discussions</button>
-      <button onclick="deleteAccount()" class="btn-destructive">Supprimer mon compte</button>
-    `;
-    // Fetch credits depuis backend si besoin
-    fetch(`${backendURL}/user/credits?uid=${currentUID}`)
-      .then(r=>r.json())
-      .then(d=>{ if (d && d.credits !== undefined) document.getElementById('userCredits').textContent = d.credits; })
-      .catch(()=>{});
-  } else if (name === 'terms') {
-    content.innerHTML = document.getElementById('termsModal')?.querySelector('.legal-content')?.innerHTML || '<p>Conditions...</p>';
-  } else if (name === 'privacy') {
-    content.innerHTML = document.getElementById('privacyModal')?.querySelector('.legal-content')?.innerHTML || '<p>Politique...</p>';
-  } else {
-    content.innerHTML = '<p>Paramètre inconnu</p>';
-  }
-}
-
-// actions (à adapter serveur)
-function deleteAllConversations() {
-  if (!confirm("Supprimer toutes vos discussions ? Cette action est irréversible.")) return;
-  fetch(`${backendURL}/conversations/delete_all`, { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid: currentUID }) })
-    .then(res=>res.json()).then(j=>{
-      if (j.success) { alert("Discussions supprimées."); loadConversationHistory(); }
-      else alert("Erreur suppression.");
-    }).catch(e=>alert("Erreur réseau."));
-}
-
-function deleteAccount() {
-  if (!confirm("Supprimer votre compte ? Cette action est irréversible.")) return;
-  // Appel backend pour suppression puis signOut
-  fetch(`${backendURL}/account/delete`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid: currentUID }) })
-    .then(r=>r.json()).then(j=>{
-      if (j.success) { alert("Compte supprimé."); signOut(); }
-      else alert("Erreur suppression du compte.");
-    }).catch(e=>alert("Erreur réseau."));
-}
-
 
 
 function toggleLang() {
@@ -1140,17 +1042,6 @@ function toggleLang() {
     }
   });
 }
-
-document.addEventListener('click', function(e){
-  const btn = e.target.closest('.size-btn');
-  if (!btn) return;
-  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const size = btn.dataset.size;
-  const hidden = document.getElementById('imageSize');
-  if (hidden) hidden.value = size;
-});
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const menus = document.querySelectorAll(".dropdown-container");
