@@ -98,7 +98,19 @@
       </div>
       <button onclick="showArchived()">Discussions archivées</button>
       <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
-      <ul id="conversationList"></ul>
+      <ul id="conversationList">
+        <li class="conversation-item">
+          <span class="conversation-preview" onclick="loadConversation('conversation_id')">Exemple de conversation...</span>
+          <div class="dropdown-container">
+             <i class="fa-solid fa-ellipsis-vertical options-icon" onclick="toggleDropdown(event)"></i>
+             <div class="dropdown-menu">
+                <div onclick="toggleArchive(event, 'conversation_id', true)">Archiver</div>
+                <div onclick="confirmDelete(event, 'conversation_id')">Supprimer</div>
+             </div>
+          </div>
+        </li>
+      </ul>
+
     </div>
 
     <div id="accountWrapper">
