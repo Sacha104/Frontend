@@ -1009,3 +1009,40 @@ h1 {
 .checkbox-terms label {
   display: inline;
 }
+/* Style du conteneur du menu déroulant */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 1rem; /* Espace entre l'icône et le texte de la conversation */
+}
+
+/* Icône des trois points (options) */
+.options-icon {
+  cursor: pointer;
+  color: #f8fafc;
+}
+
+/* Style du menu déroulant */
+.dropdown-menu {
+  display: none; /* Par défaut, caché */
+  position: absolute;
+  right: 0;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.3rem 0;
+  min-width: 120px;
+  z-index: 100;
+}
+
+/* Chaque option dans le menu déroulant */
+.dropdown-menu div {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: #f8fafc;
+}
+
+/* Hover sur une option du menu déroulant */
+.dropdown-menu div:hover {
+  background-color: #334155;
+}
