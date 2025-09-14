@@ -954,12 +954,22 @@ function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
 
-// Fonction pour afficher/masquer le menu déroulant lors du clic sur les trois points
+
 function toggleDropdown(event) {
+  // Cibler le menu déroulant
   const dropdownMenu = event.target.closest('.dropdown-container').querySelector('.dropdown-menu');
-  console.log(dropdownMenu);  // Ajoute ce log pour vérifier l'élément
+  console.log(dropdownMenu);  // Vérifie si le dropdownMenu est correctement ciblé
+
+  // Si l'élément n'est pas trouvé, logguer un message d'erreur
+  if (!dropdownMenu) {
+    console.error('Menu déroulant non trouvé');
+    return;
+  }
+
+  // Basculer l'affichage du menu
   dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
 }
+
 
 // Fonction pour archiver/désarchiver une conversation
 function toggleArchive(event, conversationId, archive) {
