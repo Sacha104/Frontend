@@ -59,14 +59,11 @@
           <button type="button" onclick="signUp()" class="btn-primary">S’inscrire</button>
         </div>
         <!-- Réinitialisation du mot de passe -->
-        <div id="resetSection" style="display: none;">
-          <h2>Réinitialiser le mot de passe</h2>
-          <input type="email" id="resetEmail" placeholder="Votre email" required />
-          <button type="button" onclick="sendPasswordReset()" class="btn-primary">
-           Envoyer le lien de réinitialisation
-          </button>
-          <p id="resetStatus"></p>
-          <a href="#" onclick="showLogin()">🔙 Retour</a>
+        <!-- HTML à ajouter si manquant -->
+        <div id="resetSection">
+            <input id="resetEmail" type="email" placeholder="Votre e-mail" />
+            <button type="button" onclick="sendPasswordReset()" class="btn-primary">Envoyer le lien de réinitialisation</button>
+            <div id="resetStatus" role="status" aria-live="polite"></div>
         </div>
 
 
@@ -99,6 +96,17 @@
       <button onclick="showArchived()">Discussions archivées</button>
       <button id="exitArchiveBtn" onclick="loadConversationHistory()" style="display: none;">Quitter les archives</button>
       <ul id="conversationList"></ul>
+      <div class="conversation-item" data-id="CONV_ID">
+          <span class="conversation-title">Titre de la discussion</span>
+          <div class="dropdown-container">
+               <i class="fa-solid fa-ellipsis-vertical options-icon" onclick="toggleDropdown(event, this)"></i>
+               <div class="dropdown-menu">
+                   <div onclick="archiveConversation('CONV_ID')">Archiver</div>
+                   <div onclick="deleteConversation('CONV_ID')">Supprimer</div>
+               </div>
+          </div>
+      </div>
+
     </div>
 
     <div id="accountWrapper">
@@ -119,6 +127,21 @@
     <div id="reopenHistoryBtn" class="reopen-history" onclick="toggleHistory()" style="display: none;" title="Ouvrir l'historique">
       <i class="fa-solid fa-bars"></i>
     </div>
+    <div class="mode-cards">
+       <div class="mode-card" data-mode="text" onclick="setMode('text')">
+            <h3>Texte</h3>
+            <p>Générer un texte / conversation</p>
+       </div>
+       <div class="mode-card" data-mode="image" onclick="setMode('image')">
+            <h3>Image</h3>
+            <p>Générer une image</p>
+       </div>
+       <div class="mode-card" data-mode="video" onclick="setMode('video')">
+            <h3>Vidéo</h3>
+            <p>Générer une courte vidéo</p>
+       </div>
+    </div>
+
 
     <div class="main-content">
       <div id="modeSelector" class="mode-selector">
@@ -317,6 +340,28 @@ Pour toute question relative à la confidentialité de vos données, ou pour exe
          </div>
      </div>
   </div>
+
+  <!-- Modal Paramètres -->
+<div id="settingsModal" class="modal fullscreen" style="display:none;">
+  <div class="modal-content" style="display:flex; gap:1rem; max-width:900px;">
+    <span class="close" onclick="closeModal('settingsModal')">&times;</span>
+
+    <!-- menu gauche -->
+    <nav style="width:240px; text-align:left;">
+      <ul style="list-style:none; padding:0; margin:0;">
+        <li onclick="showSettingsPane('account')" class="settings-item">Mon compte</li>
+        <li onclick="showSettingsPane('terms')" class="settings-item">Conditions d'utilisation</li>
+        <li onclick="showSettingsPane('privacy')" class="settings-item">Politique de confidentialité</li>
+      </ul>
+    </nav>
+
+    <!-- contenu à droite -->
+    <div id="settingsContent" style="flex:1; overflow:auto; max-height:80vh; padding:0 1rem;">
+      <!-- rempli dynamiquement par JS -->
+    </div>
+  </div>
+</div>
+
 
 <script src="script.js"></script>
 </body>
