@@ -873,6 +873,30 @@ function handleNewConversation() {
 }
 
 
+function showAccountSettings() {
+  document.getElementById("settingsModal").style.display = "block";
+  loadUserData();  // Fonction pour charger les données utilisateur comme l'email et les crédits
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
+function loadUserData() {
+  const userEmail = document.getElementById('userEmail');
+  const creditsBalance = document.getElementById('creditsBalance');
+  
+  // Charger les informations de l'utilisateur (simulé ici, utilisez Firebase pour les données réelles)
+  userEmail.textContent = "utilisateur@example.com";
+  creditsBalance.textContent = "5000";
+}
+
+function deleteAccount() {
+  if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ?")) {
+    // Logic to delete account (via Firebase or your backend)
+    alert("Votre compte a été supprimé.");
+  }
+}
 
 
 
