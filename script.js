@@ -957,6 +957,7 @@ function closeModal(id) {
 // Fonction pour afficher/masquer le menu déroulant lors du clic sur les trois points
 function toggleDropdown(event) {
   const dropdownMenu = event.target.closest('.dropdown-container').querySelector('.dropdown-menu');
+  console.log(dropdownMenu);  // Ajoute ce log pour vérifier l'élément
   dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
 }
 
