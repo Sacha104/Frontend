@@ -873,20 +873,7 @@ function handleNewConversation() {
 }
 
 
-function toggleArchive(e, id, archive) {
-  e.stopPropagation();
-  console.log("toggleArchive called", id, archive); // ✅ ici, en dehors de fetch()
 
-  fetch(`${backendURL}/conversation/archive`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, archive })
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) loadConversationHistory();
-    });
-}
 
 
 function showArchived() {
@@ -918,20 +905,7 @@ function showArchived() {
     });
   });
 }
-function confirmDelete(e, id) {
-  e.stopPropagation();
-  if (confirm("Es-tu sûr de vouloir supprimer cette conversation ?")) {
-    fetch(`${backendURL}/conversation/delete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) loadConversationHistory();
-      });
-  }
-}
+
 function showBuyCredits() {
   document.getElementById("buyCreditsModal").style.display = "flex";
 }
@@ -980,6 +954,51 @@ function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
 
+// Fonction pour afficher/masquer le menu déroulant lors du clic sur les trois points
+function toggleDropdown(event) {
+  const dropdownMenu = event.target.closest('.dropdown-container').querySelector('.dropdown-menu');
+  dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Fonction pour archiver/désarchiver une conversation
+function toggleArchive(event, conversationId, archive) {
+  // Empêche la propagation de l'événement pour ne pas fermer le menu tout de suite
+  event.stopPropagation();
+
+  // Envoi de la demande pour archiver ou désarchiver la conversation
+  fetch(`${backendURL}/conversation/archive`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id: conversationId, archive })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      loadConversationHistory(); // Recharge la liste des conversations après modification
+    }
+  });
+}
+
+// Fonction pour supprimer une conversation
+function confirmDelete(event, conversationId) {
+  // Empêche la propagation de l'événement pour ne pas fermer le menu tout de suite
+  event.stopPropagation();
+
+  // Demande de confirmation pour la suppression
+  if (confirm("Es-tu sûr de vouloir supprimer cette conversation ?")) {
+    fetch(`${backendURL}/conversation/delete`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: conversationId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        loadConversationHistory(); // Recharge la liste des conversations après suppression
+      }
+    });
+  }
+}
 
 function toggleLang() {
   const translations = {  
