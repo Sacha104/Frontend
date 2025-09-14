@@ -399,6 +399,11 @@ async function sendOptimizedPrompt() {
     });
 
     const data = await res.json();
+    if (data.error && data.error.includes("Crédits")) {
+         updateLastBotMessage("❌ Tu n’as plus assez de crédits. Achète-en pour continuer.");
+         return;
+    }
+
 
     if (choice === "video") {
       // ⚡️ Réponse = uniquement la vidéo
