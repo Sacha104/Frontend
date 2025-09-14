@@ -1003,4 +1003,11 @@ h1 {
   padding: 1rem;
   color: #0f172a;
 }
+.checkbox-terms {
+  white-space: nowrap;
+}
+.checkbox-terms label {
+  display: inline;
+}
+
 
