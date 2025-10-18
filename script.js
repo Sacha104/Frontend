@@ -891,12 +891,6 @@ function loadUserData() {
   creditsBalance.textContent = "5000";
 }
 
-function deleteAccount() {
-  if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ?")) {
-    // Logic to delete account (via Firebase or your backend)
-    alert("Votre compte a été supprimé.");
-  }
-}
 
 
 
@@ -970,13 +964,6 @@ function setMode(mode) {
   if (videoOptions) videoOptions.style.display = (mode === "video") ? "block" : "none";
 }
 
-function openModal(id) {
-  document.getElementById(id).style.display = "flex";
-}
-
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
-}
 
 
 function toggleDropdown(event) {
@@ -1034,6 +1021,62 @@ function confirmDelete(event, conversationId) {
     });
   }
 }
+
+function openModal(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+// Supprimer toutes les discussions de l’utilisateur
+async function deleteAllDiscussions() {
+  if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer toutes vos discussions ? Cette action est irréversible.")) return;
+
+  try {
+    const res = await fetch(`${backendURL}/delete_all_conversations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: currentUID })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert("✅ Toutes vos discussions ont été supprimées.");
+      loadConversationHistory();
+    } else {
+      alert("❌ Une erreur est survenue lors de la suppression.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Erreur réseau lors de la suppression des discussions.");
+  }
+}
+
+// Supprimer le compte utilisateur
+async function deleteAccount() {
+  if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer définitivement votre compte ?")) return;
+
+  try {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      await fetch(`${backendURL}/user/delete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: user.uid })
+      });
+
+      await user.delete();
+      alert("✅ Votre compte a été supprimé.");
+      signOut();
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Erreur lors de la suppression du compte.");
+  }
+}
+
 
 function toggleLang() {
   const translations = {  
