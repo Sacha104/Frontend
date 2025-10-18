@@ -878,9 +878,7 @@ function showAccountSettings() {
   loadUserData();  // Fonction pour charger les données utilisateur comme l'email et les crédits
 }
 
-function closeModal(modalId) {
-  document.getElementById(modalId).style.display = "none";
-}
+
 
 function loadUserData() {
   const userEmail = document.getElementById('userEmail');
@@ -1030,17 +1028,51 @@ function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
 
-// Supprimer toutes les discussions de l’utilisateur
-async function deleteAllDiscussions() {
-  if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer toutes vos discussions ? Cette action est irréversible.")) return;
+// Gestion des sections internes du popup paramètres
+function showSettingsSection(section) {
+  const sections = ["terms", "privacy", "account"];
+  sections.forEach(id => {
+    const el = document.getElementById(`settings-${id}`);
+    const li = document.querySelector(`.settings-sidebar li[onclick*='${id}']`);
+    if (el) el.style.display = id === section ? "block" : "none";
+    if (li) li.classList.toggle("active", id === section);
+  });
 
+  // Si on va dans la section compte, on recharge les infos utilisateur
+  if (section === "account") {
+    loadAccountSettings();
+  }
+}
+
+// Charge les infos du compte dans la section Mon compte
+async function loadAccountSettings() {
+  try {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      document.getElementById("settingsUserEmail").textContent = user.email || "(non défini)";
+
+      const res = await fetch(`${backendURL}/user/credits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: user.uid })
+      });
+      const data = await res.json();
+      document.getElementById("settingsCredits").textContent = data.credits || 0;
+    }
+  } catch (err) {
+    console.error("Erreur chargement des infos compte :", err);
+  }
+}
+
+// Supprime toutes les discussions
+async function deleteAllDiscussions() {
+  if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer toutes vos discussions ?")) return;
   try {
     const res = await fetch(`${backendURL}/delete_all_conversations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ uid: currentUID })
     });
-
     const data = await res.json();
     if (data.success) {
       alert("✅ Toutes vos discussions ont été supprimées.");
@@ -1049,15 +1081,13 @@ async function deleteAllDiscussions() {
       alert("❌ Une erreur est survenue lors de la suppression.");
     }
   } catch (err) {
-    console.error(err);
     alert("Erreur réseau lors de la suppression des discussions.");
   }
 }
 
-// Supprimer le compte utilisateur
+// Supprime définitivement le compte utilisateur
 async function deleteAccount() {
-  if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer définitivement votre compte ?")) return;
-
+  if (!confirm("⚠️ Voulez-vous vraiment supprimer définitivement votre compte ?")) return;
   try {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -1066,14 +1096,13 @@ async function deleteAccount() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ uid: user.uid })
       });
-
       await user.delete();
       alert("✅ Votre compte a été supprimé.");
       signOut();
     }
   } catch (err) {
-    console.error(err);
     alert("❌ Erreur lors de la suppression du compte.");
+    console.error(err);
   }
 }
 
