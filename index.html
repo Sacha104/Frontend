@@ -121,7 +121,7 @@
       <ul>
         <li id="creditBalance">💰 Crédits : ...</li> <!-- ✅ affichage solde -->
         <li onclick="showBuyCredits()">💳 Acheter des crédits</li>
-        <li>Paramètres</li>
+        <li onclick="openModal('settingsModal')">⚙️ Paramètres</li>
         <li><a href="#" onclick="openModal('termsModal'); return false;">📜 Conditions d’utilisation</a></li>
         <li><a href="#" onclick="openModal('privacyModal'); return false;">🔒 Politique de confidentialité</a></li>
         <li onclick="signOut()" style="color: #f87171; cursor: pointer;">Se déconnecter</li>
@@ -330,14 +330,29 @@ Pour toute question relative à la confidentialité de vos données, ou pour exe
      </div>
   </div>
 
+
+
 <div id="settingsModal" class="modal fullscreen" style="display:none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('settingsModal')">&times;</span>
-        <h1>⚙️ Paramètres de Compte</h1>
-        <p>Compte Email : <span id="userEmail">user@example.com</span></p>
-        <p>Crédits disponibles : <span id="creditsBalance">... crédits</span></p>
-        <button onclick="deleteAccount()">Supprimer mon compte</button>
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('settingsModal')">&times;</span>
+    <h1>⚙️ Paramètres du compte</h1>
+
+    <div class="settings-section">
+      <h3>Liens légaux</h3>
+      <p>
+        <a href="#" onclick="openModal('termsModal'); return false;">📜 Conditions d’utilisation</a><br>
+        <a href="#" onclick="openModal('privacyModal'); return false;">🔒 Politique de confidentialité</a>
+      </p>
     </div>
+
+    <hr>
+
+    <div class="settings-section">
+      <h3>Gestion du compte</h3>
+      <button onclick="deleteAccount()" class="danger-btn">🔥 Supprimer mon compte</button>
+      <button onclick="deleteAllDiscussions()" class="danger-btn">🗑️ Supprimer toutes mes discussions</button>
+    </div>
+  </div>
 </div>
 
 
