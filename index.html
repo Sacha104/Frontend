@@ -332,28 +332,55 @@ Pour toute question relative à la confidentialité de vos données, ou pour exe
 
 
 
+<!-- 🧩 Popup Paramètres -->
 <div id="settingsModal" class="modal fullscreen" style="display:none;">
-  <div class="modal-content">
+  <div class="modal-content settings-layout">
     <span class="close" onclick="closeModal('settingsModal')">&times;</span>
-    <h1>⚙️ Paramètres du compte</h1>
 
-    <div class="settings-section">
-      <h3>Liens légaux</h3>
-      <p>
-        <a href="#" onclick="openModal('termsModal'); return false;">📜 Conditions d’utilisation</a><br>
-        <a href="#" onclick="openModal('privacyModal'); return false;">🔒 Politique de confidentialité</a>
-      </p>
+    <div class="settings-sidebar">
+      <ul>
+        <li class="active" onclick="showSettingsSection('terms')">📜 Conditions d’utilisation</li>
+        <li onclick="showSettingsSection('privacy')">🔒 Politique de confidentialité</li>
+        <li onclick="showSettingsSection('account')">👤 Mon compte</li>
+      </ul>
     </div>
 
-    <hr>
+    <div class="settings-main">
+      <!-- Section : Conditions -->
+      <div id="settings-terms" class="settings-section visible">
+        <h2>📜 Conditions d’utilisation</h2>
+        <div class="scrollable-content">
+          <!-- On réutilise le contenu existant -->
+          <div class="legal-content">
+            (Texte complet déjà présent dans ton `termsModal`)
+          </div>
+        </div>
+      </div>
 
-    <div class="settings-section">
-      <h3>Gestion du compte</h3>
-      <button onclick="deleteAccount()" class="danger-btn">🔥 Supprimer mon compte</button>
-      <button onclick="deleteAllDiscussions()" class="danger-btn">🗑️ Supprimer toutes mes discussions</button>
+      <!-- Section : Politique -->
+      <div id="settings-privacy" class="settings-section" style="display:none;">
+        <h2>🔒 Politique de confidentialité</h2>
+        <div class="scrollable-content">
+          <div class="legal-content">
+            (Texte complet déjà présent dans ton `privacyModal`)
+          </div>
+        </div>
+      </div>
+
+      <!-- Section : Compte -->
+      <div id="settings-account" class="settings-section" style="display:none;">
+        <h2>👤 Mon compte</h2>
+        <p><strong>Email :</strong> <span id="settingsUserEmail">Chargement...</span></p>
+        <p><strong>Crédits restants :</strong> <span id="settingsCredits">...</span></p>
+        <div class="account-actions">
+          <button class="danger-btn" onclick="deleteAllDiscussions()">🗑️ Supprimer toutes mes discussions</button>
+          <button class="danger-btn" onclick="deleteAccount()">🔥 Supprimer mon compte</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 
 
 <script src="script.js"></script>
