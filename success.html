@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paiement réussi - Pr@mpt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="centered">
+  <div class="success-box">
+    <h1>✅ Paiement réussi !</h1>
+    <p>Merci pour votre achat 🎉</p>
+    <p>Votre solde actuel :</p>
+    <h2 id="creditBalance">Chargement...</h2>
+
+    <a href="index.html" class="btn-primary">Retour à l'application</a>
+  </div>
+
+  <script>
+    const backendURL = "https://prompt-me-up-backend.com"; // ⚠️ à adapter à ton vrai backend
+    const uid = localStorage.getItem("currentUID");
+
+    async function fetchCredits() {
+      if (!uid) {
+        document.getElementById("creditBalance").textContent = "Utilisateur non connecté";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${backendURL}/user/credits`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid })
+        });
+        const data = await res.json();
+
+        if (data.credits !== undefined) {
+          document.getElementById("creditBalance").textContent = data.credits + " crédits";
+        } else {
+          document.getElementById("creditBalance").textContent = "Erreur de chargement";
+        }
+      } catch (err) {
+        console.error("Erreur fetchCredits:", err);
+        document.getElementById("creditBalance").textContent = "Erreur réseau";
+      }
+    }
+
+    fetchCredits();
+  </script>
+</body>
+</html>
+
