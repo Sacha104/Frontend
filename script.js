@@ -86,6 +86,14 @@ auth.onAuthStateChanged(user => {
     if (icon) icon.style.display = "none";
   }
 });
+// fermer les dropdowns si on clique hors du container
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('.dropdown-menu').forEach(menu => {
+    if (!menu.contains(e.target) && !menu.previousElementSibling?.contains(e.target)) {
+      menu.style.display = 'none';
+    }
+  });
+});
 
 // Fonction pour afficher l'inscription
 function showSignUp() {
@@ -255,13 +263,51 @@ async function handleUserMessage() {
   }
 }
 
+// ---- Remplace la fonction appendMessage existante par ceci ----
 function appendMessage(text, type) {
   if (!text || !text.trim()) return; // ⛔ ignore les messages vides
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${type}`;
-  if (type === "bot") msg.classList.add("markdown");
-  msg.textContent = text;
+
+  // Créer le conteneur interne (pour texte / markdown / médias)
+  const content = document.createElement("div");
+  content.className = "chat-content";
+
+  // Si message bot, on utilisera la classe markdown (pour le rendu)
+  if (type === "bot") {
+    content.classList.add("markdown");
+    content.innerHTML = ''; // on remplira plus tard si nécessaire
+    // Remplir text brut en attendant (pour sauvegarde immédiate)
+    content.textContent = text;
+  } else {
+    content.textContent = text;
+  }
+
+  // Créer le bouton copier (icône deux carrés : fa-clone)
+  const copyBtn = document.createElement("button");
+  copyBtn.className = "copy-btn";
+  copyBtn.title = "Copier";
+  copyBtn.innerHTML = '<i class="fa-solid fa-clone"></i>'; // deux carrés
+  copyBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const toCopy = content.innerText || content.textContent || "";
+    navigator.clipboard.writeText(toCopy.trim())
+      .then(() => {
+        // petit feedback visuel
+        copyBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+        setTimeout(() => copyBtn.innerHTML = '<i class="fa-solid fa-clone"></i>', 900);
+      })
+      .catch(() => alert("Erreur lors de la copie"));
+  });
+
+  // Assemble
+  msg.appendChild(content);
+  const actionsWrap = document.createElement("div");
+  actionsWrap.className = "chat-actions";
+  actionsWrap.appendChild(copyBtn);
+  msg.appendChild(actionsWrap);
+
   document.getElementById("chatContainer").appendChild(msg);
   scrollToBottom();
 
@@ -286,9 +332,9 @@ function appendMessage(text, type) {
     .catch(err => console.error("Sauvegarde échouée :", err));
   }
 
-  return msg; // ✅ retourne le div créé
+  // retourne le div créé (utile au chargement de conversation)
+  return msg;
 }
-
 
 
 
@@ -456,7 +502,7 @@ async function downloadResource(url, filename = 'download') {
   }
 }
 
-// Rend l'image + bouton téléchargement de façon sûre (évite l'innerHTML direct)
+// ---- Remplace renderImageWithDownload ----
 function renderImageWithDownload(container, imageUrl, filename = 'image.png') {
   container.innerHTML = '';
   const img = document.createElement('img');
@@ -478,10 +524,40 @@ function renderImageWithDownload(container, imageUrl, filename = 'image.png') {
   });
 
   actions.appendChild(dl);
+
+  // bouton copier : copie l'URL
+  const copyLink = document.createElement('button');
+  copyLink.className = 'copy-btn';
+  copyLink.innerHTML = '<i class="fa-solid fa-clone"></i>';
+  copyLink.title = 'Copier le lien de l\'image';
+  copyLink.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(imageUrl)
+      .then(()=> { copyLink.innerHTML = '<i class="fa-solid fa-check"></i>'; setTimeout(()=> copyLink.innerHTML = '<i class="fa-solid fa-clone"></i>', 900); })
+      .catch(()=> alert("Erreur copie"));
+  });
+  actions.appendChild(copyLink);
+
   container.appendChild(actions);
+
+  // === Enregistre l'image côté backend comme message bot (si user connecté) ===
+  if (currentUID && currentConversationId) {
+    fetch(`${backendURL}/message/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        uid: currentUID,
+        conversationId: currentConversationId,
+        role: "bot",
+        text: "", // pas de texte
+        image_url: imageUrl
+      })
+    }).catch(err => console.error("Erreur sauvegarde image :", err));
+  }
 }
 
-function renderVideoWithDownload(container, videoUrl, filename = 'video.mp4') {
+// ---- Remplace renderVideoWithDownload ----
+function renderVideoWithDownload(container, videoUrl, imageUrl = null, filename = 'video.mp4') {
   container.innerHTML = '';
 
   if (imageUrl) {
@@ -519,9 +595,38 @@ function renderVideoWithDownload(container, videoUrl, filename = 'video.mp4') {
     e.preventDefault();
     downloadResource(videoUrl, filename);
   });
-
   actions.appendChild(dl);
+
+  // copie du lien vidéo
+  const copyVideo = document.createElement('button');
+  copyVideo.className = 'copy-btn';
+  copyVideo.innerHTML = '<i class="fa-solid fa-clone"></i>';
+  copyVideo.title = 'Copier le lien vidéo';
+  copyVideo.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(videoUrl)
+      .then(()=> { copyVideo.innerHTML = '<i class="fa-solid fa-check"></i>'; setTimeout(()=> copyVideo.innerHTML = '<i class="fa-solid fa-clone"></i>', 900); })
+      .catch(()=> alert("Erreur copie"));
+  });
+  actions.appendChild(copyVideo);
+
   container.appendChild(actions);
+
+  // === Enregistre la vidéo côté backend ===
+  if (currentUID && currentConversationId) {
+    fetch(`${backendURL}/message/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        uid: currentUID,
+        conversationId: currentConversationId,
+        role: "bot",
+        text: "",
+        video_url: videoUrl,
+        image_url: imageUrl || null
+      })
+    }).catch(err => console.error("Erreur sauvegarde vidéo :", err));
+  }
 }
 
 async function loadCredits() {
@@ -1065,25 +1170,47 @@ async function loadAccountSettings() {
 }
 
 // Supprime toutes les discussions
+// Supprime toutes les discussions — implémentation robuste
 async function deleteAllDiscussions() {
   if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer toutes vos discussions ?")) return;
-  try {
-    const res = await fetch(`${backendURL}/delete_all_conversations`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid: currentUID })
-    });
-    const data = await res.json();
-    if (data.success) {
-      alert("✅ Toutes vos discussions ont été supprimées.");
-      loadConversationHistory();
-    } else {
-      alert("❌ Une erreur est survenue lors de la suppression.");
+
+  const possibleEndpoints = [
+    '/delete_all_conversations',
+    '/conversations/delete_all',
+    '/conversation/delete_all'
+  ];
+
+  let success = false;
+  for (const ep of possibleEndpoints) {
+    try {
+      const res = await fetch(`${backendURL}${ep}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: currentUID })
+      });
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data && data.success) { success = true; break; }
+      // Some backends may return {deleted: true} or {ok:true}
+      if (data && (data.deleted === true || data.ok === true)) { success = true; break; }
+    } catch (err) {
+      console.warn("Tentative endpoint échouée:", ep, err);
     }
-  } catch (err) {
-    alert("Erreur réseau lors de la suppression des discussions.");
+  }
+
+  if (success) {
+    alert("✅ Toutes vos discussions ont été supprimées.");
+    // ferme popup settings si ouvert
+    closeModal('settingsModal');
+    // recharge l'historique
+    await loadConversationHistory();
+    // reset conversation affichée
+    document.getElementById('chatContainer').innerHTML = '';
+  } else {
+    alert("❌ Impossible de supprimer les discussions (endpoint non trouvé ou erreur serveur). Vérifie le serveur.");
   }
 }
+
 
 // Supprime définitivement le compte utilisateur
 async function deleteAccount() {
