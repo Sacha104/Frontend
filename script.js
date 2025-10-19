@@ -807,15 +807,16 @@ async function loadConversationHistory() {
   (data.conversations || []).forEach(c => {
     const li = document.createElement("li");
     li.innerHTML = `
-      <span class="conversation-preview" onclick="loadConversation('${c.id}')">${c.preview.slice(0, 40)}...</span>
+      <span class="conversation-preview" onclick="loadConversation('${c.id}')">${(c.preview || '').slice(0, 40)}...</span>
       <div class="dropdown-container">
-        <i class="fa-solid fa-ellipsis-vertical options-icon"></i>
-        <div class="dropdown-menu">
-          <div onclick="toggleArchive(event, '${c.id}', ${!c.archived})">${c.archived ? "Désarchiver" : "Archiver"}</div>
-          <div onclick="confirmDelete(event, '${c.id}')">Supprimer</div>
-        </div>
+         <i class="fa-solid fa-ellipsis-vertical options-icon" onclick="toggleDropdown(event)"></i>
+         <div class="dropdown-menu" style="display:none; position:absolute; right:8px; background:#0b1220; border:1px solid #334155; border-radius:6px; padding:6px;">
+             <div onclick="toggleArchive(event, '${c.id}', ${!c.archived})" style="padding:6px; cursor:pointer;">${c.archived ? "Désarchiver" : "Archiver"}</div>
+             <div onclick="confirmDelete(event, '${c.id}')" style="padding:6px; cursor:pointer; color:#f87171;">Supprimer</div>
+         </div>
       </div>
     `;
+
     li.classList.add("conversation-item");
     list.appendChild(li);
   });
