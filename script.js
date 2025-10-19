@@ -1247,9 +1247,9 @@ async function startCheckout() {
 
     const data = await res.json();
     if (data.success) {
-      alert(`✅ Crédit ajouté : ${data.creditsAdded} crédits`);
+      alert(`✅ ${data.creditsAdded} crédits ajoutés. Nouveau solde : ${data.newBalance}`);
       closeBuyCredits();
-      loadCredits(); // recharge le solde à l’écran
+      loadCredits();
     } else {
       alert("Erreur : " + (data.error || "Impossible d’ajouter les crédits"));
     }
@@ -1258,6 +1258,7 @@ async function startCheckout() {
     alert("Erreur réseau pendant l’ajout des crédits.");
   }
 }
+
 
 function showBuyCredits() {
   document.getElementById("buyCreditsModal").style.display = "block";
