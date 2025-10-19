@@ -1234,6 +1234,38 @@ async function deleteAccount() {
   }
 }
 
+async function startCheckout() {
+  const amount = parseInt(document.getElementById("amountSelect").value);
+  if (!amount || !currentUID) return alert("Utilisateur non identifié.");
+
+  try {
+    const res = await fetch(`${backendURL}/user/add_credits`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: currentUID, amount })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert(`✅ Crédit ajouté : ${data.creditsAdded} crédits`);
+      closeBuyCredits();
+      loadCredits(); // recharge le solde à l’écran
+    } else {
+      alert("Erreur : " + (data.error || "Impossible d’ajouter les crédits"));
+    }
+  } catch (err) {
+    console.error("Erreur ajout crédits :", err);
+    alert("Erreur réseau pendant l’ajout des crédits.");
+  }
+}
+
+function showBuyCredits() {
+  document.getElementById("buyCreditsModal").style.display = "block";
+}
+
+function closeBuyCredits() {
+  document.getElementById("buyCreditsModal").style.display = "none";
+}
 
 function toggleLang() {
   const translations = {  
