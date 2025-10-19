@@ -1236,26 +1236,30 @@ async function deleteAccount() {
 
 async function startCheckout() {
   const amount = parseInt(document.getElementById("amountSelect").value);
-  if (!amount || !currentUID) return alert("Utilisateur non identifié.");
+  if (!amount || !currentUID) {
+    alert("Utilisateur non identifié ou montant invalide.");
+    return;
+  }
 
   try {
-    const res = await fetch(`${backendURL}/user/add_credits`, {
+    // 👉 Crée une session de paiement Stripe
+    const res = await fetch(`${backendURL}/create-checkout-session`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ uid: currentUID, amount })
     });
 
     const data = await res.json();
-    if (data.success) {
-      alert(`✅ ${data.creditsAdded} crédits ajoutés. Nouveau solde : ${data.newBalance}`);
-      closeBuyCredits();
-      loadCredits();
+
+    if (data.url) {
+      // ✅ Redirection vers la page de paiement Stripe
+      window.location.href = data.url;
     } else {
-      alert("Erreur : " + (data.error || "Impossible d’ajouter les crédits"));
+      alert("Erreur : " + (data.error || "Impossible de créer la session Stripe."));
     }
   } catch (err) {
-    console.error("Erreur ajout crédits :", err);
-    alert("Erreur réseau pendant l’ajout des crédits.");
+    console.error("Erreur Checkout:", err);
+    alert("Erreur réseau pendant la création du paiement.");
   }
 }
 
